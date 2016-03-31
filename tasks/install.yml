@@ -1,0 +1,33 @@
+---
+
+- name: Install | Check concursecio archive stat
+  stat: 
+    path="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
+  register: concourseci_binary_file_stat
+
+- name: Install | Download file with custom HTTP headers
+  get_url: 
+    url="{{ concourseci_download_url }}"
+    dest="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
+    mode=0755
+  become_user: "{{ concourseci_user }}"
+  register: concourseci_get
+  when: concourseci_binary_file_stat.stat.exists == False
+
+- name: Install | Concourse link bin
+  file: 
+    src="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
+    dest="{{ concourseci_bin_dir }}/concourse"
+    state="link"
+
+- name: Install | Concourse web start script
+  template:
+    src="concourse-web.j2"
+    dest="{{ concourseci_bin_dir }}/concourse-web"
+    mode=0755
+
+- name: Install | Concourse worker start script
+  template:
+    src="concourse-worker.j2"
+    dest="{{ concourseci_bin_dir }}/concourse-worker"
+    mode=0755

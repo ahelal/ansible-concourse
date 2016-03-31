@@ -1,0 +1,19 @@
+---
+
+- name: Common tasks
+  include: common.yml
+
+- name: Manage keys
+  include: keys.yml
+
+- name: Manage web node
+  include: web.yml
+
+- name: Manage garden worker node 
+  include: garden_linux.yml
+
+- name: Manage  worker node 
+  include: worker.yml
+
+- name: install tasks
+  include: install.yml

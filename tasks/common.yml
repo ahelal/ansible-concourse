@@ -1,0 +1,24 @@
+---
+
+- name: common | Ensure concourseci group exists
+  group: 
+    name="{{ concourseci_group }}"
+    state=present
+
+- name: common | Ensure concourseci user exists
+  user: 
+    home="{{ concourseci_base_dir }}"
+    name="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+    system="yes"
+
+- name: common | Ensure concourseci directory exists
+  file: 
+    path="{{ item }}"
+    state="directory"
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+    mode="0750"
+  with_items:
+    - "{{ concourseci_bin_dir }}"
+    - "{{ concourseci_garden_dir }}"

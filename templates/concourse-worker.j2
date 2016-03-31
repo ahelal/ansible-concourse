@@ -1,0 +1,8 @@
+#!/bin/bash
+
+{{ concourseci_bin_dir }}/{{ concourseci_binary_file }} worker \
+  --work-dir {{ concourseci_worker_dir }} \
+  --peer-ip 127.0.0.1 \
+  --tsa-host localhost \
+  --tsa-public-key {{ concourseci_host_key_public_file }} \
+  --tsa-worker-private-key {{ concourseci_host_key_private_file }}

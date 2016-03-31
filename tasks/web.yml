@@ -1,0 +1,7 @@
+---
+
+- name: Install | Concourse web start script
+  template:
+    src="concourse-web.j2"
+    dest="{{ concourseci_bin_dir }}/concourse-web"
+    mode=0755

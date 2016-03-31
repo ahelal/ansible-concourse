@@ -1,0 +1,50 @@
+---
+
+- name: garden_linux | Git clone garden
+  git: 
+    repo="https://github.com/cloudfoundry-incubator/garden-linux-release"
+    dest="{{ concourseci_garden_dir }}"
+    recursive=yes
+    force=yes
+
+- name: garden_linux | Install Exta linux kernel
+  apt: 
+    name="linux-image-extra-{{ ansible_kernel }}"
+    state=present
+
+- name: garden_linux | Load aufs
+  modprobe:
+    name="aufs"
+
+- name: common | Ensure concourseci garden directory exists
+  file: 
+    path="{{ item }}"
+    state="directory"
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+    mode="0750"
+  with_items:
+    - /opt/garden/depot 
+    - /opt/garden/graph 
+    - /opt/garden/state
+
+- name: garden_linux | Build garden-linux
+  shell: /usr/bin/make
+  args:
+    chdir: "{{ concourseci_garden_dir }}/src/github.com/cloudfoundry-incubator/garden-linux/"
+    executable: "/bin/bash"
+  environment:
+    GOPATH: "{{ concourseci_garden_dir }}"
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin://usr/local/go/bin/"
+
+# https://github.com/cloudfoundry-incubator/garden-linux/
+
+# cd $GOPATH/src/github.com/cloudfoundry-incubator/garden-linux # assuming your $GOPATH has only one entry
+# sudo ./out/garden-linux \
+#        -depot=/opt/garden/depot \
+#        -graph=/opt/garden/graph \
+#        -stateDir=/opt/garden/state \
+#        -rootfs=/opt/garden/rootfs \
+#        -bin=$PWD/linux_backend/bin \
+#        -listenNetwork=tcp \
+#        -listenAddr=127.0.0.1:7777

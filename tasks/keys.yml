@@ -1,0 +1,37 @@
+---
+
+- name: keys | Create .ssh dir
+  file: 
+    path="{{ concourseci_ssh_dir }}"
+    state=directory
+    mode=0750
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+
+- name: keys | Copy session signing key private
+  copy:
+    content="{{ item.content }}"
+    dest="{{ item.dest }}"
+    mode="{{ item.mode }}"
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+  with_items: 
+    - content: "{{ concourseci_session_signing_key_private }}"
+      dest: "{{ concourseci_session_signing_key_private_file }}"
+      mode: "0600"
+    - content: "{{ concourseci_session_signing_key_public }}"
+      dest: "{{ concourseci_session_signing_key_public_file }}"
+      mode: "0644"
+    - content: "{{ concourseci_host_key_private }}"
+      dest: "{{ concourseci_host_key_private_file }}"
+      mode: "0600"
+    - content: "{{ concourseci_host_key_public }}"
+      dest: "{{ concourseci_host_key_public_file }}"
+      mode: "0644"
+    - content: "{{ concourseci_worker_key_private_file }}"
+      dest: "{{ concourseci_worker_key_private_file }}"
+      mode: "0600"
+    - content: "{{ concourseci_worker_key_public_file }}"
+      dest: "{{ concourseci_worker_key_public_file }}"
+      mode: "0644"
+
