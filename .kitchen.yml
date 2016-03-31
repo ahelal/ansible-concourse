@@ -1,0 +1,38 @@
+---
+# TRAVIS: local
+# NO TRAVIS: vagrant
+name_var                    : <% name = if ENV['TRAVIS'] then 'localhost' else 'vagrant' end  %>
+name                        : <%= name %>
+driver                      :
+  name                      : <%= name %>
+  # EC2 Driver will run on Jenkins and vagrant Driver will run on dev machines
+  box                       : ubuntu/trusty64
+  customize                 :
+    cpus                    : 2
+    memory                  : 2048
+
+provisioner:
+    name                    : ansible_push
+    verbose                 : "vvvv"
+    ansible_config          : "tests/ansible.cfg"
+    idempotency_test        : True
+    extra_vars              : { 'kitchen_connection': 'smart', 'kitchen_hosts': '<%= if ENV['TRAVIS'] then 'localhost' else 'all' end %>' }
+    raw_arguments           : <%= if ENV['TRAVIS'] then '-c local' else '' end %>
+    # TRAVIS: True
+    # NO TRAVIS: False
+    sudo                    : <%= if ENV['TRAVIS'] then 'True' else 'False' end  %>
+
+platforms:
+    - name                  : "<%= name %>_V1"
+      provisioner           : 
+        ansible_playbook_bin: "`ansible-version path v1`ansible-playbook"
+
+    - name                  : "<%= name %>_V2"
+      provisioner           :
+        ansible_playbook_bin: "`ansible-version path v2`ansible-playbook"
+
+suites:
+  - name                    : simple
+    provisioner             :
+      playbook              : "tests/simple/simple.yml"
+
