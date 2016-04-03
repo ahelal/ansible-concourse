@@ -1,0 +1,11 @@
+---
+
+- name: restart concourse-web
+  service:
+    name="concourse-web"
+    state="restarted"
+
+- name: restart concourse-worker
+  service:
+    name="concourse-worker"
+    state="restarted"

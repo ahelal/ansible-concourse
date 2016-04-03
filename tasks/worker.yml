@@ -5,12 +5,16 @@
     src="concourse-worker.j2"
     dest="{{ concourseci_bin_dir }}/concourse-worker"
     mode=0755
+  notify:
+   - restart concourse-worker
 
 - name: Install | Concourse worker start init script
   template:
     src="concourse-worker-init.sh.j2"
     dest="/etc/init.d/concourse-worker"
     mode=0755
+  notify:
+   - restart concourse-worker
 
 - name: Install | Ensure Concourse worker is running and Starts on boot
   service:
