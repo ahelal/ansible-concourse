@@ -1,0 +1,32 @@
+---
+
+- name: kernel update | Install kernel 3.19
+  apt: 
+    name="linux-generic-lts-vivid"
+    state=present
+  register: kernel_update
+
+- name: kernel update | Reboot now
+  command: shutdown -r now
+  when: kernel_update | changed
+
+- name: kernel update | Check and set if ansible_ssh_host is set
+  set_fact:
+      apt_hostname: "{{ ansible_host }}"
+  when: ansible_host is defined and ansible_host | length > 0
+
+- name: kernel update | Wait for ssh port to open again
+  wait_for:
+    port="22"
+    host="{{ apt_hostname | default(inventory_hostname) }}"
+    delay=30
+    timeout=180
+    search_regex=OpenSSH
+  connection: local
+  sudo: False
+  when: kernel_update | changed
+
+- name: kernel update | pause a little to ensure everything is running
+  pause:
+    seconds="{{ kernel update_pause_after_reboot }}"
+  when: kernel_update | changed

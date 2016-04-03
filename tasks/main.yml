@@ -1,4 +1,6 @@
 ---
+- name: Kernel upgrade to 3.19
+  include: kernel_update.yml
 
 - name: Common tasks
   include: common.yml
