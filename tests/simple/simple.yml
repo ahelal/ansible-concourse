@@ -69,7 +69,7 @@
       register: postgresql_conf
   roles:
     - { name: "ansible-go", tags: "go" }
-    - { name: "ansible-concourseci", tags: "concourse" }
+    - { name: "ansible-concourse", tags: "concourse" }
 # ssh-keygen -t rsa -f host_key -N ''
 # ssh-keygen -t rsa -f worker_key -N ''
 # ssh-keygen -t rsa -f session_signing_key -N ''
