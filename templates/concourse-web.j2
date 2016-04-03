@@ -1,6 +1,7 @@
 #!/bin/bash
 
 {{ concourseci_bin_dir }}/{{ concourseci_binary_file }} web \
+  --external-url={{ concourseci_web_external }} \
   --basic-auth-username myuser \
   --basic-auth-password mypass \
   --postgres-data-source postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }} \
@@ -8,5 +9,4 @@
   --tsa-host-key {{ concourseci_host_key_private_file }} \
   --tsa-authorized-keys {{ concourseci_worker_key_public_file }} &>> {{ concourseci_log_web }}  &>> {{ concourseci_log_web }}
 
-#   --external-url https://ci.example.com \
 #  --peer-url http://10.0.16.11:8080 

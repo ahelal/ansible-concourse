@@ -10,6 +10,9 @@ concourseci_log_dir                         : "/var/log/concourse"
 concourseci_ssh_dir                         : "{{ concourseci_base_dir }}/.ssh"
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
+# Concourse web
+concourseci_web_external                    : "http://127.0.0.1:8080"
+
 # PostgreSQL
 concourseci_postgresql_user                 : "concourseci"
 concourseci_postgresql_pass                 : "conpass"
@@ -21,7 +24,6 @@ concourseci_garden_update_force             : False
 # Concourse CI
 concourseci_log_worker                      : "{{ concourseci_log_dir }}/concourseci_worker.log"
 concourseci_log_web                         : "{{ concourseci_log_dir }}/concourseci_web.log"
-
 
 concourseci_session_signing_key_private_file: "{{ concourseci_ssh_dir }}/session_signing"
 concourseci_session_signing_key_public_file : "{{ concourseci_ssh_dir }}/session_signing.pub"
