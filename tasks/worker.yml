@@ -11,3 +11,9 @@
     src="concourse-worker-init.sh.j2"
     dest="/etc/init.d/concourse-worker"
     mode=0755
+
+- name: Install | Ensure Concourse worker is running and Starts on boot
+  service:
+    name="concourse-worker"
+    state="started"
+    enabled=True

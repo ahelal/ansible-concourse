@@ -11,3 +11,9 @@
     src="concourse-web-init.sh.j2"
     dest="/etc/init.d/concourse-web"
     mode=0755
+
+- name: Install | Ensure Concourse web is running and Starts on boot
+  service:
+    name="concourse-web"
+    state="started"
+    enabled=True
