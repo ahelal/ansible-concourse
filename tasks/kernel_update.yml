@@ -20,7 +20,6 @@
       apt_port: "{{ ansible_port }}"
   when: ansible_port is defined and (ansible_port | string ) > 0
 
-- debug: var=apt_port
 - name: kernel update | Wait for ssh port to open again
   wait_for:
     port="{{ apt_port | default('22') }}"
