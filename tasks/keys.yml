@@ -28,10 +28,10 @@
     - content: "{{ concourseci_host_key_public }}"
       dest: "{{ concourseci_host_key_public_file }}"
       mode: "0644"
-    - content: "{{ concourseci_worker_key_private_file }}"
+    - content: "{{ concourseci_worker_key_private }}"
       dest: "{{ concourseci_worker_key_private_file }}"
       mode: "0600"
-    - content: "{{ concourseci_worker_key_public_file }}"
+    - content: "{{ concourseci_worker_key_public }}"
       dest: "{{ concourseci_worker_key_public_file }}"
       mode: "0644"
 
