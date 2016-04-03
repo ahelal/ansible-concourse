@@ -23,11 +23,7 @@ provisioner:
     sudo                    : <%= if ENV['TRAVIS'] then 'True' else 'False' end  %>
 
 platforms:
-    - name                  : "<%= name %>_V1"
-      provisioner           : 
-        ansible_playbook_bin: "`ansible-version path v1`ansible-playbook"
-
-    - name                  : "<%= name %>_V2"
+    - name                  : "<%= name %>_v2"
       provisioner           :
         ansible_playbook_bin: "`ansible-version path v2`ansible-playbook"
 
