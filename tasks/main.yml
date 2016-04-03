@@ -8,6 +8,9 @@
 - name: Manage keys
   include: keys.yml
 
+- name: install tasks
+  include: install.yml
+
 - name: Manage web node
   include: web.yml
 
@@ -17,5 +20,3 @@
 - name: Manage  worker node 
   include: worker.yml
 
-- name: install tasks
-  include: install.yml
