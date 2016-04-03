@@ -1,11 +1,5 @@
 ---
-
-- name: garden_linux | Git clone garden
-  git: 
-    repo="https://github.com/cloudfoundry-incubator/garden-linux-release"
-    dest="{{ concourseci_garden_dir }}"
-    recursive=yes
-    force=yes
+# https://github.com/cloudfoundry-incubator/garden-linux/
 
 - name: garden_linux | Install Exta linux kernel
   apt: 
@@ -28,6 +22,21 @@
     - /opt/garden/graph 
     - /opt/garden/state
 
+- name: garden_linux | Check for binary
+  stat: 
+    path="{{ concourseci_garden_dir }}/src/github.com/cloudfoundry-incubator/garden-linux/"
+  register: st
+
+- name: garden_linux | Git clone garden
+  git: 
+    repo="https://github.com/cloudfoundry-incubator/garden-linux-release"
+    dest="{{ concourseci_garden_dir }}"
+    recursive=yes
+    update=no
+  register: reg_garden_linux
+  become_user: "{{ concourseci_user }}"
+  when: not st.stat.exists or concourseci_garden_update_force
+
 - name: garden_linux | Build garden-linux
   shell: /usr/bin/make
   args:
@@ -36,15 +45,6 @@
   environment:
     GOPATH: "{{ concourseci_garden_dir }}"
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin://usr/local/go/bin/"
+  become_user: "{{ concourseci_user }}"
+  when: reg_garden_linux | changed
 
-# https://github.com/cloudfoundry-incubator/garden-linux/
-
-# cd $GOPATH/src/github.com/cloudfoundry-incubator/garden-linux # assuming your $GOPATH has only one entry
-# sudo ./out/garden-linux \
-#        -depot=/opt/garden/depot \
-#        -graph=/opt/garden/graph \
-#        -stateDir=/opt/garden/state \
-#        -rootfs=/opt/garden/rootfs \
-#        -bin=$PWD/linux_backend/bin \
-#        -listenNetwork=tcp \
-#        -listenAddr=127.0.0.1:7777

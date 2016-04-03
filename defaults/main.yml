@@ -14,6 +14,9 @@ concourseci_postgresql_user                 : "concourseci"
 concourseci_postgresql_pass                 : "conpass"
 concourseci_postgresql_host                 : "127.0.0.1"
 concourseci_postgresql_db                   : "concourse"
+# Garden linux
+concourseci_garden_listen                   : "127.0.0.1:7777"
+concourseci_garden_update_force             : False
 
 concourseci_session_signing_key_private_file: "{{ concourseci_ssh_dir }}/session_signing"
 concourseci_session_signing_key_public_file : "{{ concourseci_ssh_dir }}/session_signing.pub"
