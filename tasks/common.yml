@@ -23,3 +23,11 @@
     - "{{ concourseci_bin_dir }}"
     - "{{ concourseci_garden_dir }}"
     - "{{ concourseci_log_dir }}"
+
+- name: common | Ensure concourseci .ssh dir
+  file: 
+    path="{{ concourseci_ssh_dir }}"
+    state=directory
+    mode=0750
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"

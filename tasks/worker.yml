@@ -1,6 +1,51 @@
 ---
 
-- name: Install | Concourse worker start script
+- name: Worker | Copy session key 
+  copy:
+    content="{{ item.content }}"
+    dest="{{ item.dest }}"
+    mode="{{ item.mode }}"
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+  with_items: 
+    - content: "{{ concourseci_session_signing_key.private }}"
+      dest: "{{ concourseci_session_signing_key.file }}"
+      mode: "0600"
+    - content: "{{ concourseci_session_signing_key.public }}"
+      dest: "{{ concourseci_session_signing_key.file }}.pub"
+      mode: "0644"
+
+- name: Worker | Copy host key
+  copy:
+    content="{{ item.content }}"
+    dest="{{ item.dest }}"
+    mode="{{ item.mode }}"
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+  with_items: 
+    - content: "{{ concourseci_host_key.private }}"
+      dest: "{{ concourseci_host_key.file }}"
+      mode: "0600"
+    - content: "{{ concourseci_host_key.public }}"
+      dest: "{{ concourseci_host_key.file }}.pub"
+      mode: "0644"
+
+- name: Worker | Copy worker key
+  copy:
+    content="{{ item.content }}"
+    dest="{{ item.dest }}"
+    mode="{{ item.mode }}"
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+  with_items: 
+    - content: "{{ concourseci_worker_key[0].private }}"
+      dest: "{{ concourseci_worker_key[0].file }}"
+      mode: "0600"
+    - content: "{{ concourseci_worker_key[0].public }}"
+      dest: "{{ concourseci_worker_key[0].file }}.pub"
+      mode: "0644"
+
+- name: Worker | Concourse worker start script
   template:
     src="concourse-worker.j2"
     dest="{{ concourseci_bin_dir }}/concourse-worker"
@@ -8,7 +53,7 @@
   notify:
    - restart concourse-worker
 
-- name: Install | Concourse worker start init script
+- name: Worker | Concourse worker start init script
   template:
     src="concourse-worker-init.sh.j2"
     dest="/etc/init.d/concourse-worker"
@@ -16,7 +61,7 @@
   notify:
    - restart concourse-worker
 
-- name: Install | Ensure Concourse worker is running and Starts on boot
+- name: Worker | Ensure Concourse worker is running and Starts on boot
   service:
     name="concourse-worker"
     state="started"

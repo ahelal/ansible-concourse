@@ -30,73 +30,73 @@ concourseci_postgresql_db                   : "concourse"
 
 # Example Keys (YOU MUST OVERRIDE THEM)
 # This keys are used for demo only you should generate your own and store them safely i.e. ansible-valut
-concourseci_session_signing_key_private_file: "{{ concourseci_ssh_dir }}/session_signing"
-concourseci_session_signing_key_public_file : "{{ concourseci_ssh_dir }}/session_signing.pub"
-concourseci_session_signing_key_private     : |
-                                                -----BEGIN RSA PRIVATE KEY-----
-                                                MIIEowIBAAKCAQEAurSh5kbUadGuUgHqm1ct6SUrqFkH5kyJNdOjHdWxoxCzw5I9
-                                                APGeGuayWawEe1qq0Zh69nUy/Xiq6MprSKsYCXbtUTvkjN7mVVeVBX2KwVdK5qeX
-                                                z9oP/lqJtkQfswsz09U4w5yqYfMT6o9fT/9BWPaym1PIehMxKemeQ48CmSr8QBfK
-                                                fa+sCXXuJ2PqJ3iLhtaqcWJi6Tb3TNxuOL4DXjINtI1csIyVcGAzXvKLq6j7vKwW
-                                                ri20okCPFMcenZSUk7FWsKysB0FDxCPQeSz8FM2fbf3e5NriZwooOmicDPHXMq/L
-                                                asZX3X5kIh0ZWaM2opfFMyL+uTG1Z4I4ubKqAQIDAQABAoIBAFWUZoF/Be5bRmQg
-                                                rMD3fPvZJeHMrWpKuroJgEM0qG/uP/ftGDlOhwIdrLKdvpAsRxA7rGE751t37B84
-                                                aWStyB7OfIk3wtMveLS1qIETwn5M3PBM8bE8awhTx7vcDgurnt4CZjqDnTW4jfB+
-                                                N1obzoBQ1B2Okd4i3e4wP3MIIlDCMoTPPd79DfQ6Hz2vd0eFlQcwb2S66oAGTgxi
-                                                oG0X0A+o+/GXGGhcuoRfXCR/oaeMtCTAML8UVNT8qktYr+Lfo4JoQR6VroQMStOm
-                                                7DvS3yJe7ZZDrQBdNDHVAsIG9/QXEWmiKNv3p1gHm216FQeJV6rzSXGjeE22tE9S
-                                                JzmBKAECgYEA6CiFBIMECPzEnBooyrh8tehb5m0F6TeSeYwdgu+WuuBDRMh5Kruu
-                                                9ydHE3tYHE1uR2Lng6suoU4Mnzmjv4E6THPTmTlolDQEqv7V24a0e8nWxV/+K7lN
-                                                XHrq4BFE5Xa8lkLAHw4tF8Ix6162ooHkaLhhmUWzkGVxAUhL/tbVc/ECgYEAzeEn
-                                                cR2NMDsNMR/anJzkjDilhiM5pORtN5O+eBIzpbFUEDZL4LIT7gqzic0kKnMJczr7
-                                                0WYUp2U762yrA4U2BqiGyTO2yhcMM5kuDTG+1VTdw3G6rZ0L80jUugW9131VC3tB
-                                                zcinIUs8N2hWsbuaRNhTCmlEzfe5UsikRjHgZxECgYEAze1DMCFWrvInI6BAlrDW
-                                                TjTxb489MwVMM+yJMN98f/71LEn20GTyaeC5NxqtqU01iLS+TxjEn+gvYf0qtm/W
-                                                WoJTKxK1JOCPU24AHF18MmFy1Fi1h+syJ9oQBPjMeA2+cjp7WBCnBvAGf5Tfw34c
-                                                MJd8WwxsnqScfFq4ri+53sECgYBGobw6Xn0V0uyPsfH6UQlH4hdHkcYw//1IV/O8
-                                                leIKMnA4r6gQioez3xABctO5jIXtdor2KCNl2qFX/4wcRRNn7WFwncFUS9vvx9m4
-                                                xRxHbDo410fIUFzNNmtk9ptO1rzal4rX4sMT9Q/Poog7qbUfcWfr5nmogBiggh15
-                                                x5rJQQKBgE4khLJKEpLi8ozo/h02R/H4XT1YGNuadyuIULZDyuXVzcUP8R7Xx43n
-                                                ITU3tVCvmKizZmC3LZvVPkfDskhI9Yl3X7weBMUDeXxgDeUJNJZXXuDf1CC//Uo9
-                                                N1EQdIhtxo4mgHXjF/8L32SqinAJb5ErNXQQwT5k9G22mZkHZY7Y
-                                                -----END RSA PRIVATE KEY-----
-concourseci_session_signing_key_public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6tKHmRtRp0a5SAeqbVy3pJSuoWQfmTIk106Md1bGjELPDkj0A8Z4a5rJZrAR7WqrRmHr2dTL9eKroymtIqxgJdu1RO+SM3uZVV5UFfYrBV0rmp5fP2g/+Wom2RB+zCzPT1TjDnKph8xPqj19P/0FY9rKbU8h6EzEp6Z5DjwKZKvxAF8p9r6wJde4nY+oneIuG1qpxYmLpNvdM3G44vgNeMg20jVywjJVwYDNe8ourqPu8rBauLbSiQI8Uxx6dlJSTsVawrKwHQUPEI9B5LPwUzZ9t/d7k2uJnCig6aJwM8dcyr8tqxlfdfmQiHRlZozail8UzIv65MbVngji5sqoB
+concourseci_session_signing_key             :
+                                file        : "{{ concourseci_ssh_dir }}/session_signing"
+                                public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6tKHmRtRp0a5SAeqbVy3pJSuoWQfmTIk106Md1bGjELPDkj0A8Z4a5rJZrAR7WqrRmHr2dTL9eKroymtIqxgJdu1RO+SM3uZVV5UFfYrBV0rmp5fP2g/+Wom2RB+zCzPT1TjDnKph8xPqj19P/0FY9rKbU8h6EzEp6Z5DjwKZKvxAF8p9r6wJde4nY+oneIuG1qpxYmLpNvdM3G44vgNeMg20jVywjJVwYDNe8ourqPu8rBauLbSiQI8Uxx6dlJSTsVawrKwHQUPEI9B5LPwUzZ9t/d7k2uJnCig6aJwM8dcyr8tqxlfdfmQiHRlZozail8UzIv65MbVngji5sqoB
+                                private     : |
+                                              -----BEGIN RSA PRIVATE KEY-----
+                                              MIIEowIBAAKCAQEAurSh5kbUadGuUgHqm1ct6SUrqFkH5kyJNdOjHdWxoxCzw5I9
+                                              APGeGuayWawEe1qq0Zh69nUy/Xiq6MprSKsYCXbtUTvkjN7mVVeVBX2KwVdK5qeX
+                                              z9oP/lqJtkQfswsz09U4w5yqYfMT6o9fT/9BWPaym1PIehMxKemeQ48CmSr8QBfK
+                                              fa+sCXXuJ2PqJ3iLhtaqcWJi6Tb3TNxuOL4DXjINtI1csIyVcGAzXvKLq6j7vKwW
+                                              ri20okCPFMcenZSUk7FWsKysB0FDxCPQeSz8FM2fbf3e5NriZwooOmicDPHXMq/L
+                                              asZX3X5kIh0ZWaM2opfFMyL+uTG1Z4I4ubKqAQIDAQABAoIBAFWUZoF/Be5bRmQg
+                                              rMD3fPvZJeHMrWpKuroJgEM0qG/uP/ftGDlOhwIdrLKdvpAsRxA7rGE751t37B84
+                                              aWStyB7OfIk3wtMveLS1qIETwn5M3PBM8bE8awhTx7vcDgurnt4CZjqDnTW4jfB+
+                                              N1obzoBQ1B2Okd4i3e4wP3MIIlDCMoTPPd79DfQ6Hz2vd0eFlQcwb2S66oAGTgxi
+                                              oG0X0A+o+/GXGGhcuoRfXCR/oaeMtCTAML8UVNT8qktYr+Lfo4JoQR6VroQMStOm
+                                              7DvS3yJe7ZZDrQBdNDHVAsIG9/QXEWmiKNv3p1gHm216FQeJV6rzSXGjeE22tE9S
+                                              JzmBKAECgYEA6CiFBIMECPzEnBooyrh8tehb5m0F6TeSeYwdgu+WuuBDRMh5Kruu
+                                              9ydHE3tYHE1uR2Lng6suoU4Mnzmjv4E6THPTmTlolDQEqv7V24a0e8nWxV/+K7lN
+                                              XHrq4BFE5Xa8lkLAHw4tF8Ix6162ooHkaLhhmUWzkGVxAUhL/tbVc/ECgYEAzeEn
+                                              cR2NMDsNMR/anJzkjDilhiM5pORtN5O+eBIzpbFUEDZL4LIT7gqzic0kKnMJczr7
+                                              0WYUp2U762yrA4U2BqiGyTO2yhcMM5kuDTG+1VTdw3G6rZ0L80jUugW9131VC3tB
+                                              zcinIUs8N2hWsbuaRNhTCmlEzfe5UsikRjHgZxECgYEAze1DMCFWrvInI6BAlrDW
+                                              TjTxb489MwVMM+yJMN98f/71LEn20GTyaeC5NxqtqU01iLS+TxjEn+gvYf0qtm/W
+                                              WoJTKxK1JOCPU24AHF18MmFy1Fi1h+syJ9oQBPjMeA2+cjp7WBCnBvAGf5Tfw34c
+                                              MJd8WwxsnqScfFq4ri+53sECgYBGobw6Xn0V0uyPsfH6UQlH4hdHkcYw//1IV/O8
+                                              leIKMnA4r6gQioez3xABctO5jIXtdor2KCNl2qFX/4wcRRNn7WFwncFUS9vvx9m4
+                                              xRxHbDo410fIUFzNNmtk9ptO1rzal4rX4sMT9Q/Poog7qbUfcWfr5nmogBiggh15
+                                              x5rJQQKBgE4khLJKEpLi8ozo/h02R/H4XT1YGNuadyuIULZDyuXVzcUP8R7Xx43n
+                                              ITU3tVCvmKizZmC3LZvVPkfDskhI9Yl3X7weBMUDeXxgDeUJNJZXXuDf1CC//Uo9
+                                              N1EQdIhtxo4mgHXjF/8L32SqinAJb5ErNXQQwT5k9G22mZkHZY7Y
+                                              -----END RSA PRIVATE KEY-----
+concourseci_host_key                        :
+                                file        : "{{ concourseci_ssh_dir }}/concourseci_host"
+                                public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjddjviqF3BjVnxrledNsKM0wm7bwJwRgnUomLVrwHXjfArEz5yFa2C87IT9CYpIxkZMgmd0Bdtwj3kiNPP0qYpcj/uTqQTE5xLzTiJIUFsgSQwrMt/zd5x44g71qiHF/1KtHdcZq1dW3+5IwBog692HjcytbAxpUEGGpocHs/aoJ5/xn2tx61QOhkr5+PP1Ft7eHu719/pb1czhH8tZwCwNJQs4vzf79Mlgt0ikjJ84o9kOiUGP+Fc0+EjapBg9M2GE6/l86IJzcx/t/uQYCFOdKbg5ukck9NztldaOUeAPkUttPtf2vdjZU+EwSYc3XvhyQlN/QQmZ8tvG3gV9wv
+                                private     : |
+                                              -----BEGIN RSA PRIVATE KEY-----
+                                              MIIEogIBAAKCAQEAo3XY74qhdwY1Z8a5XnTbCjNMJu28CcEYJ1KJi1a8B143wKxM
+                                              +chWtgvOyE/QmKSMZGTIJndAXbcI95IjTz9KmKXI/7k6kExOcS804iSFBbIEkMKz
+                                              Lf83eceOIO9aohxf9SrR3XGatXVt/uSMAaIOvdh43MrWwMaVBBhqaHB7P2qCef8Z
+                                              9rcetUDoZK+fjz9Rbe3h7u9ff6W9XM4R/LWcAsDSULOL83+/TJYLdIpIyfOKPZDo
+                                              lBj/hXNPhI2qQYPTNhhOv5fOiCc3Mf7f7kGAhTnSm4ObpHJPTc7ZXWjlHgD5FLbT
+                                              7X9r3Y2VPhMEmHN174ckJTf0EJmfLbxt4FfcLwIDAQABAoIBAFzux2OJIbuV4A8c
+                                              QI+fSFlISOdpChtRmPXiSyjZKxXVT0VPsIPijsn5dJsWJbZi9x6s3c5gxkuBoKuA
+                                              fmqzxSl8OAaLvOwFNiPLfvmDYc2XJFlZGJ3yGAw4lGnNK243S6cLrT2FNTwtg1gD
+                                              gEX9aPwucqi0+duoC1jEuNqf+LJYZykDicw3yHixgas/pKe2yDvsUhyQy2m/g9SW
+                                              rpKjppxas7aKQr1GEI4Gz4JY6L78ksdLLFCiXD/pg/DLbyfOoMid8eCUnGbh1rhB
+                                              PsKNyk3r/CSWsSlUlrujEqFdc/H8Ej07wVmVduTZddvjE4LcVtFlBzcEZbEofnyx
+                                              H8wLv8ECgYEA0F/jBIVcSWLTB00R/Fix7Bo9ICtZ1sXL+hLPm/zVlL/gD+MlAAVB
+                                              FimJKqMZa25B1ZUrYWV+Zddtel61ZxTrb86KKqtb0yuIVtPBc2ssVsO9hKL7NJ9i
+                                              g6tpR0hOhD46WJxOI9Srjv61f9tP7izlwbKXo6TrdYxM8YdjXlUyMCcCgYEAyNIB
+                                              IayYqg+pFoNdqKi3/n7/yGGWvlO0kW9aXkzrwTxT/k3NCHwarGgeSqU+/XVhnAHB
+                                              pvsORLAnf++gQNfoxU10nrdhkj6YIdg8OK5rO4n7iNysa4bZi2DrwJt9/mFpNkvY
+                                              lD956Lof/J1gPKmcNAwnsxijJE7w3I3rJ5UucLkCgYB5PMEGWV2XqTMlVVc4npZu
+                                              y9lyxSZRSuZiSt2WYaYXFQiV1dAqUeRLs8EGGL1qf004qsEBux6uvIgLId2j600M
+                                              0XwcVXVoyTRbaHtu3xV+Kgczi+xi8rVL7MilW9GrKdWixtbEDDIBUftiN8Uqy96m
+                                              M3X9FbCVxRrjkKVlNmasEwKBgBCMxg0ZZUd2nO+/CcPxi6BMpRXFfR/YVCQ8Mg1d
+                                              d3xoVV+616/gUm5s8joinitTNiUeO/Bf9lAQ2GCBxgoyAPvpozfFUyQzRmRbprLh
+                                              JPM2LuWbkhYWee0zopov9lU1f+86lvG4vXpBhItUCO9W5wmfCtKGsEM4wj7a70tG
+                                              zxn5AoGARTzJJb6nxhqQCAWTq2GOQ1dL3uJvHihDs8+Brtn686Xqkajaw+1+OX2i
+                                              ehm8iE8k8Mdv7BqPMXQxlLb954l/ieTYkmwTnTG5Ot2+bx0Q15TGJqKFCWQZRveV
+                                              uPTcE+vQzvMV3lJo0CHTlNMo1JgHOO5UsFZ1cBxO7MZXCzChGE8=
+                                              -----END RSA PRIVATE KEY-----
 
-concourseci_host_key_private_file           : "{{ concourseci_ssh_dir }}/concourseci_host"
-concourseci_host_key_public_file            : "{{ concourseci_ssh_dir }}/concourseci_host.pub"
-concourseci_host_key_private                : |
-                                                -----BEGIN RSA PRIVATE KEY-----
-                                                MIIEogIBAAKCAQEAo3XY74qhdwY1Z8a5XnTbCjNMJu28CcEYJ1KJi1a8B143wKxM
-                                                +chWtgvOyE/QmKSMZGTIJndAXbcI95IjTz9KmKXI/7k6kExOcS804iSFBbIEkMKz
-                                                Lf83eceOIO9aohxf9SrR3XGatXVt/uSMAaIOvdh43MrWwMaVBBhqaHB7P2qCef8Z
-                                                9rcetUDoZK+fjz9Rbe3h7u9ff6W9XM4R/LWcAsDSULOL83+/TJYLdIpIyfOKPZDo
-                                                lBj/hXNPhI2qQYPTNhhOv5fOiCc3Mf7f7kGAhTnSm4ObpHJPTc7ZXWjlHgD5FLbT
-                                                7X9r3Y2VPhMEmHN174ckJTf0EJmfLbxt4FfcLwIDAQABAoIBAFzux2OJIbuV4A8c
-                                                QI+fSFlISOdpChtRmPXiSyjZKxXVT0VPsIPijsn5dJsWJbZi9x6s3c5gxkuBoKuA
-                                                fmqzxSl8OAaLvOwFNiPLfvmDYc2XJFlZGJ3yGAw4lGnNK243S6cLrT2FNTwtg1gD
-                                                gEX9aPwucqi0+duoC1jEuNqf+LJYZykDicw3yHixgas/pKe2yDvsUhyQy2m/g9SW
-                                                rpKjppxas7aKQr1GEI4Gz4JY6L78ksdLLFCiXD/pg/DLbyfOoMid8eCUnGbh1rhB
-                                                PsKNyk3r/CSWsSlUlrujEqFdc/H8Ej07wVmVduTZddvjE4LcVtFlBzcEZbEofnyx
-                                                H8wLv8ECgYEA0F/jBIVcSWLTB00R/Fix7Bo9ICtZ1sXL+hLPm/zVlL/gD+MlAAVB
-                                                FimJKqMZa25B1ZUrYWV+Zddtel61ZxTrb86KKqtb0yuIVtPBc2ssVsO9hKL7NJ9i
-                                                g6tpR0hOhD46WJxOI9Srjv61f9tP7izlwbKXo6TrdYxM8YdjXlUyMCcCgYEAyNIB
-                                                IayYqg+pFoNdqKi3/n7/yGGWvlO0kW9aXkzrwTxT/k3NCHwarGgeSqU+/XVhnAHB
-                                                pvsORLAnf++gQNfoxU10nrdhkj6YIdg8OK5rO4n7iNysa4bZi2DrwJt9/mFpNkvY
-                                                lD956Lof/J1gPKmcNAwnsxijJE7w3I3rJ5UucLkCgYB5PMEGWV2XqTMlVVc4npZu
-                                                y9lyxSZRSuZiSt2WYaYXFQiV1dAqUeRLs8EGGL1qf004qsEBux6uvIgLId2j600M
-                                                0XwcVXVoyTRbaHtu3xV+Kgczi+xi8rVL7MilW9GrKdWixtbEDDIBUftiN8Uqy96m
-                                                M3X9FbCVxRrjkKVlNmasEwKBgBCMxg0ZZUd2nO+/CcPxi6BMpRXFfR/YVCQ8Mg1d
-                                                d3xoVV+616/gUm5s8joinitTNiUeO/Bf9lAQ2GCBxgoyAPvpozfFUyQzRmRbprLh
-                                                JPM2LuWbkhYWee0zopov9lU1f+86lvG4vXpBhItUCO9W5wmfCtKGsEM4wj7a70tG
-                                                zxn5AoGARTzJJb6nxhqQCAWTq2GOQ1dL3uJvHihDs8+Brtn686Xqkajaw+1+OX2i
-                                                ehm8iE8k8Mdv7BqPMXQxlLb954l/ieTYkmwTnTG5Ot2+bx0Q15TGJqKFCWQZRveV
-                                                uPTcE+vQzvMV3lJo0CHTlNMo1JgHOO5UsFZ1cBxO7MZXCzChGE8=
-                                                -----END RSA PRIVATE KEY-----
-concourseci_host_key_public                 : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjddjviqF3BjVnxrledNsKM0wm7bwJwRgnUomLVrwHXjfArEz5yFa2C87IT9CYpIxkZMgmd0Bdtwj3kiNPP0qYpcj/uTqQTE5xLzTiJIUFsgSQwrMt/zd5x44g71qiHF/1KtHdcZq1dW3+5IwBog692HjcytbAxpUEGGpocHs/aoJ5/xn2tx61QOhkr5+PP1Ft7eHu719/pb1czhH8tZwCwNJQs4vzf79Mlgt0ikjJ84o9kOiUGP+Fc0+EjapBg9M2GE6/l86IJzcx/t/uQYCFOdKbg5ukck9NztldaOUeAPkUttPtf2vdjZU+EwSYc3XvhyQlN/QQmZ8tvG3gV9wv
-
-concourseci_worker_key_private_file         : "{{ concourseci_ssh_dir }}/concourseci_worker"
-concourseci_worker_key_public_file          : "{{ concourseci_ssh_dir }}/concourseci_worker.pub"
-concourseci_worker_key_private              : |
+concourseci_worker_key                      :
+                              - file        : "{{ concourseci_ssh_dir }}/concourseci_worker"
+                                public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKW31QIWcCR2Gh8i1fodDPHqviQV5eAW7Zv37Hzs1SKISvYeJ32EQ1mx2UXV8omzJiVojlXIsqkTXIBK6awvXQcRt8HFXwB9LjBfbYOUm+vU6L46HG3p2rBFAynh3NOeXvV1IBMNeuJ/w7v4CNNIkfKfQ34iwpirnX9fwoRV1pIt7c7MnKwZVrq/BwFpGh/GfOKrXLRXUsJAxDA+Mm0q2rvfpcsviINM7V41Lzemany1KVfjMLVe86CKWT0j2WERYejVlhxTXLlz7lHAowyU87dXh4QVHmDgMMSRIWgbMS0/1uAwfpdLMkzBEUhWRgKXDe/NWRk2I+Q77IJa1fnunJ
+                                private     : |
                                                 -----BEGIN RSA PRIVATE KEY-----
                                                 MIIEpQIBAAKCAQEAylt9UCFnAkdhofItX6HQzx6r4kFeXgFu2b9+x87NUiiEr2Hi
                                                 d9hENZsdlF1fKJsyYlaI5VyLKpE1yASumsL10HEbfBxV8AfS4wX22DlJvr1Oi+Oh
@@ -124,4 +124,3 @@ concourseci_worker_key_private              : |
                                                 0XBHuBy2hbiZPIZpAK3DtPONUjjrcv3gPmhraoz5K7saY5vxyEJFYNCu2nKCJUkp
                                                 ZNJ69MjK2HDIBIpqFJ7jnp32Dp8wviHXQ5e1PJQxoaXNyubfOs1Cpa0=
                                                 -----END RSA PRIVATE KEY-----
-concourseci_worker_key_public               : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKW31QIWcCR2Gh8i1fodDPHqviQV5eAW7Zv37Hzs1SKISvYeJ32EQ1mx2UXV8omzJiVojlXIsqkTXIBK6awvXQcRt8HFXwB9LjBfbYOUm+vU6L46HG3p2rBFAynh3NOeXvV1IBMNeuJ/w7v4CNNIkfKfQ34iwpirnX9fwoRV1pIt7c7MnKwZVrq/BwFpGh/GfOKrXLRXUsJAxDA+Mm0q2rvfpcsviINM7V41Lzemany1KVfjMLVe86CKWT0j2WERYejVlhxTXLlz7lHAowyU87dXh4QVHmDgMMSRIWgbMS0/1uAwfpdLMkzBEUhWRgKXDe/NWRk2I+Q77IJa1fnunJ

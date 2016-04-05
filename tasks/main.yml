@@ -5,9 +5,6 @@
 - name: Common tasks
   include: common.yml
 
-- name: Manage keys
-  include: keys.yml
-
 - name: install tasks
   include: install.yml
 
