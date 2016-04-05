@@ -1,1 +1,3 @@
 ---
+concourseci_binary_file                     : "concourse_linux_amd64_{{ concourseci_version }}"
+concourseci_download_url                    : "https://github.com/concourse/bin/releases/download/{{ concourseci_version }}/concourse_linux_amd64"

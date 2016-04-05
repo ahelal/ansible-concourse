@@ -1,30 +1,35 @@
 ---
-
-concourseci_version                         : "v1.0.1-rc.6"
-
+# Version
+concourseci_version                         : "v1.0.1-rc.9"
+# Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
 concourseci_bin_dir                         : "{{ concourseci_base_dir }}/bin"
 concourseci_garden_dir                      : "{{ concourseci_base_dir }}/garden"
 concourseci_worker_dir                      : "{{ concourseci_base_dir }}/worker"
-concourseci_log_dir                         : "/var/log/concourse"
 concourseci_ssh_dir                         : "{{ concourseci_base_dir }}/.ssh"
+
+# Concourse log
+concourseci_log_dir                         : "/var/log/concourse"
+concourseci_log_worker                      : "{{ concourseci_log_dir }}/concourseci_worker.log"
+concourseci_log_web                         : "{{ concourseci_log_dir }}/concourseci_web.log"
+
+# Concourse User
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
 # Concourse web
 concourseci_web_external                    : "http://127.0.0.1:8080"
+# Garden linux
+concourseci_garden_listen                   : "127.0.0.1:7777"
+concourseci_garden_update_force             : False
 
 # PostgreSQL
 concourseci_postgresql_user                 : "concourseci"
 concourseci_postgresql_pass                 : "conpass"
 concourseci_postgresql_host                 : "127.0.0.1"
 concourseci_postgresql_db                   : "concourse"
-# Garden linux
-concourseci_garden_listen                   : "127.0.0.1:7777"
-concourseci_garden_update_force             : False
-# Concourse CI
-concourseci_log_worker                      : "{{ concourseci_log_dir }}/concourseci_worker.log"
-concourseci_log_web                         : "{{ concourseci_log_dir }}/concourseci_web.log"
 
+# Example Keys (YOU MUST OVERRIDE THEM)
+# This keys are used for demo only you should generate your own and store them safely i.e. ansible-valut
 concourseci_session_signing_key_private_file: "{{ concourseci_ssh_dir }}/session_signing"
 concourseci_session_signing_key_public_file : "{{ concourseci_ssh_dir }}/session_signing.pub"
 concourseci_session_signing_key_private     : |
@@ -120,6 +125,3 @@ concourseci_worker_key_private              : |
                                                 ZNJ69MjK2HDIBIpqFJ7jnp32Dp8wviHXQ5e1PJQxoaXNyubfOs1Cpa0=
                                                 -----END RSA PRIVATE KEY-----
 concourseci_worker_key_public               : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKW31QIWcCR2Gh8i1fodDPHqviQV5eAW7Zv37Hzs1SKISvYeJ32EQ1mx2UXV8omzJiVojlXIsqkTXIBK6awvXQcRt8HFXwB9LjBfbYOUm+vU6L46HG3p2rBFAynh3NOeXvV1IBMNeuJ/w7v4CNNIkfKfQ34iwpirnX9fwoRV1pIt7c7MnKwZVrq/BwFpGh/GfOKrXLRXUsJAxDA+Mm0q2rvfpcsviINM7V41Lzemany1KVfjMLVe86CKWT0j2WERYejVlhxTXLlz7lHAowyU87dXh4QVHmDgMMSRIWgbMS0/1uAwfpdLMkzBEUhWRgKXDe/NWRk2I+Q77IJa1fnunJ
-
-concourseci_binary_file                     : "concourse_linux_amd64_{{ concourseci_version }}"
-concourseci_download_url                    : "https://github.com/concourse/bin/releases/download/{{ concourseci_version }}/concourse_linux_amd64"
