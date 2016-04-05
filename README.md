@@ -1,30 +1,28 @@
 # ansible-concourse
 A role to install [Concourse CI](http://concourse.ci/)
 
-## Requirments
+## Requirements
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql) 
 * GOlang I recommend [ansible gloang role](https://github.com/jlund/ansible-go) 
 * SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx) 
 
-##
-
 ## Warning experimental
 I am a big fan of concourse CI, not so much bosh. This role will install concourse CI.
 
-The role is in early development, but usauabl.
+The role is in early development, but usable.
 
 ## Example
 You can use test-kitchen to spin a test machine. 
 ```
 bundle install
-bundle exec kitchen converage simple-vagrant
+bundle exec kitchen converge simple-vagrant
 ```
 The kitchen machine will have an IP of **192.168.50.150**
 
 Once your done
 ````
-bundle exec kitchen destory
+bundle exec kitchen destroy
 ```
 
 ## Cluster
@@ -78,7 +76,7 @@ concourseci_postgresql_host                 : "127.0.0.1"
 concourseci_postgresql_db                   : "concourse"
 
 # Example Keys (YOU MUST OVERRIDE THEM)
-# This keys are used for demo only you should generate your own and store them safely i.e. ansible-valut
+# This keys are used for demo only you should generate your own and store them safely i.e. ansible-vault
 concourseci_session_signing_key             :
                                 file        : "{{ concourseci_ssh_dir }}/session_signing"
                                 public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6tKHmRtRp0a5SAeqbVy3pJSuoWQfmTIk106Md1bGjELPDkj0A8Z4a5rJZrAR7WqrRmHr2dTL9eKroymtIqxgJdu1RO+SM3uZVV5UFfYrBV0rmp5fP2g/+Wom2RB+zCzPT1TjDnKph8xPqj19P/0FY9rKbU8h6EzEp6Z5DjwKZKvxAF8p9r6wJde4nY+oneIuG1qpxYmLpNvdM3G44vgNeMg20jVywjJVwYDNe8ourqPu8rBauLbSiQI8Uxx6dlJSTsVawrKwHQUPEI9B5LPwUzZ9t/d7k2uJnCig6aJwM8dcyr8tqxlfdfmQiHRlZozail8UzIv65MbVngji5sqoB
