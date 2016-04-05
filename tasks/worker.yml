@@ -38,11 +38,11 @@
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
   with_items: 
-    - content: "{{ concourseci_worker_key[0].private }}"
-      dest: "{{ concourseci_worker_key[0].file }}"
+    - content: "{{ concourseci_worker_key[concourseci_worker_position].private }}"
+      dest: "{{ concourseci_worker_key[concourseci_worker_position].file }}"
       mode: "0600"
-    - content: "{{ concourseci_worker_key[0].public }}"
-      dest: "{{ concourseci_worker_key[0].file }}.pub"
+    - content: "{{ concourseci_worker_key[concourseci_worker_position].public }}"
+      dest: "{{ concourseci_worker_key[concourseci_worker_position].file }}.pub"
       mode: "0644"
 
 - name: Worker | Concourse worker start script

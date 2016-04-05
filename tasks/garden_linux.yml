@@ -10,7 +10,7 @@
   modprobe:
     name="aufs"
 
-- name: common | Ensure concourseci garden directory exists
+- name: common | Ensure Concourse garden directory exists
   file: 
     path="{{ item }}"
     state="directory"
@@ -27,7 +27,7 @@
     path="{{ concourseci_garden_dir }}/src/github.com/cloudfoundry-incubator/garden-linux/"
   register: st
 
-- name: garden_linux | Git clone garden
+- name: garden_linux | Git clone Garden Linux
   git: 
     repo="https://github.com/cloudfoundry-incubator/garden-linux-release"
     dest="{{ concourseci_garden_dir }}"
@@ -37,7 +37,7 @@
   become_user: "{{ concourseci_user }}"
   when: not st.stat.exists or concourseci_garden_update_force
 
-- name: garden_linux | Build garden-linux
+- name: garden_linux | Build Garden Linux
   shell: /usr/bin/make
   args:
     chdir: "{{ concourseci_garden_dir }}/src/github.com/cloudfoundry-incubator/garden-linux/"

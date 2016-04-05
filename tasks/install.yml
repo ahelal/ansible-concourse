@@ -1,11 +1,11 @@
 ---
 
-- name: Install | Check concursecio archive stat
+- name: Install | Check Concourse archive stat
   stat: 
     path="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
   register: concourseci_binary_file_stat
 
-- name: Install | Download file with custom HTTP headers
+- name: Install | Download Concourse CI
   get_url: 
     url="{{ concourseci_download_url }}"
     dest="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"

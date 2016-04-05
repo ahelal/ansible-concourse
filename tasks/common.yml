@@ -1,18 +1,18 @@
 ---
 
-- name: common | Ensure concourseci group exists
+- name: common | Ensure Concourse group exists
   group: 
     name="{{ concourseci_group }}"
     state=present
 
-- name: common | Ensure concourseci user exists
+- name: common | Ensure Concourse user exists
   user: 
     home="{{ concourseci_base_dir }}"
     name="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
     system="yes"
 
-- name: common | Ensure concourseci directory exists
+- name: common | Ensure Concourse directory exists
   file: 
     path="{{ item }}"
     state="directory"
@@ -24,7 +24,7 @@
     - "{{ concourseci_garden_dir }}"
     - "{{ concourseci_log_dir }}"
 
-- name: common | Ensure concourseci .ssh dir
+- name: common | Ensure Concourse .ssh dir
   file: 
     path="{{ concourseci_ssh_dir }}"
     state=directory
