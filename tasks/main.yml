@@ -1,4 +1,5 @@
 ---
+
 - name: Kernel upgrade to 3.19
   include: kernel_update.yml
 
@@ -10,10 +11,13 @@
 
 - name: Manage web node
   include: web.yml
+  when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group]"
 
 - name: Manage garden worker node 
   include: garden_linux.yml
+  when: "groups[concourseci_worker_group] is defined and inventory_hostname in groups[concourseci_worker_group]"
 
 - name: Manage  worker node 
   include: worker.yml
+  when: "groups[concourseci_worker_group] is defined and inventory_hostname in groups[concourseci_worker_group]"
 

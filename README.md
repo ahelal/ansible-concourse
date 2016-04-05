@@ -27,11 +27,29 @@ Once your done
 bundle exec kitchen destory
 ```
 
+## Cluster
+In order to make a cluster of servers you can easily add the host to groups
+```ini
+[concourse-web]
+web01
+[concourse-worker]
+worker01
+worker02
+worker03
+```
+This still work in progress so keys might not work. You can also change the default group names.
+
+
 ## Variables 
 ```yaml
 ---
-# Version
+# Ansible groups
+concourseci_web_group                       : "concourse-web"
+concourseci_worker_group                    : "concourse-worker"
+
+# Concourse version
 concourseci_version                         : "v1.0.1-rc.9"
+
 # Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
 concourseci_bin_dir                         : "{{ concourseci_base_dir }}/bin"
