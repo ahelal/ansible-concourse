@@ -25,7 +25,7 @@ provisioner:
     sudo                    : <%= if ENV['TRAVIS'] then 'True' else 'False' end  %>
 
 platforms:
-    - name                  : "<%= name %>_v2"
+    - name                  : "<%= name %>"
       provisioner           :
         ansible_playbook_bin: "`ansible-version path v2`ansible-playbook"
         mygroup             : ["concourse-web", "concourse-worker"]
