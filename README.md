@@ -18,7 +18,7 @@ The role is in early development, but usauabl.
 You can use test-kitchen to spin a test machine. 
 ```
 bundle install
-bundle exec kitchen converage simple-vagrant-v2
+bundle exec kitchen converage simple-vagrant
 ```
 The kitchen machine will have an IP of **192.168.50.150**
 
