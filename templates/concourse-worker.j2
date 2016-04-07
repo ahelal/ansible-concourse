@@ -5,4 +5,4 @@
   --peer-ip 127.0.0.1 \
   --tsa-host localhost \
   --tsa-public-key {{ concourseci_host_key.file }}.pub \
-  --tsa-worker-private-key {{ concourseci_worker_key[concourseci_worker_position].file }}.pub  &>> {{ concourseci_log_worker }}
+  --tsa-worker-private-key {{ concourseci_worker_key[concourseci_worker_position | int].file }}.pub  &>> {{ concourseci_log_worker }}

@@ -7,5 +7,5 @@
   --postgres-data-source postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }} \
   --session-signing-key {{ concourseci_session_signing_key.file }} \
   --tsa-host-key {{ concourseci_host_key.file }} \
-  --tsa-authorized-keys {{ concourseci_worker_key[concourseci_worker_position].file }}.pub &>> {{ concourseci_log_web }}  &>> {{ concourseci_log_web }}
+  --tsa-authorized-keys {{ concourseci_worker_key[concourseci_worker_position | int].file }}.pub &>> {{ concourseci_log_web }}  &>> {{ concourseci_log_web }}
 # TODO: WIll not work with multi host
