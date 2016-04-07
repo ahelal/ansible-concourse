@@ -4,7 +4,7 @@ concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
 # Concourse version
-concourseci_version                         : "v1.0.1-rc.9"
+concourseci_version                         : "v1.0.1-rc.34"
 
 # Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
