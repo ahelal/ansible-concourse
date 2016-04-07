@@ -55,14 +55,14 @@
     - name: pre Create postgresql db
       postgresql_db: 
          name=concourse
-      sudo_user: postgres
+      become_user: postgres
 
     - name : pre Create postgresql user 
       postgresql_user: 
         db=concourse
         name=concourseci
         password=conpass
-      sudo_user: postgres
+      become_user: postgres
 
     - name : pre Service postgresql
       service: 

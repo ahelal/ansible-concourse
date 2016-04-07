@@ -28,7 +28,7 @@
     timeout=180
     search_regex=OpenSSH
   connection: local
-  sudo: False
+  become: False
   when: kernel_update | changed
 
 - name: kernel update | pause a little to ensure everything is running
