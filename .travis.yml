@@ -1,0 +1,26 @@
+---
+language: python
+python: "2.7"
+services:
+  - docker
+
+
+before_install:
+  # Make sure everything's up to date.
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq python-apt python-pycurl git python-pip ruby ruby-dev build-essential autoconf
+  - gem install bundler
+  # Get ansible install
+  - curl -s https://raw.githubusercontent.com/AutomationWithAnsible/ansible-setup/master/example/travis-install -o /tmp/travis-ansible-setup.sh
+
+install:
+  - bash /tmp/travis-ansible-setup.sh
+  - bundle install
+
+script:
+    - ansible --version
+    - export TRAVIS=True
+    - bundle exec kitchen test 
+
+after_success:
+    - echo "Success"
