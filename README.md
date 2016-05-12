@@ -2,15 +2,17 @@
 An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
 ## Requirements
+* Ubuntu 14.04
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql) 
 * GOlang I recommend [ansible gloang role](https://github.com/jlund/ansible-go) 
 * SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx) 
 
-## Warning experimental
-I am a big fan of concourse CI, not so much bosh. This role will install concourse CI.
+## Overview
+I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
+The role is in early development, but usable so please submit PRs and PRs.
 
-The role is in early development, but usable.
+
 
 ## Example
 You can use test-kitchen to spin a test machine. 
@@ -25,20 +27,45 @@ Once your done
 bundle exec kitchen destroy
 ```
 
-## Cluster
+Play example 
+```
+---
+- name: Create Single node host
+  hosts: ci
+  become: True
+  vars:
+    concourseci_external_url         : "http://192.168.50.150:8080"
+    concourseci_basic_auth_username  : "myuser"
+    concourseci_basic_auth_password  : "mypass"
+  roles:
+    - { name: "postgresql", tags: "go" }
+    - { name: "ansible-go", tags: "go" }
+    - { name: "ansible-concourse", tags: "concourse" }
+```
+```ìni
+[concourse-web]
+ci
+[concourse-worker]
+ci
+```
+
+## Cluster 1 web and 4 worker example
+
 In order to make a cluster of servers you can easily add the host to groups
 ```ini
 [concourse-web]
-web01
+ci01
 [concourse-worker]
+ci01
 worker01
 worker02
 worker03
 ```
 
+You would also need to generate keys for workers check key section
+
 ## Variables 
 ```yaml
----
 ---
 
 # Concourse version
