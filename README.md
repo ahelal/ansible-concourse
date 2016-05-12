@@ -28,7 +28,8 @@ bundle exec kitchen destroy
 ```
 
 Play example 
-```
+
+```yaml
 ---
 - name: Create Single node host
   hosts: ci
@@ -42,6 +43,7 @@ Play example
     - { name: "ansible-go", tags: "go" }
     - { name: "ansible-concourse", tags: "concourse" }
 ```
+
 ```ìni
 [concourse-web]
 ci
