@@ -10,7 +10,7 @@
   notify:
    - restart concourse-worker
 
-- name: web | Copy worker public key
+- name: worker | Copy worker public key
   copy:
     content="{{ concourseci_key_worker_public }}"
     dest="{{ concourseci_key_worker_path }}.pub"

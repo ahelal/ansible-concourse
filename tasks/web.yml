@@ -44,7 +44,7 @@
     key: "{{ item.public }}"
     path: "{{ concourseci_tsa_authorization_keys }}"
     manage_dir: no
-  with_items: "{{ concourseci_worker_key }}"
+  with_items: "{{ concourseci_worker_keys }}"
   notify:
    - restart concourse-web
 
