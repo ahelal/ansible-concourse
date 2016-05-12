@@ -7,7 +7,9 @@
   hosts: all
   become: True
   vars:
-    concourseci_web_external : "http://192.168.50.150:8080"
+    concourseci_external_url         : "http://192.168.50.150:8080"
+    concourseci_basic_auth_username  : "myuser"
+    concourseci_basic_auth_password  : "mypass"
   pre_tasks:
     - name: pre Putting you authorized_key
       authorized_key:
@@ -72,60 +74,3 @@
   roles:
     - { name: "ansible-go", tags: "go" }
     - { name: "ansible-concourse", tags: "concourse" }
-# ssh-keygen -t rsa -f host_key -N ''
-# ssh-keygen -t rsa -f worker_key -N ''
-# ssh-keygen -t rsa -f session_signing_key -N ''
-# cp worker_key.pub authorized_worker_keys
-
-# ./concourse web \
-#   --basic-auth-username test \
-#   --basic-auth-password test \
-#   --session-signing-key session_signing_key \
-#   --tsa-host-key session_signing_key \
-#   --tsa-authorized-keys authorized_worker_keys \
-#   --external-url http://192.168.56.150:8080\
-#   --postgres-data-source postgres://vagrant:vagrant@127.0.0.1/concourse 
-
-
-# ./concourse web \
-#   --basic-auth-username test \
-#   --basic-auth-password test \
-#   --session-signing-key session_signing_key \
-#   --tsa-host-key session_signing_key \
-#   --tsa-authorized-keys authorized_worker_keys \
-#   --external-url http://127.0.0.1:8080\
-#   --postgres-data-source postgres://vagrant:vagrant@127.0.0.1/concourse 
-
-
-# sudo ./concourse worker \
-#   --work-dir /opt/concourse/worker \
-#   --peer-ip 127.0.0.1 \
-#   --tsa-host 127.0.0.1 \
-#   --tsa-public-key worker_key.pub \
-#   --tsa-worker-private-key worker_key \
-#   --bind-port=7778
-
-
-
-
-
-
-
-
-# ./concourse web \
-#   --basic-auth-username test \
-#   --basic-auth-password test \
-#   --session-signing-key session_signing_key \
-#   --tsa-host-key session_signing_key \
-#   --tsa-authorized-keys  host_key \
-#   --external-url http://127.0.0.1:8080\
-#   --postgres-data-source postgres://vagrant:vagrant@127.0.0.1/concourse 
-
-
-# sudo ./concourse worker \
-#   --work-dir /opt/concourse/worker \
-#   --peer-ip 127.0.0.1 \
-#   --tsa-host 127.0.0.1 \
-#   --tsa-public-key  host_key.pub \
-#   --tsa-worker-private-key  host_key \
-#   --bind-port=7778

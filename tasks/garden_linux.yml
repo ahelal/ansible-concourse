@@ -31,6 +31,7 @@
   git: 
     repo="https://github.com/cloudfoundry-incubator/garden-linux-release"
     dest="{{ concourseci_garden_dir }}"
+    version="{{ concourseci_garden_version }}"
     recursive=yes
     update=no
   register: reg_garden_linux

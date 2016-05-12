@@ -1,59 +1,62 @@
 ---
 
-- name: web | Copy session key 
+- name: web | Copy session public key
   copy:
-    content="{{ item.content }}"
-    dest="{{ item.dest }}"
-    mode="{{ item.mode }}"
+    content="{{ concourseci_key_session_public }}"
+    dest="{{ concourseci_key_session_path }}.pub"
+    mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
-  with_items: 
-    - content: "{{ concourseci_session_signing_key.private }}"
-      dest: "{{ concourseci_session_signing_key.file }}"
-      mode: "0600"
-    - content: "{{ concourseci_session_signing_key.public }}"
-      dest: "{{ concourseci_session_signing_key.file }}.pub"
-      mode: "0644"
 
-- name: web | Copy host key
+- name: web | Copy session private key
   copy:
-    content="{{ item.content }}"
-    dest="{{ item.dest }}"
-    mode="{{ item.mode }}"
+    content="{{ concourseci_key_session_private }}"
+    dest="{{ concourseci_key_session_path }}"
+    mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
-  with_items: 
-    - content: "{{ concourseci_host_key.private }}"
-      dest: "{{ concourseci_host_key.file }}"
-      mode: "0600"
-    - content: "{{ concourseci_host_key.public }}"
-      dest: "{{ concourseci_host_key.file }}.pub"
-      mode: "0644"
+  no_log: True
+  notify:
+    - restart concourse-web
 
-- name: web | Copy worker key
+- name: web | Copy tsa public key 
   copy:
-    content="{{ item.content }}"
-    dest="{{ item.dest }}"
-    mode="{{ item.mode }}"
+    content="{{ concourseci_key_tsa_public }}"
+    dest="{{ concourseci_key_tsa_path }}.pub"
+    mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
-  with_items: 
-    - content: "{{ concourseci_worker_key[0].private }}"
-      dest: "{{ concourseci_worker_key[0].file }}"
-      mode: "0600"
-    - content: "{{ concourseci_worker_key[0].public }}"
-      dest: "{{ concourseci_worker_key[0].file }}.pub"
-      mode: "0644"
 
-- name: web | Concourse web start script
+- name: web | Copy tsa private key 
+  copy:
+    content="{{ concourseci_key_tsa_private }}"
+    dest="{{ concourseci_key_tsa_path }}"
+    mode="0600"
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+  no_log: True
+  notify:
+    - restart concourse-web
+
+- name: web | Create authorized key for tsa
+  authorized_key:
+    user: "{{ concourseci_user }}"
+    key: "{{ item.public }}"
+    path: "{{ concourseci_tsa_authorization_keys }}"
+    manage_dir: no
+  with_items: "{{ concourseci_worker_keys }}"
+  notify:
+   - restart concourse-web
+
+- name: web | Templating concourse web start script
   template:
     src="concourse-web.j2"
     dest="{{ concourseci_bin_dir }}/concourse-web"
     mode=0755
   notify:
-   - restart concourse-web
+    - restart concourse-web
 
-- name: web | Concourse web start init script
+- name: web | Templating concourse web start init script
   template:
     src="concourse-web-init.sh.j2"
     dest="/etc/init.d/concourse-web"

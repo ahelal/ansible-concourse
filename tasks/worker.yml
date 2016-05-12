@@ -1,49 +1,33 @@
 ---
 
-- name: Worker | Copy session key 
+- name: worker | Copy session public key
   copy:
-    content="{{ item.content }}"
-    dest="{{ item.dest }}"
-    mode="{{ item.mode }}"
+    content="{{ concourseci_key_session_public }}"
+    dest="{{ concourseci_key_session_path }}.pub"
+    mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
-  with_items: 
-    - content: "{{ concourseci_session_signing_key.private }}"
-      dest: "{{ concourseci_session_signing_key.file }}"
-      mode: "0600"
-    - content: "{{ concourseci_session_signing_key.public }}"
-      dest: "{{ concourseci_session_signing_key.file }}.pub"
-      mode: "0644"
+  notify:
+   - restart concourse-worker
 
-- name: Worker | Copy host key
+- name: worker | Copy worker public key
   copy:
-    content="{{ item.content }}"
-    dest="{{ item.dest }}"
-    mode="{{ item.mode }}"
+    content="{{ concourseci_key_worker_public }}"
+    dest="{{ concourseci_key_worker_path }}.pub"
+    mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
-  with_items: 
-    - content: "{{ concourseci_host_key.private }}"
-      dest: "{{ concourseci_host_key.file }}"
-      mode: "0600"
-    - content: "{{ concourseci_host_key.public }}"
-      dest: "{{ concourseci_host_key.file }}.pub"
-      mode: "0644"
 
-- name: Worker | Copy worker key
+- name: web | Copy worker private key
   copy:
-    content="{{ item.content }}"
-    dest="{{ item.dest }}"
-    mode="{{ item.mode }}"
+    content="{{ concourseci_key_worker_private }}"
+    dest="{{ concourseci_key_worker_path }}"
+    mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
-  with_items: 
-    - content: "{{ concourseci_worker_key[concourseci_worker_position | int].private }}"
-      dest: "{{ concourseci_worker_key[concourseci_worker_position | int].file }}"
-      mode: "0600"
-    - content: "{{ concourseci_worker_key[concourseci_worker_position].public }}"
-      dest: "{{ concourseci_worker_key[concourseci_worker_position | int].file }}.pub"
-      mode: "0644"
+  no_log: True
+  notify:
+    - restart concourse-worker
 
 - name: Worker | Concourse worker start script
   template:

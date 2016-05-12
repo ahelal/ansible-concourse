@@ -1,8 +1,81 @@
 #!/bin/bash
+{% macro build_option(option, value='omit') %}
+{% if value != 'omit' %}--{{ option }}={{ value }}{% endif %}
+{% endmacro %}
 
 {{ concourseci_bin_dir }}/{{ concourseci_binary_file }} worker \
-  --work-dir {{ concourseci_worker_dir }} \
-  --peer-ip 127.0.0.1 \
-  --tsa-host localhost \
-  --tsa-public-key {{ concourseci_host_key.file }}.pub \
-  --tsa-worker-private-key {{ concourseci_worker_key[concourseci_worker_position | int].file }} &>> {{ concourseci_log_worker }}
+{# General config #}
+  {{ build_option("name", concourseci_worker_name) }}\
+  {{ build_option("work-dir", concourseci_worker_dir) }}\
+{# TSA config #}
+  {{ build_option("tsa-host", concourseci_tsa_host ) }}\
+  {{ build_option("tsa-port", concourseci_tsa_bind_port ) }}\
+  {{ build_option("tsa-public-key", concourseci_key_tsa_path + ".pub" ) }}\
+  {{ build_option("tsa-worker-private-key", concourseci_key_worker_path  ) }}\
+{# Garden config #}
+  {{ build_option("garden-log-level", concourseci_garden_log_level) }}\
+{# Redirect to logs #}
+  &>> {{ concourseci_log_worker }}
+
+# TODO:
+#          --tag=                                         A tag to set during registration. Can be specified multiple times.
+#    Server Configuration:
+#          --garden-bind-ip=                              Bind with TCP on the given IP.
+#          --garden-bind-port=                            Bind with TCP on the given port. (default: 7777)
+#          --garden-bind-socket=                          Bind with Unix on the given socket path. (default: /tmp/garden.sock)
+#          --garden-debug-bind-ip=                        Bind the debug server on the given IP.
+#          --garden-debug-bind-port=                      Bind the debug server to the given port. (default: 17013)
+#          --garden-tag=                                  Optional 2-character identifier used for namespacing global configuration.
+#
+#    Container Lifecycle:
+#          --garden-depot=                                Directory in which to store container data.
+#          --garden-properties-path=                      Path in which to store properties.
+#          --garden-default-rootfs=                       Default rootfs to use when not specified on container creation.
+#          --garden-default-grace-time=                   Default time after which idle containers should expire.
+#          --garden-destroy-containers-on-startup         Clean up all the existing containers on startup.
+#
+#    Binary Tools:
+#          --garden-iodaemon-bin=                         Path to the 'iodaemon' binary.
+#          --garden-dadoo-bin=                            Path to the 'dadoo' binary.
+#          --garden-nstar-bin=                            Path to the 'nstar' binary.
+#          --garden-tar-bin=                              Path to the 'tar' binary.
+#          --garden-kawasaki-bin=                         Path to the 'kawasaki' network hook binary.
+#          --garden-init-bin=                             Path execute as pid 1 inside each container.
+#          --garden-runc-bin=                             Path to the 'runc' binary. (default: runc)
+#
+#    Image Graph:
+#          --garden-graph=                                Directory on which to store imported rootfs graph data.
+#          --garden-graph-cleanup-threshold-in-megabytes= Disk usage of the graph dir at which cleanup should trigger, or -1 to disable graph cleanup. (default: -1)
+#          --garden-persistent-image=                     Image that should never be garbage collected. Can be specified multiple times.
+#
+#    Docker Image Fetching:
+#          --garden-docker-registry=                      Docker registry API endpoint. (default: registry-1.docker.io)
+#          --garden-insecure-docker-registry=             Docker registry to allow connecting to even if not secure. Can be specified multiple times.
+#
+#    Container Networking:
+#          --garden-network-pool=                         Network range to use for dynamically allocated container subnets. (default: 10.254.0.0/22)
+#          --garden-allow-host-access                     Allow network access to the host machine.
+#          --garden-deny-network=                         Network ranges to which traffic from containers will be denied. Can be specified multiple times.
+#          --garden-allow-network=                        Network ranges to which traffic from containers will be allowed. Can be specified multiple times.
+#          --garden-dns-server=                           DNS server IP address to use instead of automatically determined servers. Can be specified multiple times.
+#          --garden-external-ip=                          IP address to use to reach container's mapped ports. Autodetected if not specified.
+#          --garden-port-pool-start=                      Start of the ephemeral port range used for mapped container ports. (default: 60000)
+#          --garden-port-pool-size=                       Size of the port pool used for mapped container ports. (default: 5000)
+#          --garden-mtu=                                  MTU size for container network interfaces. (default: 1500)
+#          --garden-network-plugin=                       Path to network plugin binary.
+#          --garden-network-plugin-extra-arg=             Extra argument to pass to the network plugin. Can be specified multiple times.
+#
+#    Limits:
+#          --garden-max-containers=                       Maximum number of containers that can be created. (default: 0)
+#
+#    Metrics:
+#          --garden-metrics-emission-interval=            Interval on which to emit metrics. (default: 1m)
+#          --garden-dropsonde-origin=                     Origin identifier for Dropsonde-emitted metrics. (default: garden-linux)
+#          --garden-dropsonde-destination=                Destination for Dropsonde-emitted metrics. (default: 127.0.0.1:3457)
+#
+#    Baggageclaim Configuration:
+#          --baggageclaim-bind-ip=                        IP address on which to listen for API traffic. (default: 0.0.0.0)
+#          --baggageclaim-bind-port=                      Port on which to listen for API traffic. (default: 7788)
+#          --baggageclaim-reap-interval=                  Interval on which to reap expired volumes. (default: 10s)
+#
+#    #

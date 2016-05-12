@@ -1,16 +1,18 @@
 # ansible-concourse
-A role to install [Concourse CI](http://concourse.ci/)
+An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
 ## Requirements
+* Ubuntu 14.04
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql) 
 * GOlang I recommend [ansible gloang role](https://github.com/jlund/ansible-go) 
 * SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx) 
 
-## Warning experimental
-I am a big fan of concourse CI, not so much bosh. This role will install concourse CI.
+## Overview
+I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
+The role is in early development, but usable so please submit PRs and PRs.
 
-The role is in early development, but usable.
+
 
 ## Example
 You can use test-kitchen to spin a test machine. 
@@ -25,28 +27,54 @@ Once your done
 bundle exec kitchen destroy
 ```
 
-## Cluster
+Play example 
+
+```yaml
+---
+- name: Create Single node host
+  hosts: ci
+  become: True
+  vars:
+    concourseci_external_url         : "http://192.168.50.150:8080"
+    concourseci_basic_auth_username  : "myuser"
+    concourseci_basic_auth_password  : "mypass"
+  roles:
+    - { name: "postgresql", tags: "go" }
+    - { name: "ansible-go", tags: "go" }
+    - { name: "ansible-concourse", tags: "concourse" }
+```
+
+```ìni
+[concourse-web]
+ci
+[concourse-worker]
+ci
+```
+
+## Cluster 1 web and 4 worker example
+
 In order to make a cluster of servers you can easily add the host to groups
 ```ini
 [concourse-web]
-web01
+ci01
 [concourse-worker]
+ci01
 worker01
 worker02
 worker03
 ```
-This still work in progress so keys might not work. You can also change the default group names.
 
+You would also need to generate keys for workers check key section
 
 ## Variables 
 ```yaml
 ---
-# Ansible groups
-concourseci_web_group                       : "concourse-web"
-concourseci_worker_group                    : "concourse-worker"
 
 # Concourse version
-concourseci_version                         : "v1.0.1-rc.9"
+concourseci_version                         : "v1.3.0-rc.28"
+## Concurse garden installation option
+concourseci_garden_version                  : "master"
+concourseci_garden_update_force             : False # Force update of newer version of garden
 
 # Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
@@ -63,24 +91,78 @@ concourseci_log_web                         : "{{ concourseci_log_dir }}/concour
 # Concourse User
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
-# Concourse web
-concourseci_web_external                    : "http://127.0.0.1:8080"
-# Garden linux
+
+## Concourse web
+concourseci_bind_ip                         : "0.0.0.0"
+concourseci_bind_port                       : "8080"
+concourseci_external_url                    : "http://127.0.0.1:8080" #URL used to reach any ATC from the outside world.
+# concourseci_oauth_base_url                # URL used as the base of OAuth redirect URIs. If not specified, the external URL is used.
+# concourseci_peer_url                      # URL used to reach this ATC from other ATCs in the cluster. (default: http://127.0.0.1:8080)
+
+## Cocnourse resources
+# concourseci_resource_checking_interval      # Interval on which to check for new versions of resources. (default: 1m)
+# concourseci_old_resource_grace_period       # How long to cache the result of a get step after a newer version of the resource is found. (default: 5m)
+# concourseci_resource_cache_cleanup_interval # Interval on which to cleanup old caches of resources. (default: 30s)
+
+## Concourse Container Retention 
+# concourseci_container_retention_success_duration  # The duration to keep a succeeded step's containers before expiring them. (default: 5m)
+# concourseci_container_retention_failure_duration  # The duration to keep a failed step's containers before expiring them. (default: 1h)
+
+## Concuorse authentication
+### Basic
+# concourseci_basic_auth_username          # Username to use for basic auth.
+# concourseci_basic_auth_password          # Password to use for basic auth.
+### Github
+# concourseci_github_auth_client_id        # Application client ID for enabling GitHub OAuth.
+# concourseci_github_auth_client_secret    # Application client secret for enabling GitHub OAuth.
+# concourseci_github_auth_organization     # GitHub organization whose members will have access.
+# concourseci_github_auth_team             # GitHub team whose members will have access.
+# concourseci_github_auth_user             # GitHub user to permit access.
+# concourseci_github_auth_auth_url         # Override default endpoint AuthURL for Github Enterprise
+# concourseci_github_auth_token_url        # Override default endpoint TokenURL for Github Enterprise
+# concourseci_github_auth_api_url          # Override default API endpoint URL for Github Enterprise
+
+# Concourse TSA Config
+concourseci_tsa_host                        : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group 
+concourseci_tsa_bind_ip                     : "0.0.0.0"
+concourseci_tsa_bind_port                   : "2222"
+concourseci_tsa_heartbeat_interval          : "30s"
+concourseci_tsa_authorization_keys          : "{{ concourseci_base_dir }}/tls_authorization"
+# concourseci_peer_url                      : # URL used to reach this ATC from other ATCs in the cluster. (default:http://127.0.0.1:8080)
+
+## Concourse Extra raw options
+concourseci_web_extra_options               : ""
+
+## Concourse worker
+concourseci_worker_name                     : "{{ inventory_hostname }}"
+
+## Concourse garden linux
 concourseci_garden_listen                   : "127.0.0.1:7777"
-concourseci_garden_update_force             : False
+concourseci_garden_log_level                : "info" # [debug|info|error|fatal] 
 
 # PostgreSQL
 concourseci_postgresql_user                 : "concourseci"
 concourseci_postgresql_pass                 : "conpass"
 concourseci_postgresql_host                 : "127.0.0.1"
 concourseci_postgresql_db                   : "concourse"
+concourseci_postgresql_ssl                  : "disable"
+concourseci_postgresql_source               : "postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }}?sslmode={{ concourseci_postgresql_ssl }}"
 
-# Example Keys (YOU MUST OVERRIDE THEM)
-# This keys are used for demo only you should generate your own and store them safely i.e. ansible-vault
-concourseci_session_signing_key             :
-                                file        : "{{ concourseci_ssh_dir }}/session_signing"
-                                public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6tKHmRtRp0a5SAeqbVy3pJSuoWQfmTIk106Md1bGjELPDkj0A8Z4a5rJZrAR7WqrRmHr2dTL9eKroymtIqxgJdu1RO+SM3uZVV5UFfYrBV0rmp5fP2g/+Wom2RB+zCzPT1TjDnKph8xPqj19P/0FY9rKbU8h6EzEp6Z5DjwKZKvxAF8p9r6wJde4nY+oneIuG1qpxYmLpNvdM3G44vgNeMg20jVywjJVwYDNe8ourqPu8rBauLbSiQI8Uxx6dlJSTsVawrKwHQUPEI9B5LPwUzZ9t/d7k2uJnCig6aJwM8dcyr8tqxlfdfmQiHRlZozail8UzIv65MbVngji5sqoB
-                                private     : |
+# Ansible Groups
+concourseci_web_group                       : "concourse-web"
+concourseci_worker_group                    : "concourse-worker"
+
+# ********************* Example Keys (YOU MUST OVERRIDE THEM) *********************
+# This keys are used for demo only you should generate your own and store them 
+# safely i.e. ansible-vault
+# **********************************************************************************
+
+# If you dont know how to generate keys check https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
+# You would need to Generate a minumum of 2 keys for web
+# And one key for each worker node
+concourseci_key_session_path               : "{{ concourseci_ssh_dir }}/session_signing"
+concourseci_key_session_public             : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6tKHmRtRp0a5SAeqbVy3pJSuoWQfmTIk106Md1bGjELPDkj0A8Z4a5rJZrAR7WqrRmHr2dTL9eKroymtIqxgJdu1RO+SM3uZVV5UFfYrBV0rmp5fP2g/+Wom2RB+zCzPT1TjDnKph8xPqj19P/0FY9rKbU8h6EzEp6Z5DjwKZKvxAF8p9r6wJde4nY+oneIuG1qpxYmLpNvdM3G44vgNeMg20jVywjJVwYDNe8ourqPu8rBauLbSiQI8Uxx6dlJSTsVawrKwHQUPEI9B5LPwUzZ9t/d7k2uJnCig6aJwM8dcyr8tqxlfdfmQiHRlZozail8UzIv65MbVngji5sqoB
+concourseci_key_session_private            : |
                                               -----BEGIN RSA PRIVATE KEY-----
                                               MIIEowIBAAKCAQEAurSh5kbUadGuUgHqm1ct6SUrqFkH5kyJNdOjHdWxoxCzw5I9
                                               APGeGuayWawEe1qq0Zh69nUy/Xiq6MprSKsYCXbtUTvkjN7mVVeVBX2KwVdK5qeX
@@ -108,10 +190,10 @@ concourseci_session_signing_key             :
                                               ITU3tVCvmKizZmC3LZvVPkfDskhI9Yl3X7weBMUDeXxgDeUJNJZXXuDf1CC//Uo9
                                               N1EQdIhtxo4mgHXjF/8L32SqinAJb5ErNXQQwT5k9G22mZkHZY7Y
                                               -----END RSA PRIVATE KEY-----
-concourseci_host_key                        :
-                                file        : "{{ concourseci_ssh_dir }}/concourseci_host"
-                                public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjddjviqF3BjVnxrledNsKM0wm7bwJwRgnUomLVrwHXjfArEz5yFa2C87IT9CYpIxkZMgmd0Bdtwj3kiNPP0qYpcj/uTqQTE5xLzTiJIUFsgSQwrMt/zd5x44g71qiHF/1KtHdcZq1dW3+5IwBog692HjcytbAxpUEGGpocHs/aoJ5/xn2tx61QOhkr5+PP1Ft7eHu719/pb1czhH8tZwCwNJQs4vzf79Mlgt0ikjJ84o9kOiUGP+Fc0+EjapBg9M2GE6/l86IJzcx/t/uQYCFOdKbg5ukck9NztldaOUeAPkUttPtf2vdjZU+EwSYc3XvhyQlN/QQmZ8tvG3gV9wv
-                                private     : |
+
+concourseci_key_tsa_path                    : "{{ concourseci_ssh_dir }}/tsa"
+concourseci_key_tsa_public                  : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjddjviqF3BjVnxrledNsKM0wm7bwJwRgnUomLVrwHXjfArEz5yFa2C87IT9CYpIxkZMgmd0Bdtwj3kiNPP0qYpcj/uTqQTE5xLzTiJIUFsgSQwrMt/zd5x44g71qiHF/1KtHdcZq1dW3+5IwBog692HjcytbAxpUEGGpocHs/aoJ5/xn2tx61QOhkr5+PP1Ft7eHu719/pb1czhH8tZwCwNJQs4vzf79Mlgt0ikjJ84o9kOiUGP+Fc0+EjapBg9M2GE6/l86IJzcx/t/uQYCFOdKbg5ukck9NztldaOUeAPkUttPtf2vdjZU+EwSYc3XvhyQlN/QQmZ8tvG3gV9wv
+concourseci_key_tsa_private                 : |
                                               -----BEGIN RSA PRIVATE KEY-----
                                               MIIEogIBAAKCAQEAo3XY74qhdwY1Z8a5XnTbCjNMJu28CcEYJ1KJi1a8B143wKxM
                                               +chWtgvOyE/QmKSMZGTIJndAXbcI95IjTz9KmKXI/7k6kExOcS804iSFBbIEkMKz
@@ -140,9 +222,13 @@ concourseci_host_key                        :
                                               uPTcE+vQzvMV3lJo0CHTlNMo1JgHOO5UsFZ1cBxO7MZXCzChGE8=
                                               -----END RSA PRIVATE KEY-----
 
-concourseci_worker_key                      :
-                              - file        : "{{ concourseci_ssh_dir }}/concourseci_worker"
-                                public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKW31QIWcCR2Gh8i1fodDPHqviQV5eAW7Zv37Hzs1SKISvYeJ32EQ1mx2UXV8omzJiVojlXIsqkTXIBK6awvXQcRt8HFXwB9LjBfbYOUm+vU6L46HG3p2rBFAynh3NOeXvV1IBMNeuJ/w7v4CNNIkfKfQ34iwpirnX9fwoRV1pIt7c7MnKwZVrq/BwFpGh/GfOKrXLRXUsJAxDA+Mm0q2rvfpcsviINM7V41Lzemany1KVfjMLVe86CKWT0j2WERYejVlhxTXLlz7lHAowyU87dXh4QVHmDgMMSRIWgbMS0/1uAwfpdLMkzBEUhWRgKXDe/NWRk2I+Q77IJa1fnunJ
+
+concourseci_worker_position                 : "{{ groups[concourseci_worker_group].index(inventory_hostname)| default(0) }}"
+concourseci_key_worker_path                 : "{{ concourseci_ssh_dir }}/worker"
+concourseci_key_worker_public               : "{{ concourseci_worker_keys[concourseci_worker_position | int ]}}.public"
+concourseci_key_worker_private              : "{{ concourseci_worker_keys[concourseci_worker_position | int ]}}.private"
+concourseci_worker_keys                     :
+                              - public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKW31QIWcCR2Gh8i1fodDPHqviQV5eAW7Zv37Hzs1SKISvYeJ32EQ1mx2UXV8omzJiVojlXIsqkTXIBK6awvXQcRt8HFXwB9LjBfbYOUm+vU6L46HG3p2rBFAynh3NOeXvV1IBMNeuJ/w7v4CNNIkfKfQ34iwpirnX9fwoRV1pIt7c7MnKwZVrq/BwFpGh/GfOKrXLRXUsJAxDA+Mm0q2rvfpcsviINM7V41Lzemany1KVfjMLVe86CKWT0j2WERYejVlhxTXLlz7lHAowyU87dXh4QVHmDgMMSRIWgbMS0/1uAwfpdLMkzBEUhWRgKXDe/NWRk2I+Q77IJa1fnunJ
                                 private     : |
                                                 -----BEGIN RSA PRIVATE KEY-----
                                                 MIIEpQIBAAKCAQEAylt9UCFnAkdhofItX6HQzx6r4kFeXgFu2b9+x87NUiiEr2Hi
@@ -171,6 +257,37 @@ concourseci_worker_key                      :
                                                 0XBHuBy2hbiZPIZpAK3DtPONUjjrcv3gPmhraoz5K7saY5vxyEJFYNCu2nKCJUkp
                                                 ZNJ69MjK2HDIBIpqFJ7jnp32Dp8wviHXQ5e1PJQxoaXNyubfOs1Cpa0=
                                                 -----END RSA PRIVATE KEY-----
+
+                              - file        : "{{ concourseci_ssh_dir }}/concourseci_worker"
+                                public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXQFU/VlngUtaW9i6HgkdEfcB6Ak+Ogk/EN96lB6lm6NHvMWL0ggtrxzPcyQ+K6Rri1Vh2zDKenF+ZutqfxfNEmmDUNuHW96djUXEzwLuTYYdoobHNFtV9s2pEix2QFaMxMnvWSIfvKqDvI2Z+zwfzNFKjDweiVsCPw3vAF9vIL6W12zDb3hGN4uJqpz4GCj0K3DR/dxMZVEcE4VQ5ITOusqRKeZTt3QMJI9ZdJF8xg+Bdg/NSDvH7GOcmN5eLEheIx3lWCmhtQvh1iwa+JlDVWQFmxbVqPTzI/8phjOIfEqimg+nBVq157UIfDf77Xj2YyVQSv2inVc4RLZSMQw3p
+                                private     : |
+                                              -----BEGIN RSA PRIVATE KEY-----
+                                              MIIEowIBAAKCAQEA10BVP1ZZ4FLWlvYuh4JHRH3AegJPjoJPxDfepQepZujR7zFi
+                                              9IILa8cz3MkPiuka4tVYdswynpxfmbran8XzRJpg1Dbh1venY1FxM8C7k2GHaKGx
+                                              zRbVfbNqRIsdkBWjMTJ71kiH7yqg7yNmfs8H8zRSow8HolbAj8N7wBfbyC+ltdsw
+                                              294RjeLiaqc+Bgo9Ctw0f3cTGVRHBOFUOSEzrrKkSnmU7d0DCSPWXSRfMYPgXYPz
+                                              Ug7x+xjnJjeXixIXiMd5VgpobUL4dYsGviZQ1VkBZsW1aj08yP/KYYziHxKopoPp
+                                              wVatee1CHw3++149mMlUEr9op1XOES2UjEMN6QIDAQABAoIBAH42vsWwwGqEqEdE
+                                              euwCO/+xLNdd24BYcKVBjU9/OpmZEuAKOVfdmQzNdV+UlYSCQr2XE5Q1D8lpL7VY
+                                              lzDwRUCItRY6SBpghMn7y0DpVhOJMHjttu/m37AhL8KZP/Bof5QtYee4B9z5Rfxy
+                                              6XqZsrOsjngGLBfIfojNuxZb5wdttX/u7Qp9otnESxifTbn9PfUM5UwhXRncWbsT
+                                              MJ0p+aP36aNxwWDKht6bxiBRryvwNbRZX2iu18oxUUWg50uK0M/lo0KK4Svvc5lN
+                                              YfBFvum78KckgDX7zVenEOmU9bQfXWgB79oP8IpRP5OyPF2AJjgiKOfR7X+JA7Nq
+                                              pfXj48ECgYEA8MjIKz4ILS0ahsaxOIPsc1UyOK6F9v1PrU7ooi8WfLdY4ouPvIl5
+                                              BI6zCFL9IdNOlc6Rh+UpfPYndaJz/1cWJyC0diChVdLAR+j6fuEqIKPSiv/Xn+hM
+                                              sbsiNn23MoA6C2Jvv1FLez+Shvlj6fF4G1t8MfHwoXZ0yVhuSkJH9o0CgYEA5Np/
+                                              k4fA9w/OsbtJu0KtGN0AwhCVmFE/3doE4BVSsmWGznzHcC864S924CHsgznrM3OW
+                                              HX7C+PFgbsbtXwqxiaMAaxrh1wBnx28c4wMsNkXCFUds4DkjqDW6IhNH7W9TtuDL
+                                              qNoniBH/o18aj0xGF6HJFt6tU7f9iTxJ+tmY280CgYB2HMe0DpXMM1fTzRuZ8XzH
+                                              hn9ANrwYUGIJTa/n/tk1DGtZlcRIY9ctWSKRbsQlF5Zw/gd9dfhICCeLGMl18642
+                                              O2DKoW8CvoL7w1k9bA5SPIpHDQEku7sDZByARmLbLvNKKltOqf4w0xp5g1RzqbOV
+                                              F+dwSJIVYhofunU/kAvk8QKBgGMPcUma6ZwH66BjQXcdVW/9ueZG53oXMV4GkTWu
+                                              BS3TZJbczDdzOjlfIkXCaW4kE/shfUknJZ48XVGWKgmJx2+cbwHtkPRP6JwbLJXX
+                                              ObwEVg5/7FDiatzU5Mz7K5dLKSFwDLf6NkJgCBffgs+kZHK2RSTxHnWunsBYqG08
+                                              4z3BAoGBAItHnGHbnl7cVHJFHd8teLzS+ki+gv+mKwPwSmeimV6zALAKZvj4RIg8
+                                              4g6kUWry+NNuiaH6fsDA0FWnT3Kyc59/M/EuKNCR7ci1Gnkunc0IUn78aWtNcxX5
+                                              RsCKJUM8l63P0jyUufpTbG6nAP8fMdWCdtDBidFLV2JMPYnWb4aP
+                                              -----END RSA PRIVATE KEY-----
 ```
 
 ## License
