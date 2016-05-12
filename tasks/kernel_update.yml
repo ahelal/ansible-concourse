@@ -10,16 +10,6 @@
   command: shutdown -r now
   when: kernel_update | changed
 
-- name: kernel update | Check and set if ansible_host is set
-  set_fact:
-      apt_hostname: "{{ ansible_host }}"
-  when: ansible_host is defined and ansible_host | length > 0
-
-- name: kernel update | Check and set if ansible_port is set
-  set_fact:
-      apt_port: "{{ ansible_port }}"
-  when: ansible_port is defined and (ansible_port | string ) > 0
-
 - name: kernel update | Wait for ssh port to open again
   wait_for:
     port="{{ apt_port | default('22') }}"
