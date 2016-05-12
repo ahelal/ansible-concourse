@@ -39,7 +39,7 @@ Play example
     concourseci_basic_auth_username  : "myuser"
     concourseci_basic_auth_password  : "mypass"
   roles:
-    - { name: "postgresql", tags: "go" }
+    - { name: "postgresql", tags: "postgres" }
     - { name: "ansible-go", tags: "go" }
     - { name: "ansible-concourse", tags: "concourse" }
 ```
