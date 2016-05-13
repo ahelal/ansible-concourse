@@ -57,7 +57,7 @@ concourseci_tsa_host                        : "{{ groups[concourseci_web_group][
 concourseci_tsa_bind_ip                     : "0.0.0.0"
 concourseci_tsa_bind_port                   : "2222"
 concourseci_tsa_heartbeat_interval          : "30s"
-concourseci_tsa_authorization_keys          : "{{ concourseci_base_dir }}/tls_authorization"
+concourseci_tsa_authorization_keys          : "{{ concourseci_ssh_dir }}/tsa_authorization"
 # concourseci_peer_url                      : # URL used to reach this ATC from other ATCs in the cluster. (default:http://127.0.0.1:8080)
 
 ## Concourse Extra raw options
@@ -155,8 +155,8 @@ concourseci_key_tsa_private                 : |
 
 concourseci_worker_position                 : "{{ groups[concourseci_worker_group].index(inventory_hostname)| default(0) }}"
 concourseci_key_worker_path                 : "{{ concourseci_ssh_dir }}/worker"
-concourseci_key_worker_public               : "{{ concourseci_worker_keys[concourseci_worker_position | int ]}}.public"
-concourseci_key_worker_private              : "{{ concourseci_worker_keys[concourseci_worker_position | int ]}}.private"
+concourseci_key_worker_public               : "{{ concourseci_worker_keys[concourseci_worker_position | int ].public}}"
+concourseci_key_worker_private              : "{{ concourseci_worker_keys[concourseci_worker_position | int ].private}}"
 concourseci_worker_keys                     :
                               - public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKW31QIWcCR2Gh8i1fodDPHqviQV5eAW7Zv37Hzs1SKISvYeJ32EQ1mx2UXV8omzJiVojlXIsqkTXIBK6awvXQcRt8HFXwB9LjBfbYOUm+vU6L46HG3p2rBFAynh3NOeXvV1IBMNeuJ/w7v4CNNIkfKfQ34iwpirnX9fwoRV1pIt7c7MnKwZVrq/BwFpGh/GfOKrXLRXUsJAxDA+Mm0q2rvfpcsviINM7V41Lzemany1KVfjMLVe86CKWT0j2WERYejVlhxTXLlz7lHAowyU87dXh4QVHmDgMMSRIWgbMS0/1uAwfpdLMkzBEUhWRgKXDe/NWRk2I+Q77IJa1fnunJ
                                 private     : |
