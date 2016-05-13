@@ -69,8 +69,10 @@ concourseci_worker_name                     : "{{ inventory_hostname }}"
 ## Concourse garden linux
 concourseci_garden_listen                   : "127.0.0.1:7777"
 concourseci_garden_log_level                : "info" # [debug|info|error|fatal] 
+## Garden Container Networking              
+# concourseci_garden_network_pool           # Network range to use for dynamically allocated container subnets. (default: 10.254.0.0/22)
 
-# PostgreSQL
+## PostgreSQL
 concourseci_postgresql_user                 : "concourseci"
 concourseci_postgresql_pass                 : "conpass"
 concourseci_postgresql_host                 : "127.0.0.1"
@@ -78,7 +80,7 @@ concourseci_postgresql_db                   : "concourse"
 concourseci_postgresql_ssl                  : "disable"
 concourseci_postgresql_source               : "postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }}?sslmode={{ concourseci_postgresql_ssl }}"
 
-# Ansible Groups
+## Ansible Groups
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 

@@ -14,6 +14,8 @@
   {{ build_option("tsa-worker-private-key", concourseci_key_worker_path  ) }}\
 {# Garden config #}
   {{ build_option("garden-log-level", concourseci_garden_log_level) }}\
+{# Garden Container Networking  config #}
+  {{ build_option("garden-network-pool", concourseci_garden_network_pool| default("omit")) }}\
 {# Redirect to logs #}
   &>> {{ concourseci_log_worker }}
 
@@ -53,7 +55,6 @@
 #          --garden-insecure-docker-registry=             Docker registry to allow connecting to even if not secure. Can be specified multiple times.
 #
 #    Container Networking:
-#          --garden-network-pool=                         Network range to use for dynamically allocated container subnets. (default: 10.254.0.0/22)
 #          --garden-allow-host-access                     Allow network access to the host machine.
 #          --garden-deny-network=                         Network ranges to which traffic from containers will be denied. Can be specified multiple times.
 #          --garden-allow-network=                        Network ranges to which traffic from containers will be allowed. Can be specified multiple times.
