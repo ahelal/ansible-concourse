@@ -19,14 +19,6 @@
   notify:
     - restart concourse-web
 
-- name: web | Copy tsa public key 
-  copy:
-    content="{{ concourseci_key_tsa_public }}"
-    dest="{{ concourseci_key_tsa_path }}.pub"
-    mode="0644"
-    owner="{{ concourseci_user }}"
-    group="{{ concourseci_group }}"
-
 - name: web | Copy tsa private key 
   copy:
     content="{{ concourseci_key_tsa_private }}"

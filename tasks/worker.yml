@@ -10,6 +10,16 @@
   notify:
    - restart concourse-worker
 
+- name: worker | Copy tsa public key 
+  copy:
+    content="{{ concourseci_key_tsa_public }}"
+    dest="{{ concourseci_key_tsa_path }}.pub"
+    mode="0644"
+    owner="{{ concourseci_user }}"
+    group="{{ concourseci_group }}"
+  notify:
+   - restart concourse-worker
+
 - name: worker | Copy worker public key
   copy:
     content="{{ concourseci_key_worker_public }}"
