@@ -21,7 +21,7 @@
   {{ build_option("container-retention-failure-duration", concourseci_container_retention_failure_duration | default("omit")) }}\
 {# TSA Config  #}
   {{ build_option("tsa-authorized-keys", concourseci_tsa_authorization_keys) }}\
-  {{ build_option("tsa-host-key", concourseci_key_session_path) }}\
+  {{ build_option("tsa-host-key", concourseci_key_tsa_path) }}\
   {{ build_option("tsa-bind-ip", concourseci_tsa_bind_ip | default("omit")) }}\
   {{ build_option("tsa-bind-port", concourseci_tsa_bind_port | default("omit")) }}\
   {{ build_option("tsa-heartbeat-interval", concourseci_tsa_heartbeat_interval | default("omit")) }}\
