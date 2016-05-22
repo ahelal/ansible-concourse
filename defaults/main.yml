@@ -1,7 +1,7 @@
 ---
 
 # Concourse version
-concourseci_version                         : "v1.3.0-rc.28"
+concourseci_version                         : "v1.3.0-rc.32"
 ## Concurse garden installation option
 concourseci_garden_version                  : "master"
 concourseci_garden_update_force             : False # Force update of newer version of garden
