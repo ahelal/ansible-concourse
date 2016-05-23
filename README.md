@@ -290,6 +290,12 @@ concourseci_worker_keys                     :
                                               -----END RSA PRIVATE KEY-----
 ```
 
+
+## TODO
+* Replace current hacky init.d scripts
+* Make test work with travis (huuuh irony)
+* Add more tests
+
 ## License
 MIT
 
