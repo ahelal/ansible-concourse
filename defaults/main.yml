@@ -71,6 +71,7 @@ concourseci_garden_listen                   : "127.0.0.1:7777"
 concourseci_garden_log_level                : "info" # [debug|info|error|fatal] 
 ## Garden Container Networking              
 # concourseci_garden_network_pool           # Network range to use for dynamically allocated container subnets. (default: 10.254.0.0/22)
+# concourseci_garden_graph_cleanup_threshold_in_megabytesDirectory # Disk usage of the graph dir at which cleanup should trigger, or -1 to disable graph cleanup. (default: -1)
 
 ## PostgreSQL
 concourseci_postgresql_user                 : "concourseci"

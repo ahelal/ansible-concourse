@@ -14,6 +14,8 @@
   {{ build_option("tsa-worker-private-key", concourseci_key_worker_path  ) }}\
 {# Garden config #}
   {{ build_option("garden-log-level", concourseci_garden_log_level) }}\
+  {{ build_option("garden-graph-cleanup-threshold-in-megabytes", concourseci_garden_graph_cleanup_threshold_in_megabytes| default("omit")) }}\
+
 {# Garden Container Networking  config #}
   {{ build_option("garden-network-pool", concourseci_garden_network_pool| default("omit")) }}\
 {# Redirect to logs #}
@@ -46,8 +48,6 @@
 #          --garden-runc-bin=                             Path to the 'runc' binary. (default: runc)
 #
 #    Image Graph:
-#          --garden-graph=                                Directory on which to store imported rootfs graph data.
-#          --garden-graph-cleanup-threshold-in-megabytes= Disk usage of the graph dir at which cleanup should trigger, or -1 to disable graph cleanup. (default: -1)
 #          --garden-persistent-image=                     Image that should never be garbage collected. Can be specified multiple times.
 #
 #    Docker Image Fetching:
