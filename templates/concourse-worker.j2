@@ -16,7 +16,6 @@
 {# Garden config #}
   {{ build_option("garden-log-level", concourseci_garden_log_level) }}\
   {{ build_option("garden-graph-cleanup-threshold-in-megabytes", concourseci_garden_graph_cleanup_threshold_in_megabytes| default("omit")) }}\
-
 {# Garden Container Networking config #}
   {{ build_option("garden-network-pool", concourseci_garden_network_pool| default("omit")) }}\
 {# Redirect to logs #}
