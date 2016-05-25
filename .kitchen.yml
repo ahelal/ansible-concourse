@@ -15,7 +15,7 @@ driver                      :
 
 provisioner:
     name                    : ansible_push
-    verbose                 : "vvvv"
+    verbose                 : "<%= ENV['ANSIBLE_KITCHEN_VERBOSE'] || nil %>"
     ansible_config          : "tests/ansible.cfg"
     idempotency_test        : True
     extra_vars              : { 'kitchen_connection': 'smart', 'kitchen_hosts': '<%= if ENV['TRAVIS'] then 'localhost' else 'all' end %>' }
