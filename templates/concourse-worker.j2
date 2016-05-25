@@ -1,9 +1,10 @@
 #!/bin/bash
+# {{ ansible_managed }}
 {% macro build_option(option, value='omit') %}
 {% if value != 'omit' %}--{{ option }}={{ value }}{% endif %}
 {% endmacro %}
 
-{{ concourseci_bin_dir }}/{{ concourseci_binary_file }} worker \
+{{ concourseci_bin_dir }}/concourse worker \
 {# General config #}
   {{ build_option("name", concourseci_worker_name) }}\
   {{ build_option("work-dir", concourseci_worker_dir) }}\
@@ -16,7 +17,7 @@
   {{ build_option("garden-log-level", concourseci_garden_log_level) }}\
   {{ build_option("garden-graph-cleanup-threshold-in-megabytes", concourseci_garden_graph_cleanup_threshold_in_megabytes| default("omit")) }}\
 
-{# Garden Container Networking  config #}
+{# Garden Container Networking config #}
   {{ build_option("garden-network-pool", concourseci_garden_network_pool| default("omit")) }}\
 {# Redirect to logs #}
   &>> {{ concourseci_log_worker }}
@@ -78,5 +79,3 @@
 #          --baggageclaim-bind-ip=                        IP address on which to listen for API traffic. (default: 0.0.0.0)
 #          --baggageclaim-bind-port=                      Port on which to listen for API traffic. (default: 7788)
 #          --baggageclaim-reap-interval=                  Interval on which to reap expired volumes. (default: 10s)
-#
-#    #

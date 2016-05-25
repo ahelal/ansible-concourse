@@ -1,9 +1,10 @@
 #!/bin/bash
+# {{ ansible_managed }}
 {% macro build_option(option, value='omit') %}
 {% if value != 'omit' %}--{{ option }}={{ value }}{% endif %}
 {% endmacro %}
 
-{{ concourseci_bin_dir }}/{{ concourseci_binary_file }} web \
+{{ concourseci_bin_dir }}/concourse web \
 {# General config #}
   {{ build_option("external-url", concourseci_external_url) }}\
   {{ build_option("oauth-base-url", concourseci_oauth_base_url | default("omit")) }}\
@@ -40,4 +41,4 @@
 {% for item in concourseci_web_extra_options %}
   {{ item }}\
 {% endfor %}
-  &>> {{ concourseci_log_web }} 
+  >> {{ concourseci_log_web }} 2>&1
