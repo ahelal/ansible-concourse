@@ -14,7 +14,7 @@ RUN_AS_USER="{{ concourseci_user }}"
 RUN_AS_GROUP="{{ concourseci_group }}"
 
 BASE_DIR="{{ concourseci_bin_dir }}"
-GREP_NAME="{{ concourseci_binary_file }} web"
+GREP_NAME="{{ concourseci_bin_dir }}/concourse web"
 
 RUN_CMD="{{ concourseci_bin_dir }}/concourse-web"
 DAEMON_OPTS=""
