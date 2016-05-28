@@ -1,15 +1,11 @@
 ---
 
 # Concourse version
-concourseci_version                         : "v1.3.0-rc.67"
-## Concurse garden installation option
-concourseci_garden_version                  : "master"
-concourseci_garden_update_force             : False # Force update of newer version of garden
+concourseci_version                         : "v1.3.0-rc.75"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
 concourseci_bin_dir                         : "{{ concourseci_base_dir }}/bin"
-concourseci_garden_dir                      : "{{ concourseci_base_dir }}/garden"
 concourseci_worker_dir                      : "{{ concourseci_base_dir }}/worker"
 concourseci_ssh_dir                         : "{{ concourseci_base_dir }}/.ssh"
 
