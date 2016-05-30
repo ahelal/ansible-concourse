@@ -14,7 +14,7 @@
   register: concourseci_get
   when: concourseci_binary_file_stat.stat.exists == False
 
-- name: Install | Concourse link bin
+- name: Install | Concourse link binary
   file: 
     src="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
     dest="{{ concourseci_bin_dir }}/concourse"
