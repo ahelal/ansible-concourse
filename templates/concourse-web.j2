@@ -4,7 +4,7 @@
 {% if value != 'omit' %}--{{ option }}={{ value }}{% endif %}
 {% endmacro %}
 
-{{ concourseci_bin_dir }}/concourse web \
+exec {{ concourseci_bin_dir }}/concourse web \
 {# General config #}
   {{ build_option("external-url", concourseci_external_url) }}\
   {{ build_option("oauth-base-url", concourseci_oauth_base_url | default("omit")) }}\
