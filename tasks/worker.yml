@@ -1,5 +1,11 @@
 ---
 
+- name: worker | Concourse worker start script
+  template:
+    src="concourse-worker.j2"
+    dest="{{ concourseci_bin_dir }}/concourse-worker"
+    mode=0755
+
 - name: worker | Copy session public key
   copy:
     content="{{ concourseci_key_session_public }}"
@@ -28,7 +34,7 @@
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
 
-- name: web | Copy worker private key
+- name: worker | Copy worker private key
   copy:
     content="{{ concourseci_key_worker_private }}"
     dest="{{ concourseci_key_worker_path }}"

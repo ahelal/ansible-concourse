@@ -19,15 +19,3 @@
     src="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
     dest="{{ concourseci_bin_dir }}/concourse"
     state="link"
-
-- name: Install | Concourse web start script
-  template:
-    src="concourse-web.j2"
-    dest="{{ concourseci_bin_dir }}/concourse-web"
-    mode=0755
-
-- name: Install | Concourse worker start script
-  template:
-    src="concourse-worker.j2"
-    dest="{{ concourseci_bin_dir }}/concourse-worker"
-    mode=0755

@@ -1,5 +1,11 @@
 ---
 
+- name: web | Concourse web start script
+  template:
+    src="concourse-web.j2"
+    dest="{{ concourseci_bin_dir }}/concourse-web"
+    mode=0755
+
 - name: web | Copy session public key
   copy:
     content="{{ concourseci_key_session_public }}"
