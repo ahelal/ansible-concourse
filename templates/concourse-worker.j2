@@ -13,11 +13,13 @@ exec {{ concourseci_bin_dir }}/concourse worker \
   {{ build_option("tsa-port", concourseci_tsa_bind_port ) }}\
   {{ build_option("tsa-public-key", concourseci_key_tsa_path + ".pub" ) }}\
   {{ build_option("tsa-worker-private-key", concourseci_key_worker_path  ) }}\
+  {{ build_option("peer_ip", concourseci_peer_ip | default("omit")) }}\
 {# Garden config #}
   {{ build_option("garden-log-level", concourseci_garden_log_level) }}\
   {{ build_option("garden-graph-cleanup-threshold-in-megabytes", concourseci_garden_graph_cleanup_threshold_in_megabytes| default("omit")) }}\
 {# Garden Container Networking config #}
   {{ build_option("garden-network-pool", concourseci_garden_network_pool| default("omit")) }}\
+  {{ build_option("garden-max-containers", concourseci_garden_max_containers| default("omit")) }}\
 {# Redirect to logs #}
   &>> {{ concourseci_log_worker }}
 
@@ -65,9 +67,6 @@ exec {{ concourseci_bin_dir }}/concourse worker \
 #          --garden-mtu=                                  MTU size for container network interfaces. (default: 1500)
 #          --garden-network-plugin=                       Path to network plugin binary.
 #          --garden-network-plugin-extra-arg=             Extra argument to pass to the network plugin. Can be specified multiple times.
-#
-#    Limits:
-#          --garden-max-containers=                       Maximum number of containers that can be created. (default: 0)
 #
 #    Metrics:
 #          --garden-metrics-emission-interval=            Interval on which to emit metrics. (default: 1m)
