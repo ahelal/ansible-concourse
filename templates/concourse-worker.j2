@@ -4,7 +4,7 @@
 {% if value != 'omit' %}--{{ option }}={{ value }}{% endif %}
 {% endmacro %}
 
-{{ concourseci_bin_dir }}/concourse worker \
+exec {{ concourseci_bin_dir }}/concourse worker \
 {# General config #}
   {{ build_option("name", concourseci_worker_name) }}\
   {{ build_option("work-dir", concourseci_worker_dir) }}\
