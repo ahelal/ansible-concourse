@@ -70,24 +70,20 @@ You would also need to generate keys for workers check key section
 ---
 
 # Concourse version
-concourseci_version                         : "v1.3.0-rc.28"
-## Concurse garden installation option
-concourseci_garden_version                  : "master"
-concourseci_garden_update_force             : False # Force update of newer version of garden
+concourseci_version                         : "v1.3.1-rc.5"
 
-# Dir structure
+## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
 concourseci_bin_dir                         : "{{ concourseci_base_dir }}/bin"
-concourseci_garden_dir                      : "{{ concourseci_base_dir }}/garden"
 concourseci_worker_dir                      : "{{ concourseci_base_dir }}/worker"
 concourseci_ssh_dir                         : "{{ concourseci_base_dir }}/.ssh"
 
-# Concourse log
+## Concourse log
 concourseci_log_dir                         : "/var/log/concourse"
 concourseci_log_worker                      : "{{ concourseci_log_dir }}/concourseci_worker.log"
 concourseci_log_web                         : "{{ concourseci_log_dir }}/concourseci_web.log"
 
-# Concourse User
+## Concourse User
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
 
@@ -126,7 +122,7 @@ concourseci_tsa_host                        : "{{ groups[concourseci_web_group][
 concourseci_tsa_bind_ip                     : "0.0.0.0"
 concourseci_tsa_bind_port                   : "2222"
 concourseci_tsa_heartbeat_interval          : "30s"
-concourseci_tsa_authorization_keys          : "{{ concourseci_base_dir }}/tls_authorization"
+concourseci_tsa_authorization_keys          : "{{ concourseci_ssh_dir }}/tsa_authorization"
 # concourseci_peer_url                      : # URL used to reach this ATC from other ATCs in the cluster. (default:http://127.0.0.1:8080)
 
 ## Concourse Extra raw options
@@ -138,8 +134,12 @@ concourseci_worker_name                     : "{{ inventory_hostname }}"
 ## Concourse garden linux
 concourseci_garden_listen                   : "127.0.0.1:7777"
 concourseci_garden_log_level                : "info" # [debug|info|error|fatal] 
+# concourseci_peer_ip                       # IP used to reach this worker from the ATC nodes. If omitted, the worker will be forwarded through the SSH connection to the TSA.
+# concourseci_garden_network_pool           # Network range to use for dynamically allocated container subnets. (default: 10.254.0.0/22)
+# concourseci_garden_max_containers         # Maximum number of containers that can be created. (default: )
+# concourseci_garden_graph_cleanup_threshold_in_megabytesDirectory # Disk usage of the graph dir at which cleanup should trigger, or -1 to disable graph cleanup. (default: -1)
 
-# PostgreSQL
+## PostgreSQL
 concourseci_postgresql_user                 : "concourseci"
 concourseci_postgresql_pass                 : "conpass"
 concourseci_postgresql_host                 : "127.0.0.1"
@@ -147,7 +147,7 @@ concourseci_postgresql_db                   : "concourse"
 concourseci_postgresql_ssl                  : "disable"
 concourseci_postgresql_source               : "postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }}?sslmode={{ concourseci_postgresql_ssl }}"
 
-# Ansible Groups
+## Ansible Groups
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
@@ -224,8 +224,8 @@ concourseci_key_tsa_private                 : |
 
 concourseci_worker_position                 : "{{ groups[concourseci_worker_group].index(inventory_hostname)| default(0) }}"
 concourseci_key_worker_path                 : "{{ concourseci_ssh_dir }}/worker"
-concourseci_key_worker_public               : "{{ concourseci_worker_keys[concourseci_worker_position | int ]}}.public"
-concourseci_key_worker_private              : "{{ concourseci_worker_keys[concourseci_worker_position | int ]}}.private"
+concourseci_key_worker_public               : "{{ concourseci_worker_keys[concourseci_worker_position | int ].public}}"
+concourseci_key_worker_private              : "{{ concourseci_worker_keys[concourseci_worker_position | int ].private}}"
 concourseci_worker_keys                     :
                               - public      : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKW31QIWcCR2Gh8i1fodDPHqviQV5eAW7Zv37Hzs1SKISvYeJ32EQ1mx2UXV8omzJiVojlXIsqkTXIBK6awvXQcRt8HFXwB9LjBfbYOUm+vU6L46HG3p2rBFAynh3NOeXvV1IBMNeuJ/w7v4CNNIkfKfQ34iwpirnX9fwoRV1pIt7c7MnKwZVrq/BwFpGh/GfOKrXLRXUsJAxDA+Mm0q2rvfpcsviINM7V41Lzemany1KVfjMLVe86CKWT0j2WERYejVlhxTXLlz7lHAowyU87dXh4QVHmDgMMSRIWgbMS0/1uAwfpdLMkzBEUhWRgKXDe/NWRk2I+Q77IJa1fnunJ
                                 private     : |
