@@ -10,7 +10,7 @@ exec {{ concourseci_bin_dir }}/concourse worker \
   {{ build_option("work-dir", concourseci_worker_dir) }}\
 {# TSA config #}
   {{ build_option("tsa-host", concourseci_tsa_host ) }}\
-  {{ build_option("tsa-port", concourseci_tsa_bind_port ) }}\
+  {{ build_option("tsa-port", concourseci_worker_tsa_bind_port ) }}\
   {{ build_option("tsa-public-key", concourseci_key_tsa_path + ".pub" ) }}\
   {{ build_option("tsa-worker-private-key", concourseci_key_worker_path  ) }}\
   {{ build_option("peer-ip", concourseci_peer_ip | default("omit")) }}\
