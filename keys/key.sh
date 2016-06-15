@@ -44,7 +44,7 @@ ssh-keygen -b 4096 -f id_web_rsa -N ""
 public="$(cat id_web_rsa.pub)"
 private="$(cat id_web_rsa)"
 echo "concourseci_key_tsa_public      : ${public}" >> ${web_yaml_output}
-echo "cconcourseci_key_tsa_private    : |" >> ${web_yaml_output}
+echo "concourseci_key_tsa_private     : |" >> ${web_yaml_output}
 echo "${private}" | python -c "${python_ident}" >> ${web_yaml_output}
 
 rm -rf ${temp_dir}
