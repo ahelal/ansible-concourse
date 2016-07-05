@@ -5,6 +5,8 @@
     src="concourse-worker.j2"
     dest="{{ concourseci_bin_dir }}/concourse-worker"
     mode=0755
+  notify:
+   - restart concourse-worker
 
 - name: worker | Copy session public key
   copy:
@@ -16,7 +18,7 @@
   notify:
    - restart concourse-worker
 
-- name: worker | Copy tsa public key 
+- name: worker | Copy tsa public key
   copy:
     content="{{ concourseci_key_tsa_public }}"
     dest="{{ concourseci_key_tsa_path }}.pub"

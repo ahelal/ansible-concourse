@@ -5,6 +5,8 @@
     src="concourse-web.j2"
     dest="{{ concourseci_bin_dir }}/concourse-web"
     mode=0755
+  notify:
+    - restart concourse-web
 
 - name: web | Copy session public key
   copy:
@@ -13,6 +15,8 @@
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
+  notify:
+    - restart concourse-web
 
 - name: web | Copy session private key
   copy:
@@ -25,7 +29,7 @@
   notify:
     - restart concourse-web
 
-- name: web | Copy tsa private key 
+- name: web | Copy tsa private key
   copy:
     content="{{ concourseci_key_tsa_private }}"
     dest="{{ concourseci_key_tsa_path }}"
