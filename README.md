@@ -4,8 +4,8 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 ## Requirements
 * Ubuntu 14.04
 * Ansible 2.0 or higher
-* PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql) 
-* Optional SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx) 
+* PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
+* Optional SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
 
 ## Overview
 I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
@@ -14,7 +14,7 @@ The role is in early development, but usable so please submit PRs and PRs.
 
 
 ## Example
-You can use test-kitchen to spin a test machine. 
+You can use test-kitchen to spin a test machine.
 ```
 bundle install
 bundle exec kitchen converge simple-vagrant
@@ -26,7 +26,7 @@ Once your done
 bundle exec kitchen destroy
 ```
 
-Play example 
+Play example
 
 ```yaml
 ---
@@ -65,12 +65,12 @@ worker03
 
 You would also need to generate keys for workers check key section
 
-## Variables 
+## Variables
 ```yaml
 ---
 
 # Concourse version
-concourseci_version                         : "v1.3.1-rc.5"
+concourseci_version                         : "v1.3.1-rc.15"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
@@ -99,7 +99,7 @@ concourseci_external_url                    : "http://127.0.0.1:8080" #URL used 
 # concourseci_old_resource_grace_period       # How long to cache the result of a get step after a newer version of the resource is found. (default: 5m)
 # concourseci_resource_cache_cleanup_interval # Interval on which to cleanup old caches of resources. (default: 30s)
 
-## Concourse Container Retention 
+## Concourse Container Retention
 # concourseci_container_retention_success_duration  # The duration to keep a succeeded step's containers before expiring them. (default: 5m)
 # concourseci_container_retention_failure_duration  # The duration to keep a failed step's containers before expiring them. (default: 1h)
 
@@ -118,7 +118,7 @@ concourseci_external_url                    : "http://127.0.0.1:8080" #URL used 
 # concourseci_github_auth_api_url          # Override default API endpoint URL for Github Enterprise
 
 # Concourse TSA Config
-concourseci_tsa_host                        : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group 
+concourseci_tsa_host                        : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
 concourseci_tsa_bind_ip                     : "0.0.0.0"
 concourseci_tsa_bind_port                   : "2222"
 concourseci_tsa_heartbeat_interval          : "30s"
@@ -133,7 +133,7 @@ concourseci_worker_name                     : "{{ inventory_hostname }}"
 
 ## Concourse garden linux
 concourseci_garden_listen                   : "127.0.0.1:7777"
-concourseci_garden_log_level                : "info" # [debug|info|error|fatal] 
+concourseci_garden_log_level                : "info" # [debug|info|error|fatal]
 # concourseci_peer_ip                       # IP used to reach this worker from the ATC nodes. If omitted, the worker will be forwarded through the SSH connection to the TSA.
 # concourseci_garden_network_pool           # Network range to use for dynamically allocated container subnets. (default: 10.254.0.0/22)
 # concourseci_garden_max_containers         # Maximum number of containers that can be created. (default: )
@@ -152,7 +152,7 @@ concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
 # ********************* Example Keys (YOU MUST OVERRIDE THEM) *********************
-# This keys are used for demo only you should generate your own and store them 
+# This keys are used for demo only you should generate your own and store them
 # safely i.e. ansible-vault
 # **********************************************************************************
 
