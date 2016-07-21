@@ -1,21 +1,27 @@
 ---
 
 - name: Install | Check Concourse archive stat
-  stat: 
+  stat:
     path="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
   register: concourseci_binary_file_stat
 
 - name: Install | Download Concourse CI
-  get_url: 
+  get_url:
     url="{{ concourseci_download_url }}"
     dest="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
     mode=0755
   become_user: "{{ concourseci_user }}"
   register: concourseci_get
   when: concourseci_binary_file_stat.stat.exists == False
+  notify:
+   - restart concourse-worker
+   - restart concourse-web
 
 - name: Install | Concourse link binary
-  file: 
+  file:
     src="{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
     dest="{{ concourseci_bin_dir }}/concourse"
     state="link"
+  notify:
+   - restart concourse-worker
+   - restart concourse-web

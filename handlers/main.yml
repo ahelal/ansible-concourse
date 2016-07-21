@@ -4,8 +4,10 @@
   service:
     name="concourse-web"
     state="restarted"
+  when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group]"
 
 - name: restart concourse-worker
   service:
     name="concourse-worker"
     state="restarted"
+  when: "groups[concourseci_worker_group] is defined and inventory_hostname in groups[concourseci_worker_group]"
