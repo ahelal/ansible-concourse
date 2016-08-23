@@ -1,0 +1,19 @@
+---
+# https://github.com/cloudfoundry-incubator/garden-linux/blob/master/README.md
+# https://github.com/concourse/concourse/issues/229
+# https://github.com/concourse/bin
+
+- name: Provision my keys
+  hosts: all
+  become: True
+  vars:
+    concourseci_external_url         : "http://192.168.50.150:8080"
+    concourseci_basic_auth_username  : "myuser"
+    concourseci_basic_auth_password  : "mypass"
+  pre_tasks:
+    - name: update apt
+      apt: 
+        update_cache="yes"
+
+  roles:
+    - { name: "ansible-concourse", tags: "concourse" }

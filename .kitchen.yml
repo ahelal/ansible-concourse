@@ -10,8 +10,7 @@ driver                      :
   customize                 :
     cpus                    : 2
     memory                  : 2048
-  network:
-    - ["private_network", {ip: "192.168.50.150"}]
+
 
 provisioner:
     name                    : ansible_push
@@ -20,18 +19,28 @@ provisioner:
     idempotency_test        : True
     extra_vars              : { 'kitchen_connection': 'smart', 'kitchen_hosts': '<%= if ENV['TRAVIS'] then 'localhost' else 'all' end %>' }
     raw_arguments           : <%= if ENV['TRAVIS'] then '-c local' else '' end %>
-    # TRAVIS: True
-    # NO TRAVIS: False
+    use_instance_name       : true
+    # Hash of other groups
+    groups                  : 
+         concourse-web      : [ 'simple-ubuntu' ]
+         concourse-worker   : [ 'simple-ubuntu', 'worker-ubuntu' ]
     sudo                    : <%= if ENV['TRAVIS'] then 'True' else 'False' end  %>
 
 platforms:
-    - name                  : "<%= name %>"
+    - name                  : "ubuntu"
       provisioner           :
         ansible_playbook_bin: "`ansible-version path v2`ansible-playbook"
-        mygroup             : ["concourse-web", "concourse-worker"]
 
 suites:
   - name                    : simple
     provisioner             :
       playbook              : "tests/simple/simple.yml"
-
+    driver_config           :
+      network:
+        - ["private_network", {ip: "192.168.50.150"}]
+  - name                    : worker
+    provisioner             :
+      playbook              : "tests/worker/worker.yml"
+    driver_config           :
+      network:
+        - ["private_network", {ip: "192.168.50.151"}]
