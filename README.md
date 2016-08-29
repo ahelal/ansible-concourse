@@ -70,7 +70,7 @@ You would also need to generate keys for workers check key section
 ---
 
 # Concourse version
-concourseci_version                         : "v1.6.1-rc.9"
+concourseci_version                         : "v2.0.1-rc.12"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
