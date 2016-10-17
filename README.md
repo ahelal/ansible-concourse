@@ -2,7 +2,7 @@
 An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
 ## Requirements
-* Ubuntu 14.04
+* Ubuntu 14.04/16.04
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
 * Optional SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
@@ -12,18 +12,17 @@ I am a big fan of concourse CI, not so much bosh. This role will install concour
 The role is in early development, but usable so please submit PRs and PRs.
 
 
-
 ## Example
 You can use test-kitchen to spin a test machine.
 ```
-bundle install
-bundle exec kitchen converge simple-vagrant
+vagrant up
 ```
-The kitchen machine will have an IP of **192.168.50.150**
+The vagrant machine will have an IP of **192.168.50.150**
 
+You can access the web and API on port 8080 with username **myuser** and **mypass**
 Once your done
 ````
-bundle exec kitchen destroy
+vagrnt destroy
 ```
 
 Play example
