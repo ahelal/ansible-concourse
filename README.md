@@ -295,7 +295,6 @@ An easy way to generate your keys to use a script in ```keys/key.sh```
 The script will ask you the number of workers you require and generate to files in ```keys/vars``` you can than copy the content in your group vars  or pass it somehow.
 
 ## TODO
-* Replace current hacky init.d scripts
 * Make test work with travis (huuuh irony)
 * Add more tests
 
