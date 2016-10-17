@@ -1,0 +1,73 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    artifactory (2.3.3)
+    diff-lcs (1.2.5)
+    kitchen-ansiblepush (0.4.0)
+      test-kitchen
+    kitchen-docker (2.5.0)
+      test-kitchen (>= 1.0.0)
+    kitchen-verifier-serverspec (0.4.0)
+      net-ssh (~> 2.0)
+      test-kitchen (~> 1.4)
+    mixlib-install (1.1.0)
+      artifactory
+      mixlib-shellout
+      mixlib-versioning
+    mixlib-shellout (2.2.6)
+    mixlib-versioning (1.1.0)
+    multi_json (1.12.1)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.9.4)
+    net-telnet (0.1.1)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.4)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-its (1.2.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+    safe_yaml (1.0.4)
+    serverspec (2.37.2)
+      multi_json
+      rspec (~> 3.0)
+      rspec-its
+      specinfra (~> 2.53)
+    sfl (2.3)
+    specinfra (2.63.3)
+      net-scp
+      net-ssh (>= 2.7, < 4.0)
+      net-telnet
+      sfl
+    test-kitchen (1.10.2)
+      mixlib-install (~> 1.0, >= 1.0.4)
+      mixlib-shellout (>= 1.2, < 3.0)
+      net-scp (~> 1.1)
+      net-ssh (>= 2.9, < 4.0)
+      safe_yaml (~> 1.0)
+      thor (~> 0.18)
+    thor (0.19.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  kitchen-ansiblepush
+  kitchen-docker
+  kitchen-verifier-serverspec
+  net-ssh
+  serverspec
+  test-kitchen
+
+BUNDLED WITH
+   1.13.4

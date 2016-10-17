@@ -3,73 +3,24 @@
 # https://github.com/concourse/concourse/issues/229
 # https://github.com/concourse/bin
 
+- name: Check for python2.7
+  hosts: all
+  gather_facts: False
+  become: True
+  tasks:
+    - name: install python 2
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
 - name: Provision my keys
   hosts: all
   become: True
   vars:
     concourseci_external_url         : "http://192.168.50.150:8080"
     concourseci_basic_auth_username  : "myuser"
-    concourseci_basic_auth_password  : "mypass"
-  pre_tasks:
-    - name: pre Putting you authorized_key
-      authorized_key:
-        key="{{lookup('file', '~/.ssh/id_rsa.pub')}}"
-        user="{{localuser}}"
-        manage_dir=yes
-      ignore_errors: yes
+    concourseci_basic_auth_password  : "mypass"  
+    concourseci_reboot               : false
 
-    - name: pre APT key
-      apt_key: 
-        id="ACCC4CF8"
-        url='https://postgresql.org/media/keys/ACCC4CF8.asc'
-      
-    - name: pre Add apt for postgres
-      apt_repository: 
-        update_cache="yes"
-        repo='deb https://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' 
-        state=present
-
-    - name: pre Install demo packages
-      apt:
-        name="{{item}}"
-        update_cache=yes
-        cache_valid_time=3600
-      with_items: 
-         - "git"
-         - "postgresql-9.4"
-         - "python-psycopg2"
-         - "vim"
-         - "curl"
-
-    - name : pre Configure postgresql
-      lineinfile: 
-        dest=/etc/postgresql/9.4/main/postgresql.conf
-        regexp='^listen_addresses'
-        line="listen_addresses = '*'"
-      register: postgresql_conf
-
-    - name : pre Configure postgresql hba.conf
-      lineinfile: 
-        dest=/etc/postgresql/9.4/main/pg_hba.conf
-        insertafter="EOF"
-        line="host  all  all 0.0.0.0/0 md5"
-
-    - name: pre Create postgresql db
-      postgresql_db: 
-         name=concourse
-      become_user: postgres
-
-    - name : pre Create postgresql user 
-      postgresql_user: 
-        db=concourse
-        name=concourseci
-        password=conpass
-      become_user: postgres
-
-    - name : pre Service postgresql
-      service: 
-        name=postgresql
-        state=started
-      register: postgresql_conf
   roles:
+    - { name: hosts,               tags: "hosts" }
+    - { name: "postgresql",        tags: "concourse" }
     - { name: "ansible-concourse", tags: "concourse" }
