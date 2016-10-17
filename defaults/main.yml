@@ -1,7 +1,7 @@
 ---
 
 # Concourse version
-concourseci_version                         : "v2.2.1-rc.4"
+concourseci_version                         : "v2.3.2-rc.6"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
@@ -81,6 +81,10 @@ concourseci_postgresql_source               : "postgres://{{ concourseci_postgre
 ## Ansible Groups
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
+
+## Disable reboot (used for docker)
+concourseci_reboot                          : True
+
 
 # ********************* Example Keys (YOU MUST OVERRIDE THEM) *********************
 # This keys are used for demo only you should generate your own and store them

@@ -1,0 +1,5 @@
+
+# Use hacky method since we cant move /etc/hosts in docker
+- name: Ensure hostname entries in /etc/hosts
+  command: echo "127.0.1.1 {{ inventory_hostname }}" >> /etc/hosts
+  changed_when: false

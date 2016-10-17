@@ -2,7 +2,7 @@
 An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
 ## Requirements
-* Ubuntu 14.04
+* Ubuntu 14.04/16.04
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
 * Optional SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
@@ -12,18 +12,17 @@ I am a big fan of concourse CI, not so much bosh. This role will install concour
 The role is in early development, but usable so please submit PRs and PRs.
 
 
-
 ## Example
 You can use test-kitchen to spin a test machine.
 ```
-bundle install
-bundle exec kitchen converge simple-vagrant
+vagrant up
 ```
-The kitchen machine will have an IP of **192.168.50.150**
+The vagrant machine will have an IP of **192.168.50.150**
 
+You can access the web and API on port 8080 with username **myuser** and **mypass**
 Once your done
 ````
-bundle exec kitchen destroy
+vagrnt destroy
 ```
 
 Play example
@@ -39,7 +38,6 @@ Play example
     concourseci_basic_auth_password  : "mypass"
   roles:
     - { name: "postgresql", tags: "postgres" }
-    - { name: "ansible-go", tags: "go" }
     - { name: "ansible-concourse", tags: "concourse" }
 ```
 
@@ -70,7 +68,7 @@ You would also need to generate keys for workers check key section
 ---
 
 # Concourse version
-concourseci_version                         : "v2.2.1-rc.4"
+concourseci_version                         : "vx.x.x"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
@@ -297,7 +295,6 @@ An easy way to generate your keys to use a script in ```keys/key.sh```
 The script will ask you the number of workers you require and generate to files in ```keys/vars``` you can than copy the content in your group vars  or pass it somehow.
 
 ## TODO
-* Replace current hacky init.d scripts
 * Make test work with travis (huuuh irony)
 * Add more tests
 

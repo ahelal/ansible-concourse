@@ -1,46 +1,67 @@
 ---
 # TRAVIS: local
 # NO TRAVIS: vagrant
-name_var                    : <% name = if ENV['TRAVIS'] then 'localhost' else 'vagrant' end  %>
-name                        : <%= name %>
 driver                      :
-  name                      : <%= name %>
-  # EC2 Driver will run on Jenkins and vagrant Driver will run on dev machines
-  box                       : ubuntu/trusty64
-  customize                 :
-    cpus                    : 2
-    memory                  : 2048
-
-
-provisioner:
+    name                    : docker
+    socket                  : unix:///var/run/docker.sock
+    use_sudo                : false
+    publish_all             : true
+    privileged              : true
+    forward:
+      - 8080:8080
+  
+verifier                    :
+  name                      : serverspec
+  remote_exec               : false
+  default_pattern           : true
+  
+provisioner                 :  
     name                    : ansible_push
-    verbose                 : "<%= ENV['ANSIBLE_KITCHEN_VERBOSE'] || nil %>"
     ansible_config          : "tests/ansible.cfg"
+    chef_bootstrap_url      : nil
+    use_instance_name       : True
     idempotency_test        : True
-    extra_vars              : { 'kitchen_connection': 'smart', 'kitchen_hosts': '<%= if ENV['TRAVIS'] then 'localhost' else 'all' end %>' }
-    raw_arguments           : <%= if ENV['TRAVIS'] then '-c local' else '' end %>
-    use_instance_name       : true
-    # Hash of other groups
-    groups                  : 
-         concourse-web      : [ 'simple-ubuntu' ]
-         concourse-worker   : [ 'simple-ubuntu', 'worker-ubuntu' ]
-    sudo                    : <%= if ENV['TRAVIS'] then 'True' else 'False' end  %>
+    diff                    : True
+    sudo                    : True
+    #extra_vars                : "@kitchen_vars.yml"
+    verbose                 : "vvvv"
 
-platforms:
-    - name                  : "ubuntu"
-      provisioner           :
-        ansible_playbook_bin: "`ansible-version path v2`ansible-playbook"
+
+platforms                   :
+ - name                     : "ubuntu1404"
+   driver_config            :
+     image                  : ubuntu:14.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2`ansible-playbook"
+      # Hash of other groups
+      groups                : 
+         concourse-web      : [ 'simple-ubuntu1404' ]
+         concourse-worker   : [ 'simple-ubuntu1404', 'worker-ubuntu1404' ]
+
+ - name                     : "ubuntu1604"
+   driver_config            :
+     image                  : ubuntu:16.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2`ansible-playbook"
+      # Hash of other groups
+      groups                : 
+         concourse-web      : [ 'simple-ubuntu1604' ]
+         concourse-worker   : [ 'simple-ubuntu1604', 'worker-ubuntu1604' ]
 
 suites:
   - name                    : simple
     provisioner             :
       playbook              : "tests/simple/simple.yml"
     driver_config           :
+      hostname              : "simple"
       network:
         - ["private_network", {ip: "192.168.50.150"}]
-  - name                    : worker
-    provisioner             :
-      playbook              : "tests/worker/worker.yml"
-    driver_config           :
-      network:
-        - ["private_network", {ip: "192.168.50.151"}]
+  # - name                    : worker
+  #   provisioner             :
+  #     playbook              : "tests/worker/worker.yml"
+  #   driver_config           :
+  #     hostname              : "worker"
+  #     network           :
+  #       - ["private_network", {ip: "192.168.50.151"}]

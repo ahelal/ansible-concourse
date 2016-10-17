@@ -3,6 +3,15 @@
 # https://github.com/concourse/concourse/issues/229
 # https://github.com/concourse/bin
 
+- name: Check for python2.7
+  hosts: all
+  gather_facts: False
+  become: True
+  tasks:
+    - name: install python 2
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+
 - name: Provision my keys
   hosts: all
   become: True
@@ -14,6 +23,5 @@
     - name: update apt
       apt: 
         update_cache="yes"
-
   roles:
     - { name: "ansible-concourse", tags: "concourse" }
