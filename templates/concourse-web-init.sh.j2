@@ -1,11 +1,14 @@
 #!/bin/bash
+### BEGIN INIT INFO
+# Provides:          concourse-web
+# Required-Start:    $local_fs $network $remote_fs $syslog
+# Required-Stop:     $local_fs $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: concourse web 
+# Description:       This script starts and stops the concourse web service daemon
+### END INIT INFO
 # {{ ansible_managed }}
-# ConcourseCI 
-#
-# chkconfig: 345 99 1
-# description: ConcourseCI 
-# processname: ConcourseCI 
-#
 
 NAME="con-web"
 DESC="concourse-web"
