@@ -1,4 +1,4 @@
 .kitchen
 keys/vars
 *.retry
-
+.vagrant
