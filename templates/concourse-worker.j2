@@ -12,14 +12,17 @@ exec {{ concourseci_bin_dir }}/concourse worker \
   {{ build_option("tsa-host", concourseci_tsa_host ) }}\
   {{ build_option("tsa-port", concourseci_worker_tsa_bind_port ) }}\
   {{ build_option("tsa-public-key", concourseci_key_tsa_path + ".pub" ) }}\
+  {{ build_option("bind-ip", concourseci_bind_ip  ) }}\
   {{ build_option("tsa-worker-private-key", concourseci_key_worker_path  ) }}\
-  {{ build_option("peer-ip", concourseci_peer_ip | default("omit")) }}\
+  {{ build_option(" -ip", concourseci_peer_ip | default("omit")) }}\
 {# Garden config #}
   {{ build_option("garden-log-level", concourseci_garden_log_level) }}\
   {{ build_option("garden-graph-cleanup-threshold-in-megabytes", concourseci_garden_graph_cleanup_threshold_in_megabytes| default("omit")) }}\
 {# Garden Container Networking config #}
   {{ build_option("garden-network-pool", concourseci_garden_network_pool| default("omit")) }}\
   {{ build_option("garden-max-containers", concourseci_garden_max_containers| default("omit")) }}\
+{# Baggageclaim config #}
+{{ build_option("baggageclaim-bind-ip", concourseci_baggageclaim_bind_ip| default("omit")) }}\
 {# Redirect to logs #}
   &>> {{ concourseci_log_worker }}
 
@@ -74,6 +77,5 @@ exec {{ concourseci_bin_dir }}/concourse worker \
 #          --garden-dropsonde-destination=                Destination for Dropsonde-emitted metrics. (default: 127.0.0.1:3457)
 #
 #    Baggageclaim Configuration:
-#          --baggageclaim-bind-ip=                        IP address on which to listen for API traffic. (default: 0.0.0.0)
 #          --baggageclaim-bind-port=                      Port on which to listen for API traffic. (default: 7788)
 #          --baggageclaim-reap-interval=                  Interval on which to reap expired volumes. (default: 10s)
