@@ -9,13 +9,13 @@ driver                      :
     privileged              : true
     forward:
       - 8080:8080
-  
+
 verifier                    :
   name                      : serverspec
   remote_exec               : false
   default_pattern           : true
-  
-provisioner                 :  
+
+provisioner                 :
     name                    : ansible_push
     ansible_config          : "tests/ansible.cfg"
     chef_bootstrap_url      : nil
@@ -35,7 +35,7 @@ platforms                   :
    provisioner              :
       ansible_playbook_bin  : "`avm path v2`ansible-playbook"
       # Hash of other groups
-      groups                : 
+      groups                :
          concourse-web      : [ 'simple-ubuntu1404' ]
          concourse-worker   : [ 'simple-ubuntu1404', 'worker-ubuntu1404' ]
 
@@ -46,7 +46,7 @@ platforms                   :
    provisioner              :
       ansible_playbook_bin  : "`avm path v2`ansible-playbook"
       # Hash of other groups
-      groups                : 
+      groups                :
          concourse-web      : [ 'simple-ubuntu1604' ]
          concourse-worker   : [ 'simple-ubuntu1604', 'worker-ubuntu1604' ]
 

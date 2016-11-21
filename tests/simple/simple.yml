@@ -17,7 +17,7 @@
   vars:
     concourseci_external_url         : "http://192.168.50.150:8080"
     concourseci_basic_auth_username  : "myuser"
-    concourseci_basic_auth_password  : "mypass"  
+    concourseci_basic_auth_password  : "mypass"
     concourseci_reboot               : false
 
   roles:

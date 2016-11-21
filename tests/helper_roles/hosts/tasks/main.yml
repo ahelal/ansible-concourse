@@ -1,5 +1,11 @@
 
 # Use hacky method since we cant move /etc/hosts in docker
 - name: Ensure hostname entries in /etc/hosts
-  command: echo "127.0.1.1 {{ inventory_hostname }}" >> /etc/hosts
+  command: grep "127.0.1.1 {{ inventory_hostname }}" /etc/hosts
+  register: grep_command
+  failed_when: false
   changed_when: false
+
+- name: Ensure hostname entries in /etc/hosts
+  shell: echo "127.0.1.1 {{ inventory_hostname }}" >> /etc/hosts
+  when: grep_command.rc == 1
