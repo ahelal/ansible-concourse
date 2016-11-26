@@ -10,7 +10,7 @@ before_install:
 
 
 install:
-  - bash ./tests/ansible-setup.sh
+  - bash ./test/ansible-setup.sh
   - bundle install
 
 script:

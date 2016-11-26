@@ -53,14 +53,14 @@ platforms                   :
 suites:
   - name                    : simple
     provisioner             :
-      playbook              : "tests/simple/simple.yml"
+      playbook              : "test/simple/simple.yml"
     driver_config           :
       hostname              : "simple"
       network:
         - ["private_network", {ip: "192.168.50.150"}]
   # - name                    : worker
   #   provisioner             :
-  #     playbook              : "tests/worker/worker.yml"
+  #     playbook              : "test/worker/worker.yml"
   #   driver_config           :
   #     hostname              : "worker"
   #     network           :

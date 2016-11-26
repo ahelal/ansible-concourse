@@ -9,7 +9,8 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: "192.168.50.150"
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "tests/simple/simple.yml"
+    ansible.playbook = "test/simple/simple.yml"
+#    ansible.verbose = "vvvv"
     ansible.groups = {
       "concourse-web" => ["vagrantci"],
       "concourse-worker" => ["vagrantci"],
