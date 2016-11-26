@@ -1,14 +1,9 @@
 ---
-# TRAVIS: local
-# NO TRAVIS: vagrant
 driver                      :
     name                    : docker
     socket                  : unix:///var/run/docker.sock
     use_sudo                : false
-    publish_all             : true
     privileged              : true
-    forward:
-      - 8080:8080
 
 verifier                    :
   name                      : serverspec
@@ -25,7 +20,6 @@ provisioner                 :
     sudo                    : True
     #extra_vars                : "@kitchen_vars.yml"
     verbose                 : "vvvv"
-
 
 platforms                   :
  - name                     : "ubuntu1404"
@@ -53,15 +47,6 @@ platforms                   :
 suites:
   - name                    : simple
     provisioner             :
-      playbook              : "test/simple/simple.yml"
+      playbook              : "test/integration/simple/simple.yml"
     driver_config           :
       hostname              : "simple"
-      network:
-        - ["private_network", {ip: "192.168.50.150"}]
-  # - name                    : worker
-  #   provisioner             :
-  #     playbook              : "test/worker/worker.yml"
-  #   driver_config           :
-  #     hostname              : "worker"
-  #     network           :
-  #       - ["private_network", {ip: "192.168.50.151"}]
