@@ -5,7 +5,7 @@
     name="{{item}}"
     update_cache=yes
     cache_valid_time=3600
-  with_items: 
+  with_items:
     - "git"
     - "postgresql"
     - "python-psycopg2"
@@ -14,7 +14,7 @@
 
   # this should fail if no match for postgreql path or more than on match
 - name: find postgresql path
-  find: 
+  find:
     paths="/etc/postgresql/"
     patterns="9.*"
     file_type="directory"
@@ -22,38 +22,38 @@
   failed_when: find_reg.matched != 1
 
 - name: pre Configure postgresql
-  lineinfile: 
+  lineinfile:
     dest="{{ find_reg.files[0].path }}/main/postgresql.conf"
     regexp='^listen_addresses'
     line="listen_addresses = '*'"
   register: postgresql_conf_1
 
 - name: pre Configure postgresql hba.conf
-  lineinfile: 
+  lineinfile:
     dest="{{ find_reg.files[0].path }}/main/pg_hba.conf"
     insertafter="EOF"
     line="host  all  all 0.0.0.0/0 md5"
   register: postgresql_conf_2
 
 - name: pre Service postgresql
-  service: 
+  service:
     name=postgresql
     state=restarted
   when: postgresql_conf_1 | changed or postgresql_conf_2 | changed
 
 - name: pre Create postgresql db
-  postgresql_db: 
+  postgresql_db:
     name=concourse
   become_user: postgres
 
-- name: pre Create postgresql user 
-  postgresql_user: 
+- name: pre Create postgresql user
+  postgresql_user:
     db=concourse
     name=concourseci
     password=conpass
   become_user: postgres
 
 - name: pre Service postgresql
-  service: 
+  service:
     name=postgresql
     state=started
