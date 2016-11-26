@@ -1,5 +1,5 @@
 ---
-concourseci_binary_file      : "concourse_linux_amd64_{{ concourseci_version }}"
+concourseci_binary_file      : "concourse_{{ ansible_os_family | lower }}_amd{{ ansible_userspace_bits }}_{{ concourseci_version }}"
 concourseci_download_url     : "https://github.com/concourse/bin/releases/download/{{ concourseci_version }}/concourse_linux_amd64"
 
 concourseci_worker_position  : "{{ groups[concourseci_worker_group].index(inventory_hostname)| default(0) }}"
