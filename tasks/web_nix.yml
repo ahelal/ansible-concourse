@@ -72,3 +72,4 @@
     name="concourse-web"
     state="started"
     enabled=True
+  ignore_errors: "{{ concourse_ignore_errors }}"
