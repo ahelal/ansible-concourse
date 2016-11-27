@@ -3,14 +3,13 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 
 ## Requirements
 * Ubuntu 14.04/16.04
+* MacOS (early support WIP)
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
 * Optional SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
 
 ## Overview
 I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
-The role is in early development, but usable so please submit PRs and PRs.
-
 
 ## Example
 You can use test-kitchen to spin a test machine.
@@ -295,10 +294,10 @@ An easy way to generate your keys to use a script in ```keys/key.sh```
 The script will ask you the number of workers you require and generate to files in ```keys/vars``` you can than copy the content in your group vars  or pass it somehow.
 
 ## TODO
-* Make test work with travis (huuuh irony)
+* MacOS support
+* Support all flags in concoursebinary
 * Add more tests
+* Windows support
 
 ## License
 MIT
-
-
