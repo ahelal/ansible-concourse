@@ -219,3 +219,6 @@ concourseci_worker_keys                     :
                                               4g6kUWry+NNuiaH6fsDA0FWnT3Kyc59/M/EuKNCR7ci1Gnkunc0IUn78aWtNcxX5
                                               RsCKJUM8l63P0jyUufpTbG6nAP8fMdWCdtDBidFLV2JMPYnWb4aP
                                               -----END RSA PRIVATE KEY-----
+
+# temp solution to systemV issue and ansible :(
+concourse_ignore_errors                       : "{{ ansible_lsb['codename'] == 'xenial' | default(False)}}"

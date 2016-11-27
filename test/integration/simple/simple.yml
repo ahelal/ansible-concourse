@@ -10,7 +10,11 @@
   tasks:
     - name: install python 2
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      changed_when: False
 
+    - name: install net-tools
+      apt:
+       name=net-tools
 
 - name: Provision my keys
   hosts: all
@@ -19,9 +23,8 @@
     concourseci_external_url         : "http://192.168.50.150:8080"
     concourseci_basic_auth_username  : "myuser"
     concourseci_basic_auth_password  : "mypass"
-  pre_tasks:
-    - name: update apt
-      apt: 
-        update_cache="yes"
+    concourseci_reboot               : false
   roles:
+    - { name: hosts,               tags: "hosts" }
+    - { name: "postgresql",        tags: "concourse" }
     - { name: "ansible-concourse", tags: "concourse" }

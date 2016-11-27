@@ -62,9 +62,11 @@
     mode=0755
   notify:
    - restart concourse-worker
+  when: "{{ ansible_os_family == 'Debian' }}"
 
 - name: Worker | Ensure Concourse worker is running and Starts on boot
   service:
     name="concourse-worker"
     state="started"
     enabled=True
+  ignore_errors: "{{ concourse_ignore_errors }}"

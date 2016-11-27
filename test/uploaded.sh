@@ -13,9 +13,9 @@ while [ "${pending_rc}" == "0" ]; do
     pending
     pending_rc=$?
     echo The counter is $COUNTER
-    let COUNTER=COUNTER+1 
+    let COUNTER=COUNTER+1
 done
 
 
-# Check if 
+# Check if
 fly -t docker builds | grep test/job-hello-world | grep succeeded

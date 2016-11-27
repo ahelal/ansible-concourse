@@ -65,9 +65,11 @@
     mode=0755
   notify:
    - restart concourse-web
+  when: "{{ ansible_os_family == 'Debian' }}"
 
 - name: web | Ensure Concourse web is running and Starts on boot
   service:
     name="concourse-web"
     state="started"
     enabled=True
+  ignore_errors: "{{ concourse_ignore_errors }}"

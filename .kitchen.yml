@@ -1,14 +1,9 @@
 ---
-# TRAVIS: local
-# NO TRAVIS: vagrant
 driver                      :
     name                    : docker
     socket                  : unix:///var/run/docker.sock
     use_sudo                : false
-    publish_all             : true
     privileged              : true
-    forward:
-      - 8080:8080
 
 verifier                    :
   name                      : serverspec
@@ -26,14 +21,13 @@ provisioner                 :
     #extra_vars                : "@kitchen_vars.yml"
     verbose                 : "vvvv"
 
-
 platforms                   :
  - name                     : "ubuntu1404"
    driver_config            :
      image                  : ubuntu:14.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2`ansible-playbook"
+      ansible_playbook_bin  : "`avm path v2.0`ansible-playbook"
       # Hash of other groups
       groups                :
          concourse-web      : [ 'simple-ubuntu1404' ]
@@ -44,7 +38,7 @@ platforms                   :
      image                  : ubuntu:16.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2`ansible-playbook"
+      ansible_playbook_bin  : "`avm path v2.2`ansible-playbook"
       # Hash of other groups
       groups                :
          concourse-web      : [ 'simple-ubuntu1604' ]
@@ -53,15 +47,6 @@ platforms                   :
 suites:
   - name                    : simple
     provisioner             :
-      playbook              : "tests/simple/simple.yml"
+      playbook              : "test/integration/simple/simple.yml"
     driver_config           :
       hostname              : "simple"
-      network:
-        - ["private_network", {ip: "192.168.50.150"}]
-  # - name                    : worker
-  #   provisioner             :
-  #     playbook              : "tests/worker/worker.yml"
-  #   driver_config           :
-  #     hostname              : "worker"
-  #     network           :
-  #       - ["private_network", {ip: "192.168.50.151"}]
