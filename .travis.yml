@@ -1,13 +1,14 @@
 ---
 language: python
 python: "2.7"
+services:
+  - docker
 
 before_install:
   # Make sure everything's up to date.
   - sudo apt-get update -qq
   - sudo apt-get install -qq python-apt python-pycurl git python-pip ruby ruby-dev build-essential autoconf
   - gem install bundler
-
 
 install:
   - bash ./test/ansible-setup.sh
