@@ -12,5 +12,3 @@ describe process('concourse') do
     expect(subject.args).to match('web')
   end
 end
-
-

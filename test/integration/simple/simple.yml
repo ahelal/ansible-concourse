@@ -12,6 +12,10 @@
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
       changed_when: False
 
+    - name: install net-tools
+      apt:
+       name=net-tools
+
 - name: Provision my keys
   hosts: all
   become: True
