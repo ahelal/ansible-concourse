@@ -1,4 +1,4 @@
-# ansible-concourse
+# ansible-concourse [![Build Status](https://travis-ci.org/ahelal/ansible-concourse.svg?branch=master)](https://travis-ci.org/ahelal/ansible-concourse)
 An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
 ## Requirements
