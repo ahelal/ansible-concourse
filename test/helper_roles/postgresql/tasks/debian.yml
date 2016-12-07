@@ -25,13 +25,13 @@
     dest="{{ find_reg.files[0].path }}/main/pg_hba.conf"
     insertafter="EOF"
     line="host  all  all 0.0.0.0/0 md5"
-  register: postgresql_conf_2
+  register: postgresql_conf
 
 - name: pre Service postgresql
   service:
     name=postgresql
     state=restarted
-  when: postgresql_conf_1 | changed or postgresql_conf_2 | changed
+  when: postgresql_conf | changed
 
 - name: pre Create postgresql db
   postgresql_db:
