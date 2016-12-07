@@ -1,59 +1,7 @@
 ---
 
-- name: pre Install demo packages
-  apt:
-    name="{{item}}"
-    update_cache=yes
-    cache_valid_time=3600
-  with_items:
-    - "git"
-    - "postgresql"
-    - "python-psycopg2"
-    - "vim"
-    - "curl"
+- include: redhat.yml
+  when: "{{ ansible_os_family == 'RedHat' }}"
 
-  # this should fail if no match for postgreql path or more than on match
-- name: find postgresql path
-  find:
-    paths="/etc/postgresql/"
-    patterns="9.*"
-    file_type="directory"
-  register: find_reg
-  failed_when: find_reg.matched != 1
-
-- name: pre Configure postgresql
-  lineinfile:
-    dest="{{ find_reg.files[0].path }}/main/postgresql.conf"
-    regexp='^listen_addresses'
-    line="listen_addresses = '*'"
-  register: postgresql_conf_1
-
-- name: pre Configure postgresql hba.conf
-  lineinfile:
-    dest="{{ find_reg.files[0].path }}/main/pg_hba.conf"
-    insertafter="EOF"
-    line="host  all  all 0.0.0.0/0 md5"
-  register: postgresql_conf_2
-
-- name: pre Service postgresql
-  service:
-    name=postgresql
-    state=restarted
-  when: postgresql_conf_1 | changed or postgresql_conf_2 | changed
-
-- name: pre Create postgresql db
-  postgresql_db:
-    name=concourse
-  become_user: postgres
-
-- name: pre Create postgresql user
-  postgresql_user:
-    db=concourse
-    name=concourseci
-    password=conpass
-  become_user: postgres
-
-- name: pre Service postgresql
-  service:
-    name=postgresql
-    state=started
+- include: debian.yml
+  when: "{{ ansible_os_family == 'Debian' }}"

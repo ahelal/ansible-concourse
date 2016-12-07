@@ -5,6 +5,7 @@
     name="linux-generic-lts-vivid"
     state=present
   register: kernel_update
+  when: ansible_os_family == 'Debian'
 
 - name: kernel update | Reboot now
   command: shutdown -r now
