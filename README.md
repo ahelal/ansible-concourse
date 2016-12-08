@@ -2,8 +2,12 @@
 An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
 ## Requirements
-* Ubuntu 14.04/16.04
-* MacOS (early support WIP)
+* Platforms
+  * Ubuntu 14.04/16.04
+  * MacOS (early support WIP. Accpeting PRs)
+  * Redhat (early support WIP. Accpeting PRs)
+  * Windows (not supproted yet. Accpeting PRs)
+
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
 * Optional SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
