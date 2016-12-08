@@ -25,7 +25,7 @@ The vagrant machine will have an IP of **192.168.50.150**
 You can access the web and API on port 8080 with username **myuser** and **mypass**
 Once your done
 ````
-vagrnt destroy
+vagrant destroy
 ```
 
 Play example
