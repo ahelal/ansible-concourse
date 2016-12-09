@@ -1,7 +1,7 @@
 #!/bin/bash
 # {{ ansible_managed }}
 {% macro build_option(option, value='omit') %}
-{% if value != 'omit' %}--{{ option }}={{ value }}{% endif %}
+{% if value != 'omit' %} --{{ option }}={{ value }}{% endif %}
 {% endmacro %}
 
 exec {{ concourseci_bin_dir }}/concourse web \

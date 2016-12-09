@@ -22,7 +22,7 @@ exec {{ concourseci_bin_dir }}/concourse worker \
   {{ build_option("garden-network-pool", concourseci_garden_network_pool| default("omit")) }}\
   {{ build_option("garden-max-containers", concourseci_garden_max_containers| default("omit")) }}\
 {# Baggageclaim config #}
-{{ build_option("baggageclaim-bind-ip", concourseci_baggageclaim_bind_ip| default("omit")) }}\
+  {{ build_option("baggageclaim-bind-ip", concourseci_baggageclaim_bind_ip| default("omit")) }}\
 {# Redirect to logs #}
   &>> {{ concourseci_log_worker }}
 
