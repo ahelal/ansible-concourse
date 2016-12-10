@@ -1,9 +1,10 @@
 #!/bin/bash
 # {{ ansible_managed }}
+
 # Config
 {% macro build_option(option, value='omit') %}
 {% if value != 'omit' %}
-export {{ option }}={{ value }}
+export {{ option }}="{{ value }}"
 {% endif %}
 {% endmacro %}
 
@@ -75,5 +76,8 @@ export {{ option }}={{ value }}
 {{ build_option("CONCOURSE_YELLER_API_KEY", CONCOURSE_WORKER_YELLER_API_KEY | default("omit")) -}}
 {{ build_option("CONCOURSE_YELLER_ENVIRONMENT", CONCOURSE_WORKER_YELLER_ENVIRONMENT | default("omit")) -}}
 
-# concourse worker
-exec {{ concourseci_bin_dir }}/concourse worker &>> {{ concourseci_log_worker }}
+echo "" >> {{ concourseci_log_worker }}
+echo "$(date) starting " >> {{ concourseci_log_worker }}
+env | grep CONCOURSE  >> {{ concourseci_log_worker }}
+# Exec worker
+exec {{ concourseci_bin_dir }}/concourse worker >> {{ concourseci_log_worker }} 2>&1

@@ -58,7 +58,7 @@
   notify:
     - restart concourse-web
 
-- name: web | Templating concourse web start init script
+- name: web | Templating concourse web start init script (linux)
   template:
     src="concourse-web-init.sh.j2"
     dest="/etc/init.d/concourse-web"
@@ -67,9 +67,27 @@
    - restart concourse-web
   when: "{{ ansible_system == 'Linux' }}"
 
-- name: web | Ensure Concourse web is running and Starts on boot
+- name: web | Ensure Concourse web is running and Starts on boot (linux)
   service:
     name="concourse-web"
     state="started"
     enabled=True
   ignore_errors: "{{ concourse_ignore_errors }}"
+  when: "{{ ansible_system == 'Linux' }}"
+
+- name: web | Templating concourse web start launchd plist (macOSx)
+  template:
+    src="concourse-web.plist.j2"
+    dest="{{ concourseci_launchd_path }}/{{ concourseci_launchd_web }}.plist"
+    mode=0750
+    owner="root"
+    group="wheel"
+    validate='plutil %s'
+  notify:
+   - restart concourse-web
+  register: launchd_template
+  when: "{{ ansible_system == 'Darwin' }}"
+
+- name: web | Ensure Concourse web is running and Starts on boot (macOSx)
+  shell: launchctl load -w {{ concourseci_launchd_path }}/{{ concourseci_launchd_web }}.plist && launchctl start {{ concourseci_launchd_web }}
+  when: "{{ ansible_system == 'Darwin' }}"

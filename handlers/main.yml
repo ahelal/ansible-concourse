@@ -1,11 +1,23 @@
 ---
 
 - name: restart concourse-web
+  debug:
+    msg="Notifier concourse-web restart"
+  changed_when: True
+  notify:
+    - restart concourse-web linux
+    - restart concourse-web macosx
+
+- name: restart concourse-web linux
   service:
     name="concourse-web"
     state="restarted"
-  when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group]"
+  when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and ansible_system == 'Linux'"
   ignore_errors: "{{ concourse_ignore_errors }}"
+
+- name: restart concourse-web macosx
+  shell: launchctl stop {{ concourseci_launchd_web }} && launchctl start {{ concourseci_launchd_web }}
+  when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and ansible_system == 'Darwin'"
 
 - name: restart concourse-worker
   service:

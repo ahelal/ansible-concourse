@@ -10,3 +10,8 @@ concourseci_download_rc_url  : "https://github.com/concourse/bin/releases/downlo
 concourseci_download_fr_url  : "https://github.com/concourse/concourse/releases/download/{{ concourseci_version }}/concourse_{{ concourseci_ansible_system }}_amd64"
 
 concourseci_worker_position  : "{{ groups[concourseci_worker_group].index(inventory_hostname)| default(0) }}"
+
+## MacOSx stuff
+concourseci_launchd_path     : "/Library/LaunchDaemons"
+concourseci_launchd_web      : "com.github.ahelal.concourse.web"
+concourseci_launchd_worker   : "com.github.ahelal.concourse.worker.plist"
