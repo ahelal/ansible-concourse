@@ -3,14 +3,14 @@ GEM
   specs:
     artifactory (2.5.1)
     diff-lcs (1.2.5)
-    kitchen-ansiblepush (0.4.0)
+    kitchen-ansiblepush (0.5.1)
       test-kitchen
     kitchen-docker (2.6.0)
       test-kitchen (>= 1.0.0)
     kitchen-verifier-serverspec (0.6.2)
       net-ssh (~> 3)
       test-kitchen (~> 1.4)
-    mixlib-install (2.1.7)
+    mixlib-install (2.1.9)
       artifactory
       mixlib-shellout
       mixlib-versioning
@@ -47,12 +47,12 @@ GEM
       rspec-its
       specinfra (~> 2.53)
     sfl (2.3)
-    specinfra (2.66.0)
+    specinfra (2.66.2)
       net-scp
       net-ssh (>= 2.7, < 4.0)
       net-telnet
       sfl
-    test-kitchen (1.14.0)
+    test-kitchen (1.14.2)
       mixlib-install (>= 1.2, < 3.0)
       mixlib-shellout (>= 1.2, < 3.0)
       net-scp (~> 1.1)
