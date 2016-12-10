@@ -1,0 +1,17 @@
+---
+jobs:
+- name: job
+  public: true
+  plan:
+  - task: hello-world success
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          exit 0

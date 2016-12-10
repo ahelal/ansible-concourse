@@ -1,7 +1,4 @@
 ---
-# https://github.com/cloudfoundry-incubator/garden-linux/blob/master/README.md
-# https://github.com/concourse/concourse/issues/229
-# https://github.com/concourse/bin
 
 - name: Check for python2.7
   hosts: all
@@ -12,12 +9,10 @@
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
       changed_when: False
 
-
 - name: Provision Concourse
   hosts: all
   become: True
   vars:
-    CONCOURSE_WEB_EXTERNAL_URL        : "http://192.168.50.150:8080"
     CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
     CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
     concourseci_reboot                : false
@@ -25,13 +20,4 @@
     - { name: "hosts",             tags: "hosts"      }
     - { name: "postgresql",        tags: "postgresql" }
     - { name: "ansible-concourse", tags: "concourse"  }
-
-- name: Install packages required for testing
-  hosts: all
-  gather_facts: False
-  become: True
-  tasks:
-    - name: install net-tools
-      apt:
-       name=net-tools
-      when: "{{ ansible_os_family == 'Debian' }}"
+    - { name: "fly",               tags: "fly"        }
