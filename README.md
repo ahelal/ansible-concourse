@@ -15,6 +15,11 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 ## Overview
 I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
 
+## Note breaking changes as of version 1.0.0
+version 1.0.0 now support all options for web and worker, but you need to adapt to the new config.
+Please look at config section.
+
+
 ## Example
 You can use test-kitchen to spin a test machine.
 ```
@@ -65,6 +70,12 @@ worker03
 ```
 
 You would also need to generate keys for workers check key section
+
+## Config
+All options are now supported since version 1.0.0 in *Web* and *worker*.
+to view all web
+
+
 
 ## Variables
 ```yaml

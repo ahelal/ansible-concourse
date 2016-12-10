@@ -1,7 +1,7 @@
 ---
 
 # Concourse version
-concourseci_version                         : "v2.5.1-rc.5"
+concourseci_version                         : "v2.5.1-rc.22"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
@@ -18,71 +18,46 @@ concourseci_log_web                         : "{{ concourseci_log_dir }}/concour
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
 
-## Concourse web
-concourseci_bind_ip                         : "0.0.0.0"
-concourseci_bind_port                       : "8080"
-concourseci_external_url                    : "http://127.0.0.1:8080" #URL used to reach any ATC from the outside world.
-# concourseci_oauth_base_url                # URL used as the base of OAuth redirect URIs. If not specified, the external URL is used.
-# concourseci_peer_url                      # URL used to reach this ATC from other ATCs in the cluster. (default: http://127.0.0.1:8080)
-
-## Cocnourse resources
-# concourseci_resource_checking_interval      # Interval on which to check for new versions of resources. (default: 1m)
-# concourseci_old_resource_grace_period       # How long to cache the result of a get step after a newer version of the resource is found. (default: 5m)
-# concourseci_resource_cache_cleanup_interval # Interval on which to cleanup old caches of resources. (default: 30s)
-
-## Concourse Container Retention
-# concourseci_container_retention_success_duration  # The duration to keep a succeeded step's containers before expiring them. (default: 5m)
-# concourseci_container_retention_failure_duration  # The duration to keep a failed step's containers before expiring them. (default: 1h)
-
-## Concuorse authentication
-### Basic
-# concourseci_basic_auth_username          # Username to use for basic auth.
-# concourseci_basic_auth_password          # Password to use for basic auth.
-### Github
-# concourseci_github_auth_client_id        # Application client ID for enabling GitHub OAuth.
-# concourseci_github_auth_client_secret    # Application client secret for enabling GitHub OAuth.
-# concourseci_github_auth_organization     # GitHub organization whose members will have access.
-# concourseci_github_auth_team             # GitHub team whose members will have access.
-# concourseci_github_auth_user             # GitHub user to permit access.
-# concourseci_github_auth_auth_url         # Override default endpoint AuthURL for Github Enterprise
-# concourseci_github_auth_token_url        # Override default endpoint TokenURL for Github Enterprise
-# concourseci_github_auth_api_url          # Override default API endpoint URL for Github Enterprise
-
+## Concourse Web
+## For full support variables web templates/concourse-web.j2
+CONCOURSE_WEB_BIND_IP                       : "0.0.0.0"
+CONCOURSE_WEB_BIND_PORT                     : "8080"
+#CONCOURSE_WEB_EXTERNAL_URL                  : "http://127.0.0.1:8080" #URL used to reach any ATC from the outside world.
 # Concourse TSA Config
-concourseci_tsa_host                        : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
-concourseci_tsa_bind_ip                     : "0.0.0.0"
-concourseci_tsa_bind_port                   : "2222"
-concourseci_tsa_heartbeat_interval          : "30s"
-concourseci_tsa_authorization_keys          : "{{ concourseci_ssh_dir }}/tsa_authorization"
-# concourseci_peer_url                      : # URL used to reach this ATC from other ATCs in the cluster. (default:http://127.0.0.1:8080)
+CONCOURSE_WEB_TSA_HOST                      : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
+CONCOURSE_WEB_TSA_BIND_IP                   : "0.0.0.0"
+CONCOURSE_WEB_TSA_BIND_PORT                 : "2222"
+CONCOURSE_WEB_TSA_AUTHORIZED_KEYS           : "{{ concourseci_ssh_dir }}/tsa_authorization"
+CONCOURSE_WEB_TSA_HOST_KEY                  : "{{ concourseci_ssh_dir }}/tsa"
+CONCOURSE_WEB_SESSION_SIGNING_KEY           : "{{ concourseci_ssh_dir }}/session_signing"
 
-## Concourse Extra raw options
-concourseci_web_extra_options               : ""
-
-## Concourse worker
-concourseci_worker_name                     : "{{ inventory_hostname }}"
-concourseci_worker_tsa_bind_port            : "{{ concourseci_tsa_bind_port }}"
-## Concourse garden linux
-concourseci_garden_listen                   : "127.0.0.1:7777"
-concourseci_garden_log_level                : "info" # [debug|info|error|fatal]
-# concourseci_peer_ip                       # IP used to reach this worker from the ATC nodes. If omitted, the worker will be forwarded through the SSH connection to the TSA.
-# concourseci_garden_network_pool           # Network range to use for dynamically allocated container subnets. (default: 10.254.0.0/22)
-# concourseci_garden_max_containers         # Maximum number of containers that can be created. (default: )
-# concourseci_garden_graph_cleanup_threshold_in_megabytesDirectory # Disk usage of the graph dir at which cleanup should trigger, or -1 to disable graph cleanup. (default: -1)
-
+#concourseci_key_tsa_path                    : "{{ concourseci_ssh_dir }}/tsa"
 ## PostgreSQL
 concourseci_postgresql_user                 : "concourseci"
 concourseci_postgresql_pass                 : "conpass"
 concourseci_postgresql_host                 : "127.0.0.1"
 concourseci_postgresql_db                   : "concourse"
 concourseci_postgresql_ssl                  : "disable"
-concourseci_postgresql_source               : "postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }}?sslmode={{ concourseci_postgresql_ssl }}"
+CONCOURSE_WEB_POSTGRES_DATA_SOURCE          : "postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }}?sslmode={{ concourseci_postgresql_ssl }}"
 
-## Ansible Groups
+## Concourse worker
+## For full support variables worker templates/concourse-worker.j2
+CONCOURSE_WORKER_WORK_DIR                   : "{{ concourseci_worker_dir }}"
+CONCOURSE_WORKER_NAME                       : "{{ inventory_hostname }}"
+CONCOURSE_WORKER_BIND_PORT                  : "{{ CONCOURSE_WEB_BIND_PORT }}"
+CONCOURSE_WORKER_TSA_HOST                   : "{{ CONCOURSE_WEB_TSA_HOST }}"
+CONCOURSE_WORKER_TSA_PORT                   : "{{ CONCOURSE_WEB_TSA_BIND_PORT }}"
+CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY     : "{{ concourseci_ssh_dir }}/worker"
+CONCOURSE_WORKER_TSA_PUBLIC_KEY             : "{{ CONCOURSE_WEB_TSA_HOST_KEY }}.pub"
+
+## Concourse garden linux
+CONCOURSE_WORKER_GARDEN_LOG_LEVEL           : "info" # [debug|info|error|fatal]
+
+## Ansible Groups to form clusters
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
-## Disable reboot (used for docker)
+## Reboot when updating kernel (we disable this for test :( on docker)
 concourseci_reboot                          : True
 
 
@@ -91,7 +66,6 @@ concourseci_reboot                          : True
 # safely i.e. ansible-vault
 # **********************************************************************************
 
-concourseci_key_session_path               : "{{ concourseci_ssh_dir }}/session_signing"
 concourseci_key_session_public             : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6tKHmRtRp0a5SAeqbVy3pJSuoWQfmTIk106Md1bGjELPDkj0A8Z4a5rJZrAR7WqrRmHr2dTL9eKroymtIqxgJdu1RO+SM3uZVV5UFfYrBV0rmp5fP2g/+Wom2RB+zCzPT1TjDnKph8xPqj19P/0FY9rKbU8h6EzEp6Z5DjwKZKvxAF8p9r6wJde4nY+oneIuG1qpxYmLpNvdM3G44vgNeMg20jVywjJVwYDNe8ourqPu8rBauLbSiQI8Uxx6dlJSTsVawrKwHQUPEI9B5LPwUzZ9t/d7k2uJnCig6aJwM8dcyr8tqxlfdfmQiHRlZozail8UzIv65MbVngji5sqoB
 concourseci_key_session_private            : |
                                               -----BEGIN RSA PRIVATE KEY-----
@@ -122,7 +96,6 @@ concourseci_key_session_private            : |
                                               N1EQdIhtxo4mgHXjF/8L32SqinAJb5ErNXQQwT5k9G22mZkHZY7Y
                                               -----END RSA PRIVATE KEY-----
 
-concourseci_key_tsa_path                    : "{{ concourseci_ssh_dir }}/tsa"
 concourseci_key_tsa_public                  : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjddjviqF3BjVnxrledNsKM0wm7bwJwRgnUomLVrwHXjfArEz5yFa2C87IT9CYpIxkZMgmd0Bdtwj3kiNPP0qYpcj/uTqQTE5xLzTiJIUFsgSQwrMt/zd5x44g71qiHF/1KtHdcZq1dW3+5IwBog692HjcytbAxpUEGGpocHs/aoJ5/xn2tx61QOhkr5+PP1Ft7eHu719/pb1czhH8tZwCwNJQs4vzf79Mlgt0ikjJ84o9kOiUGP+Fc0+EjapBg9M2GE6/l86IJzcx/t/uQYCFOdKbg5ukck9NztldaOUeAPkUttPtf2vdjZU+EwSYc3XvhyQlN/QQmZ8tvG3gV9wv
 concourseci_key_tsa_private                 : |
                                               -----BEGIN RSA PRIVATE KEY-----
@@ -153,9 +126,7 @@ concourseci_key_tsa_private                 : |
                                               uPTcE+vQzvMV3lJo0CHTlNMo1JgHOO5UsFZ1cBxO7MZXCzChGE8=
                                               -----END RSA PRIVATE KEY-----
 
-
 concourseci_worker_position                 : "{{ groups[concourseci_worker_group].index(inventory_hostname)| default(0) }}"
-concourseci_key_worker_path                 : "{{ concourseci_ssh_dir }}/worker"
 concourseci_key_worker_public               : "{{ concourseci_worker_keys[concourseci_worker_position | int ].public}}"
 concourseci_key_worker_private              : "{{ concourseci_worker_keys[concourseci_worker_position | int ].private}}"
 concourseci_worker_keys                     :

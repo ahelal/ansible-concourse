@@ -1,44 +1,75 @@
 #!/bin/bash
 # {{ ansible_managed }}
+
+# Config
 {% macro build_option(option, value='omit') %}
-{% if value != 'omit' %} --{{ option }}={{ value }}{% endif %}
+{% if value != 'omit' %}
+export {{ option }}={{ value }}
+{% endif %}
 {% endmacro %}
 
-exec {{ concourseci_bin_dir }}/concourse web \
-{# General config #}
-  {{ build_option("external-url", concourseci_external_url) }}\
-  {{ build_option("oauth-base-url", concourseci_oauth_base_url | default("omit")) }}\
-  {{ build_option("bind-ip", concourseci_bind_ip) }}\
-  {{ build_option("bind-port", concourseci_bind_port) }}\
-  {{ build_option("peer-url", concourseci_peer_url | default("omit")) }}\
-  {{ build_option("session-signing-key", concourseci_key_session_path) }}\
-  {{ build_option("postgres-data-source", concourseci_postgresql_source) }}\
-{# Resource config  #}
-  {{ build_option("resource-checking-interval", concourseci_resource_checking_interval | default("omit")) }}\
-  {{ build_option("old-resource-grace-period", concourseci_old_resource_grace_period | default("omit")) }}\
-  {{ build_option("resource-cache-cleanup-interval", concourseci_resource_cache_cleanup_interval | default("omit")) }}\
-{# Container Retention #}
-  {{ build_option("container-retention-success-duration", concourseci_container_retention_success_duration | default("omit")) }}\
-  {{ build_option("container-retention-failure-duration", concourseci_container_retention_failure_duration | default("omit")) }}\
-{# TSA Config  #}
-  {{ build_option("tsa-authorized-keys", concourseci_tsa_authorization_keys) }}\
-  {{ build_option("tsa-host-key", concourseci_key_tsa_path) }}\
-  {{ build_option("tsa-bind-ip", concourseci_tsa_bind_ip | default("omit")) }}\
-  {{ build_option("tsa-bind-port", concourseci_tsa_bind_port | default("omit")) }}\
-  {{ build_option("tsa-heartbeat-interval", concourseci_tsa_heartbeat_interval | default("omit")) }}\
-{# Basic Auth #}
-  {{ build_option("basic-auth-username", concourseci_basic_auth_username | default("omit")) }}\
-  {{ build_option("basic-auth-password", concourseci_basic_auth_password | default("omit")) }}\
-{# github Auth #}
-  {{ build_option("github-auth-client-id", concourseci_github_auth_client_id | default("omit")) }}\
-  {{ build_option("github-auth-client-secret", concourseci_github_auth_client_secret | default("omit")) }}\
-  {{ build_option("github-auth-organization", concourseci_github_auth_organization | default("omit")) }}\
-  {{ build_option("github-auth-team", concourseci_github_auth_team | default("omit")) }}\
-  {{ build_option("github-auth-user", concourseci_github_auth_user | default("omit")) }}\
-  {{ build_option("github-auth-auth-url", concourseci_github_auth_auth_url | default("omit")) }}\
-  {{ build_option("github-auth-token-url", concourseci_github_auth_token_url | default("omit")) }}\
-  {{ build_option("github-auth-api-url", concourseci_github_auth_api_url | default("omit")) }}\
-{% for item in concourseci_web_extra_options %}
-  {{ item }}\
-{% endfor %}
-  >> {{ concourseci_log_web }} 2>&1
+{{ build_option("CONCOURSE_BIND_IP", CONCOURSE_WEB_BIND_IP | default("omit")) -}}
+{{ build_option("CONCOURSE_BIND_PORT", CONCOURSE_WEB_BIND_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_TLS_BIND_PORT", CONCOURSE_WEB_TLS_BIND_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_TLS_CERT", CONCOURSE_WEB_TLS_CERT | default("omit")) -}}
+{{ build_option("CONCOURSE_TLS_KEY", CONCOURSE_WEB_TLS_KEY | default("omit")) -}}
+{{ build_option("CONCOURSE_EXTERNAL_URL", CONCOURSE_WEB_EXTERNAL_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_PEER_URL", CONCOURSE_WEB_PEER_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_OAUTH_BASE_URL", CONCOURSE_WEB_OAUTH_BASE_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_AUTH_DURATION", CONCOURSE_WEB_AUTH_DURATION | default("omit")) -}}
+{{ build_option("CONCOURSE_POSTGRES_DATA_SOURCE", CONCOURSE_WEB_POSTGRES_DATA_SOURCE | default("omit")) -}}
+{{ build_option("CONCOURSE_DEBUG_BIND_IP", CONCOURSE_WEB_DEBUG_BIND_IP | default("omit")) -}}
+{{ build_option("CONCOURSE_DEBUG_BIND_PORT", CONCOURSE_WEB_DEBUG_BIND_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_SESSION_SIGNING_KEY", CONCOURSE_WEB_SESSION_SIGNING_KEY | default("omit")) -}}
+{{ build_option("CONCOURSE_RESOURCE_CHECKING_INTERVAL", CONCOURSE_WEB_RESOURCE_CHECKING_INTERVAL | default("omit")) -}}
+{{ build_option("CONCOURSE_OLD_RESOURCE_GRACE_PERIOD", CONCOURSE_WEB_OLD_RESOURCE_GRACE_PERIOD | default("omit")) -}}
+{{ build_option("CONCOURSE_RESOURCE_CACHE_CLEANUP_INTERVAL", CONCOURSE_WEB_RESOURCE_CACHE_CLEANUP_INTERVAL | default("omit")) -}}
+{{ build_option("CONCOURSE_CLI_ARTIFACTS_DIR", CONCOURSE_WEB_CLI_ARTIFACTS_DIR | default("omit")) -}}
+{{ build_option("CONCOURSE_ALLOW_SELF_SIGNED_CERTIFICATES", CONCOURSE_WEB_ALLOW_SELF_SIGNED_CERTIFICATES | default("omit")) -}}
+{{ build_option("CONCOURSE_LOG_DB_QUERIES", CONCOURSE_WEB_LOG_DB_QUERIES | default("omit")) -}}
+{{ build_option("CONCOURSE_DEVELOPMENT_MODE", CONCOURSE_WEB_DEVELOPMENT_MODE | default("omit")) -}}
+{{ build_option("CONCOURSE_NOOP", CONCOURSE_WEB_NOOP | default("omit")) -}}
+{{ build_option("CONCOURSE_WORKER_GARDEN_URL", CONCOURSE_WEB_WORKER_GARDEN_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_WORKER_BAGGAGECLAIM_URL", CONCOURSE_WEB_WORKER_BAGGAGECLAIM_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_WORKER_RESOURCE", CONCOURSE_WEB_WORKER_RESOURCE | default("omit")) -}}
+{{ build_option("CONCOURSE_BASIC_AUTH_USERNAME", CONCOURSE_WEB_BASIC_AUTH_USERNAME | default("omit")) -}}
+{{ build_option("CONCOURSE_BASIC_AUTH_PASSWORD", CONCOURSE_WEB_BASIC_AUTH_PASSWORD | default("omit")) -}}
+{{ build_option("CONCOURSE_GITHUB_AUTH_CLIENT_ID", CONCOURSE_WEB_GITHUB_AUTH_CLIENT_ID | default("omit")) -}}
+{{ build_option("CONCOURSE_GITHUB_AUTH_CLIENT_SECRET", CONCOURSE_WEB_GITHUB_AUTH_CLIENT_SECRET | default("omit")) -}}
+{{ build_option("CONCOURSE_GITHUB_AUTH_ORGANIZATION", CONCOURSE_WEB_GITHUB_AUTH_ORGANIZATION | default("omit")) -}}
+{{ build_option("CONCOURSE_GITHUB_AUTH_TEAM", CONCOURSE_WEB_GITHUB_AUTH_TEAM | default("omit")) -}}
+{{ build_option("CONCOURSE_GITHUB_AUTH_USER", CONCOURSE_WEB_GITHUB_AUTH_USER | default("omit")) -}}
+{{ build_option("CONCOURSE_GITHUB_AUTH_AUTH_URL", CONCOURSE_WEB_GITHUB_AUTH_AUTH_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_GITHUB_AUTH_TOKEN_URL", CONCOURSE_WEB_GITHUB_AUTH_TOKEN_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_GITHUB_AUTH_API_URL", CONCOURSE_WEB_GITHUB_AUTH_API_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_UAA_AUTH_CLIENT_ID", CONCOURSE_WEB_UAA_AUTH_CLIENT_ID | default("omit")) -}}
+{{ build_option("CONCOURSE_UAA_AUTH_CLIENT_SECRET", CONCOURSE_WEB_UAA_AUTH_CLIENT_SECRET | default("omit")) -}}
+{{ build_option("CONCOURSE_UAA_AUTH_AUTH_URL", CONCOURSE_WEB_UAA_AUTH_AUTH_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_UAA_AUTH_TOKEN_URL", CONCOURSE_WEB_UAA_AUTH_TOKEN_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_UAA_AUTH_CF_SPACE", CONCOURSE_WEB_UAA_AUTH_CF_SPACE | default("omit")) -}}
+{{ build_option("CONCOURSE_UAA_AUTH_CF_URL", CONCOURSE_WEB_UAA_AUTH_CF_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_UAA_AUTH_CF_CA_CERT", CONCOURSE_WEB_UAA_AUTH_CF_CA_CERT | default("omit")) -}}
+{{ build_option("CONCOURSE_GENERIC_OAUTH_DISPLAY_NAME", CONCOURSE_WEB_GENERIC_OAUTH_DISPLAY_NAME | default("omit")) -}}
+{{ build_option("CONCOURSE_GENERIC_OAUTH_CLIENT_ID", CONCOURSE_WEB_GENERIC_OAUTH_CLIENT_ID | default("omit")) -}}
+{{ build_option("CONCOURSE_GENERIC_OAUTH_CLIENT_SECRET", CONCOURSE_WEB_GENERIC_OAUTH_CLIENT_SECRET | default("omit")) -}}
+{{ build_option("CONCOURSE_GENERIC_OAUTH_AUTH_URL", CONCOURSE_WEB_GENERIC_OAUTH_AUTH_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_GENERIC_OAUTH_AUTH_URL_PARAM", CONCOURSE_WEB_GENERIC_OAUTH_AUTH_URL_PARAM | default("omit")) -}}
+{{ build_option("CONCOURSE_GENERIC_OAUTH_SCOPE", CONCOURSE_WEB_GENERIC_OAUTH_SCOPE | default("omit")) -}}
+{{ build_option("CONCOURSE_GENERIC_OAUTH_TOKEN_URL", CONCOURSE_WEB_GENERIC_OAUTH_TOKEN_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_METRICS_HOST_NAME", CONCOURSE_WEB_METRICS_HOST_NAME | default("omit")) -}}
+{{ build_option("CONCOURSE_METRICS_TAG", CONCOURSE_WEB_METRICS_TAG | default("omit")) -}}
+{{ build_option("CONCOURSE_METRICS_ATTRIBUTE", CONCOURSE_WEB_METRICS_ATTRIBUTE | default("omit")) -}}
+{{ build_option("CONCOURSE_YELLER_API_KEY", CONCOURSE_WEB_YELLER_API_KEY | default("omit")) -}}
+{{ build_option("CONCOURSE_YELLER_ENVIRONMENT", CONCOURSE_WEB_YELLER_ENVIRONMENT | default("omit")) -}}
+{{ build_option("CONCOURSE_RIEMANN_HOST", CONCOURSE_WEB_RIEMANN_HOST | default("omit")) -}}
+{{ build_option("CONCOURSE_RIEMANN_PORT", CONCOURSE_WEB_RIEMANN_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_RIEMANN_SERVICE_PREFIX", CONCOURSE_WEB_RIEMANN_SERVICE_PREFIX | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_BIND_IP", CONCOURSE_WEB_TSA_BIND_IP | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_BIND_PORT", CONCOURSE_WEB_TSA_BIND_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_HOST_KEY", CONCOURSE_WEB_TSA_HOST_KEY | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_AUTHORIZED_KEYS", CONCOURSE_WEB_TSA_AUTHORIZED_KEYS | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_TEAM_AUTHORIZED_KEYS", CONCOURSE_WEB_TSA_TEAM_AUTHORIZED_KEYS | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_HEARTBEAT_INTERVAL", CONCOURSE_WEB_TSA_HEARTBEAT_INTERVAL | default("omit")) -}}
+
+## Exec web
+exec {{ concourseci_bin_dir }}/concourse web >> {{ concourseci_log_web }} 2>&1

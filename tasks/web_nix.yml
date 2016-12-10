@@ -11,7 +11,7 @@
 - name: web | Copy session public key
   copy:
     content="{{ concourseci_key_session_public }}"
-    dest="{{ concourseci_key_session_path }}.pub"
+    dest="{{ CONCOURSE_WEB_SESSION_SIGNING_KEY }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -21,7 +21,7 @@
 - name: web | Copy session private key
   copy:
     content="{{ concourseci_key_session_private }}"
-    dest="{{ concourseci_key_session_path }}"
+    dest="{{ CONCOURSE_WEB_SESSION_SIGNING_KEY }}"
     mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -32,7 +32,7 @@
 - name: web | Copy tsa private key
   copy:
     content="{{ concourseci_key_tsa_private }}"
-    dest="{{ concourseci_key_tsa_path }}"
+    dest="{{ CONCOURSE_WEB_TSA_HOST_KEY }}"
     mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -44,7 +44,7 @@
   authorized_key:
     user: "{{ concourseci_user }}"
     key: "{{ item.public }}"
-    path: "{{ concourseci_tsa_authorization_keys }}"
+    path: "{{ CONCOURSE_WEB_TSA_AUTHORIZED_KEYS }}"
     manage_dir: no
   with_items: "{{ concourseci_worker_keys }}"
   notify:

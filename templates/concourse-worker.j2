@@ -1,81 +1,79 @@
 #!/bin/bash
 # {{ ansible_managed }}
+# Config
 {% macro build_option(option, value='omit') %}
-{% if value != 'omit' %}--{{ option }}={{ value }}{% endif %}
+{% if value != 'omit' %}
+export {{ option }}={{ value }}
+{% endif %}
 {% endmacro %}
 
-exec {{ concourseci_bin_dir }}/concourse worker \
-{# General config #}
-  {{ build_option("name", concourseci_worker_name) }}\
-  {{ build_option("work-dir", concourseci_worker_dir) }}\
-{# TSA config #}
-  {{ build_option("tsa-host", concourseci_tsa_host ) }}\
-  {{ build_option("tsa-port", concourseci_worker_tsa_bind_port ) }}\
-  {{ build_option("tsa-public-key", concourseci_key_tsa_path + ".pub" ) }}\
-  {{ build_option("bind-ip", concourseci_bind_ip  ) }}\
-  {{ build_option("tsa-worker-private-key", concourseci_key_worker_path  ) }}\
-  {{ build_option(" -ip", concourseci_peer_ip | default("omit")) }}\
-{# Garden config #}
-  {{ build_option("garden-log-level", concourseci_garden_log_level) }}\
-  {{ build_option("garden-graph-cleanup-threshold-in-megabytes", concourseci_garden_graph_cleanup_threshold_in_megabytes| default("omit")) }}\
-{# Garden Container Networking config #}
-  {{ build_option("garden-network-pool", concourseci_garden_network_pool| default("omit")) }}\
-  {{ build_option("garden-max-containers", concourseci_garden_max_containers| default("omit")) }}\
-{# Baggageclaim config #}
-  {{ build_option("baggageclaim-bind-ip", concourseci_baggageclaim_bind_ip| default("omit")) }}\
-{# Redirect to logs #}
-  &>> {{ concourseci_log_worker }}
+{{ build_option("CONCOURSE_NAME", CONCOURSE_WORKER_NAME | default("omit")) -}}
+{{ build_option("CONCOURSE_TAG", CONCOURSE_WORKER_TAG | default("omit")) -}}
+{{ build_option("CONCOURSE_TEAM", CONCOURSE_WORKER_TEAM | default("omit")) -}}
+{{ build_option("http_proxy", http_proxy | default("omit")) -}}
+{{ build_option("https_proxy", https_proxy | default("omit")) -}}
+{{ build_option("no_proxy", no_proxy | default("omit")) -}}
+{{ build_option("CONCOURSE_WORK_DIR", CONCOURSE_WORKER_WORK_DIR | default("omit")) -}}
+{{ build_option("CONCOURSE_BIND_IP", CONCOURSE_WORKER_BIND_IP | default("omit")) -}}
+{{ build_option("CONCOURSE_BIND_PORT", CONCOURSE_WORKER_BIND_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_PEER_IP", CONCOURSE_WORKER_PEER_IP | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_LOG_LEVEL", CONCOURSE_WORKER_GARDEN_LOG_LEVEL | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_BIND_IP", CONCOURSE_WORKER_GARDEN_BIND_IP | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_BIND_PORT", CONCOURSE_WORKER_GARDEN_BIND_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_BIND_SOCKET", CONCOURSE_WORKER_GARDEN_BIND_SOCKET | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DEBUG_BIND_IP", CONCOURSE_WORKER_GARDEN_DEBUG_BIND_IP | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DEBUG_BIND_PORT", CONCOURSE_WORKER_GARDEN_DEBUG_BIND_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_TAG", CONCOURSE_WORKER_GARDEN_TAG | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_ROOTLESS", CONCOURSE_WORKER_GARDEN_ROOTLESS | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DEPOT", CONCOURSE_WORKER_GARDEN_DEPOT | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_PROPERTIES_PATH", CONCOURSE_WORKER_GARDEN_PROPERTIES_PATH | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DEFAULT_ROOTFS", CONCOURSE_WORKER_GARDEN_DEFAULT_ROOTFS | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DEFAULT_GRACE_TIME", CONCOURSE_WORKER_GARDEN_DEFAULT_GRACE_TIME | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DESTROY_CONTAINERS_ON_STARTUP", CONCOURSE_WORKER_GARDEN_DESTROY_CONTAINERS_ON_STARTUP | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_APPARMOR", CONCOURSE_WORKER_GARDEN_APPARMOR | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DADOO_BIN", CONCOURSE_WORKER_GARDEN_DADOO_BIN | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_NSTAR_BIN", CONCOURSE_WORKER_GARDEN_NSTAR_BIN | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_TAR_BIN", CONCOURSE_WORKER_GARDEN_TAR_BIN | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_IPTABLES_BIN", CONCOURSE_WORKER_GARDEN_IPTABLES_BIN | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_INIT_BIN", CONCOURSE_WORKER_GARDEN_INIT_BIN | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_RUNC_BIN", CONCOURSE_WORKER_GARDEN_RUNC_BIN | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_IMAGE_PLUGIN", CONCOURSE_WORKER_GARDEN_IMAGE_PLUGIN | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_GRAPH", CONCOURSE_WORKER_GARDEN_GRAPH | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_GRAPH_CLEANUP_THRESHOLD_IN_MEGABYTES", CONCOURSE_WORKER_GARDEN_GRAPH_CLEANUP_THRESHOLD_IN_MEGABYTES | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_PERSISTENT_IMAGE", CONCOURSE_WORKER_GARDEN_PERSISTENT_IMAGE | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DOCKER_REGISTRY", CONCOURSE_WORKER_GARDEN_DOCKER_REGISTRY | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_INSECURE_DOCKER_REGISTRY", CONCOURSE_WORKER_GARDEN_INSECURE_DOCKER_REGISTRY | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_NETWORK_POOL", CONCOURSE_WORKER_GARDEN_NETWORK_POOL | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_ALLOW_HOST_ACCESS", CONCOURSE_WORKER_GARDEN_ALLOW_HOST_ACCESS | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DENY_NETWORK", CONCOURSE_WORKER_GARDEN_DENY_NETWORK | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_ALLOW_NETWORK", CONCOURSE_WORKER_GARDEN_ALLOW_NETWORK | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DNS_SERVER", CONCOURSE_WORKER_GARDEN_DNS_SERVER | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_EXTERNAL_IP", CONCOURSE_WORKER_GARDEN_EXTERNAL_IP | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_PORT_POOL_START", CONCOURSE_WORKER_GARDEN_PORT_POOL_START | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_PORT_POOL_SIZE", CONCOURSE_WORKER_GARDEN_PORT_POOL_SIZE | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_PORT_POOL_PROPERTIES_PATH", CONCOURSE_WORKER_GARDEN_PORT_POOL_PROPERTIES_PATH | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_MTU", CONCOURSE_WORKER_GARDEN_MTU | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_NETWORK_PLUGIN", CONCOURSE_WORKER_GARDEN_NETWORK_PLUGIN | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_NETWORK_PLUGIN_EXTRA_ARG", CONCOURSE_WORKER_GARDEN_NETWORK_PLUGIN_EXTRA_ARG | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_MAX_CONTAINERS", CONCOURSE_WORKER_GARDEN_MAX_CONTAINERS | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_METRICS_EMISSION_INTERVAL", CONCOURSE_WORKER_GARDEN_METRICS_EMISSION_INTERVAL | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DROPSONDE_ORIGIN", CONCOURSE_WORKER_GARDEN_DROPSONDE_ORIGIN | default("omit")) -}}
+{{ build_option("CONCOURSE_GARDEN_DROPSONDE_DESTINATION", CONCOURSE_WORKER_GARDEN_DROPSONDE_DESTINATION | default("omit")) -}}
+{{ build_option("CONCOURSE_BAGGAGECLAIM_BIND_IP", CONCOURSE_WORKER_BAGGAGECLAIM_BIND_IP | default("omit")) -}}
+{{ build_option("CONCOURSE_BAGGAGECLAIM_BIND_PORT", CONCOURSE_WORKER_BAGGAGECLAIM_BIND_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_BAGGAGECLAIM_VOLUMES", CONCOURSE_WORKER_BAGGAGECLAIM_VOLUMES | default("omit")) -}}
+{{ build_option("CONCOURSE_BAGGAGECLAIM_DRIVER", CONCOURSE_WORKER_BAGGAGECLAIM_DRIVER | default("omit")) -}}
+{{ build_option("CONCOURSE_BAGGAGECLAIM_BTRFS_BIN", CONCOURSE_WORKER_BAGGAGECLAIM_BTRFS_BIN | default("omit")) -}}
+{{ build_option("CONCOURSE_BAGGAGECLAIM_MKFS_BIN", CONCOURSE_WORKER_BAGGAGECLAIM_MKFS_BIN | default("omit")) -}}
+{{ build_option("CONCOURSE_BAGGAGECLAIM_REAP_INTERVAL", CONCOURSE_WORKER_BAGGAGECLAIM_REAP_INTERVAL | default("omit")) -}}
+{{ build_option("CONCOURSE_BAGGAGECLAIM_YELLER_API_KEY", CONCOURSE_WORKER_BAGGAGECLAIM_YELLER_API_KEY | default("omit")) -}}
+{{ build_option("CONCOURSE_BAGGAGECLAIM_YELLER_ENVIRONMENT", CONCOURSE_WORKER_BAGGAGECLAIM_YELLER_ENVIRONMENT | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_HOST", CONCOURSE_WORKER_TSA_HOST | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_PORT", CONCOURSE_WORKER_TSA_PORT | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_PUBLIC_KEY", CONCOURSE_WORKER_TSA_PUBLIC_KEY | default("omit")) -}}
+{{ build_option("CONCOURSE_TSA_WORKER_PRIVATE_KEY", CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY | default("omit")) -}}
+{{ build_option("CONCOURSE_YELLER_API_KEY", CONCOURSE_WORKER_YELLER_API_KEY | default("omit")) -}}
+{{ build_option("CONCOURSE_YELLER_ENVIRONMENT", CONCOURSE_WORKER_YELLER_ENVIRONMENT | default("omit")) -}}
 
-# TODO:
-#          --tag=                                         A tag to set during registration. Can be specified multiple times.
-#    Server Configuration:
-#          --garden-bind-ip=                              Bind with TCP on the given IP.
-#          --garden-bind-port=                            Bind with TCP on the given port. (default: 7777)
-#          --garden-bind-socket=                          Bind with Unix on the given socket path. (default: /tmp/garden.sock)
-#          --garden-debug-bind-ip=                        Bind the debug server on the given IP.
-#          --garden-debug-bind-port=                      Bind the debug server to the given port. (default: 17013)
-#          --garden-tag=                                  Optional 2-character identifier used for namespacing global configuration.
-#
-#    Container Lifecycle:
-#          --garden-depot=                                Directory in which to store container data.
-#          --garden-properties-path=                      Path in which to store properties.
-#          --garden-default-rootfs=                       Default rootfs to use when not specified on container creation.
-#          --garden-default-grace-time=                   Default time after which idle containers should expire.
-#          --garden-destroy-containers-on-startup         Clean up all the existing containers on startup.
-#
-#    Binary Tools:
-#          --garden-iodaemon-bin=                         Path to the 'iodaemon' binary.
-#          --garden-dadoo-bin=                            Path to the 'dadoo' binary.
-#          --garden-nstar-bin=                            Path to the 'nstar' binary.
-#          --garden-tar-bin=                              Path to the 'tar' binary.
-#          --garden-kawasaki-bin=                         Path to the 'kawasaki' network hook binary.
-#          --garden-init-bin=                             Path execute as pid 1 inside each container.
-#          --garden-runc-bin=                             Path to the 'runc' binary. (default: runc)
-#
-#    Image Graph:
-#          --garden-persistent-image=                     Image that should never be garbage collected. Can be specified multiple times.
-#
-#    Docker Image Fetching:
-#          --garden-docker-registry=                      Docker registry API endpoint. (default: registry-1.docker.io)
-#          --garden-insecure-docker-registry=             Docker registry to allow connecting to even if not secure. Can be specified multiple times.
-#
-#    Container Networking:
-#          --garden-allow-host-access                     Allow network access to the host machine.
-#          --garden-deny-network=                         Network ranges to which traffic from containers will be denied. Can be specified multiple times.
-#          --garden-allow-network=                        Network ranges to which traffic from containers will be allowed. Can be specified multiple times.
-#          --garden-dns-server=                           DNS server IP address to use instead of automatically determined servers. Can be specified multiple times.
-#          --garden-external-ip=                          IP address to use to reach container's mapped ports. Autodetected if not specified.
-#          --garden-port-pool-start=                      Start of the ephemeral port range used for mapped container ports. (default: 60000)
-#          --garden-port-pool-size=                       Size of the port pool used for mapped container ports. (default: 5000)
-#          --garden-mtu=                                  MTU size for container network interfaces. (default: 1500)
-#          --garden-network-plugin=                       Path to network plugin binary.
-#          --garden-network-plugin-extra-arg=             Extra argument to pass to the network plugin. Can be specified multiple times.
-#
-#    Metrics:
-#          --garden-metrics-emission-interval=            Interval on which to emit metrics. (default: 1m)
-#          --garden-dropsonde-origin=                     Origin identifier for Dropsonde-emitted metrics. (default: garden-linux)
-#          --garden-dropsonde-destination=                Destination for Dropsonde-emitted metrics. (default: 127.0.0.1:3457)
-#
-#    Baggageclaim Configuration:
-#          --baggageclaim-bind-port=                      Port on which to listen for API traffic. (default: 7788)
-#          --baggageclaim-reap-interval=                  Interval on which to reap expired volumes. (default: 10s)
+# concourse worker
+exec {{ concourseci_bin_dir }}/concourse worker &>> {{ concourseci_log_worker }}

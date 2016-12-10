@@ -26,6 +26,8 @@ platforms                   :
    driver_config            :
      image                  : ubuntu:14.04
      platform               : ubuntu
+     forward:
+        - 8080:8080
    provisioner              :
       ansible_playbook_bin  : "`avm path v2.0`ansible-playbook"
       # Hash of other groups
@@ -44,19 +46,20 @@ platforms                   :
          concourse-web      : [ 'simple-ubuntu1604' ]
          concourse-worker   : [ 'simple-ubuntu1604', 'worker-ubuntu1604' ]
 
-#  - name                     : "centos7"
-#    driver_config            :
-#       image                 : centos:7
-#       platform              : centos
-#       provision_command     :
-#          - mkdir -p /etc/selinux/targeted/contexts/
-#          - echo '<busconfig><selinux></selinux></busconfig>' > /etc/selinux/targeted/contexts/dbus_contexts
-#    provisioner              :
-#       ansible_playbook_bin  : "`avm path v2.2`ansible-playbook"
-#       # Hash of other groups
-#       groups                :
-#          concourse-web      : [ 'simple-centos7' ]
-#          concourse-worker   : [ 'simple-centos7' ]
+ - name                     : "centos7"
+   driver_config            :
+      #image                 : centos:7
+      dockerfile            : './test/centos7-dockerfile'
+      platform              : centos
+      provision_command     :
+         - mkdir -p /etc/selinux/targeted/contexts/
+         - echo '<busconfig><selinux></selinux></busconfig>' > /etc/selinux/targeted/contexts/dbus_contexts
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.2`ansible-playbook"
+      # Hash of other groups
+      groups                :
+         concourse-web      : [ 'simple-centos7' ]
+         concourse-worker   : [ 'simple-centos7' ]
 
 suites:
   - name                    : simple
