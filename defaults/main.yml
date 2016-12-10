@@ -43,7 +43,6 @@ CONCOURSE_WEB_POSTGRES_DATA_SOURCE          : "postgres://{{ concourseci_postgre
 ## For full support variables worker templates/concourse-worker.j2
 CONCOURSE_WORKER_WORK_DIR                   : "{{ concourseci_worker_dir }}"
 CONCOURSE_WORKER_NAME                       : "{{ inventory_hostname }}"
-CONCOURSE_WORKER_BIND_PORT                  : "{{ CONCOURSE_WEB_BIND_PORT }}"
 CONCOURSE_WORKER_TSA_HOST                   : "{{ CONCOURSE_WEB_TSA_HOST }}"
 CONCOURSE_WORKER_TSA_PORT                   : "{{ CONCOURSE_WEB_TSA_BIND_PORT }}"
 CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY     : "{{ concourseci_ssh_dir }}/worker"
