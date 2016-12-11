@@ -116,6 +116,16 @@ i.e. ```concourseci_version : "vx.x.x"```
 
 By default this role will try to have the latest stable release look at [defaults/main.yml](https://github.com/ahelal/ansible-concourse/blob/master/defaults/main.yml#L2-L3)
 
+## Keys
+
+**Warning** the role comes with default keys. This keys are used for demo only you should generate your own and store them **safely** i.e. ansible-vault
+
+You would need to generate 2 keys for web and one key for each worker node.
+An easy way to generate your keys to use a script in ```keys/key.sh```
+
+The bash script will ask you for the number of workers you require. It will then generate ansible compatible yaml files in ```keys/vars```
+You can than copy the content in your group vars or pass it somehow.
+
 ## Default variables
 ```yaml
 ---
@@ -312,15 +322,6 @@ concourseci_worker_keys                     :
 # temp solution to systemV issue and ansible :(
 concourse_ignore_errors                       : "{{ ansible_lsb['codename'] == 'xenial' | default(False)}}"
 ```
-## Keys
-
-**Warning** the role comes with default keys. This keys are used for demo only you should generate your own and store them **safely** i.e. ansible-vault
-
-You would need to generate 2 keys for web and one key for each worker node.
-An easy way to generate your keys to use a script in ```keys/key.sh```
-
-The bash script will ask you for the number of workers you require. It will then generate ansible compatible yaml files in ```keys/vars```
-You can than copy the content in your group vars or pass it somehow.
 
 ## TODO
 * MacOS support
