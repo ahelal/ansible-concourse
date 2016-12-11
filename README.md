@@ -17,7 +17,7 @@ I am a big fan of concourse CI, not so much bosh. This role will install concour
 
 ## Note breaking changes as of version 1.0.0
 version 1.0.0 now support all options for web and worker, but you need to adapt to the new config.
-Please look at config section.
+Please look at [config section](https://github.com/ahelal/ansible-concourse#config).
 
 ## vagrant demo
 You can use vagrant to spin a test machine.
@@ -32,7 +32,7 @@ Once your done
 vagrant destroy
 ```
 
-## Example
+## Examples
 Play example
 
 ```yaml
@@ -74,10 +74,6 @@ ci.example.com
 - name: Create worker nodes
   hosts: concourse-worker
   become: True
-  vars:
-    CONCOURSE_WEB_EXTERNAL_URL        : "http://{{ inventory_hostname }}:8080"
-    CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
-    CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
   roles:
     - { name: "ansible-concourse", tags: "concourse"  }
 ```
@@ -94,7 +90,7 @@ ci-worker03.example.com
 ci-worker04.example.com
 ```
 
-You would also need to generate keys for workers check key section
+You would also need to generate keys for workers check [key section](https://github.com/ahelal/ansible-concourse#keys)
 
 ## Config
 All options are now supported since version 1.0.0 in *Web* and *worker*.
@@ -118,7 +114,7 @@ that will install release candidate.
 For final release use https://github.com/concourse/concourse/releases
 i.e. ```concourseci_version : "vx.x.x"```
 
-by default this role will try to have the latest stable release look at defaults/main.yml
+By default this role will try to have the latest stable release look at [defaults/main.yml](https://github.com/ahelal/ansible-concourse/blob/master/defaults/main.yml#L2-L3)
 
 ## Default variables
 ```yaml
