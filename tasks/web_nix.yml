@@ -77,7 +77,7 @@
 
 - name: web | Templating concourse web start launchd plist (macOSx)
   template:
-    src="concourse-web.plist.j2"
+    src="{{ concourseci_launchd_web }}.plist.j2"
     dest="{{ concourseci_launchd_path }}/{{ concourseci_launchd_web }}.plist"
     mode=0750
     owner="root"
@@ -90,4 +90,5 @@
 
 - name: web | Ensure Concourse web is running and Starts on boot (macOSx)
   shell: launchctl load -w {{ concourseci_launchd_path }}/{{ concourseci_launchd_web }}.plist && launchctl start {{ concourseci_launchd_web }}
+  changed_when: False # since no way to detect if it started or not
   when: "{{ ansible_system == 'Darwin' }}"

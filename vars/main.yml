@@ -14,4 +14,4 @@ concourseci_worker_position  : "{{ groups[concourseci_worker_group].index(invent
 ## MacOSx stuff
 concourseci_launchd_path     : "/Library/LaunchDaemons"
 concourseci_launchd_web      : "com.github.ahelal.concourse.web"
-concourseci_launchd_worker   : "com.github.ahelal.concourse.worker.plist"
+concourseci_launchd_worker   : "com.github.ahelal.concourse.worker"
