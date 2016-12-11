@@ -37,3 +37,5 @@
   become: False
   with_items: "{{ pipelines }}"
 
+- pause:
+    seconds: 30
