@@ -1,19 +1,31 @@
 FROM centos:7
 
 ENV container docker
+ENV KITCHEN_USER kitchen
+ENV KITCHEN_HOME /home/kitchen/
+
+RUN echo "${KITCHEN_HOME} ${KITCHEN_USER}"
+RUN if ! getent passwd ${KITCHEN_USER}; then \
+    useradd -d ${KITCHEN_HOME} -m -s /bin/bash -p '*' ${KITCHEN_USER}; \
+    fi
+
+RUN echo "${KITCHEN_USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "Defaults !requiretty" >> /etc/sudoers
+
+RUN mkdir -p ${KITCHEN_HOME}/.ssh
+RUN chown -R ${KITCHEN_USER} ${KITCHEN_HOME}/.ssh
+RUN chmod 0700 ${KITCHEN_HOME}/.ssh
+ADD .kitchen/docker_id_rsa.pub ${KITCHEN_HOME}/.ssh/authorized_keys
+RUN chown kitchen ${KITCHEN_HOME}/.ssh/authorized_keys
+RUN chmod 0600 ${KITCHEN_HOME}/.ssh/authorized_keys
+
 RUN yum clean all
 RUN yum install -y sudo openssh-server openssh-clients which curl
-#RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
-#RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
+RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
+RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
 
-RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
-systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-rm -f /lib/systemd/system/multi-user.target.wants/*;\
-rm -f /etc/systemd/system/*.wants/*;\
-rm -f /lib/systemd/system/local-fs.target.wants/*; \
-rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-rm -f /lib/systemd/system/basic.target.wants/*;\
-rm -f /lib/systemd/system/anaconda.target.wants/*;
-VOLUME [ "/sys/fs/cgroup" ]
+RUN yum install postgresql-server postgresql-contrib -y
+
+RUN su postgres -c "pg_ctl init -D /var/lib/pgsql/data/"
+#RUN su postgres -c "/usr/bin/pg_ctl -D /var/lib/pgsql/data -l logfile start"
 CMD ["/usr/sbin/init"]

@@ -4,9 +4,9 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 ## Requirements
 * Platforms
   * Ubuntu 14.04/16.04
-  * MacOS (early support WIP. Accpeting PRs)
-  * Redhat (early support WIP. Accpeting PRs)
-  * Windows (not supproted yet. Accpeting PRs)
+  * MacOS (WIP. Accepting PRs)
+  * Redhat 7(WIP. Accepting PRs)
+  * Windows (not supported yet. Accepting PRs)
 
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
@@ -318,17 +318,19 @@ concourse_ignore_errors                       : "{{ ansible_lsb['codename'] == '
 ```
 ## Keys
 
-Warning the role comes with default keys. This keys are used for demo only you should generate your own and store them **safely** i.e. ansible-vault
+**Warning** the role comes with default keys. This keys are used for demo only you should generate your own and store them **safely** i.e. ansible-vault
 
 You would need to generate 2 keys for web and one key for each worker node.
 An easy way to generate your keys to use a script in ```keys/key.sh```
-The script will ask you the number of workers you require and generate the files in ```keys/vars``` you can than copy the content in your group vars or pass it somehow.
+
+The bash script will ask you for the number of workers you require. It will then generate ansible compatible yaml files in ```keys/vars```
+You can than copy the content in your group vars or pass it somehow.
 
 ## TODO
 * MacOS support
 * Redhat Support
-* Add more tests
 * Windows support
+* Add disterbuted cluster tests
 
 ## License
 MIT

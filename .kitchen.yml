@@ -48,11 +48,12 @@ platforms                   :
 
 #  - name                     : "centos7"
 #    driver_config            :
-#       image                 : centos/systemd
-#       #dockerfile            : './test/centos7-dockerfile'
+#       image                 : "cthulhuology/postgresql"
+#       dockerfile            : './test/centos7-dockerfile'
 #       platform              : centos
 #    provisioner              :
 #       ansible_playbook_bin  : "`avm path v2.2`ansible-playbook"
+#       sudo                  : true
 #       # Hash of other groups
 #       groups                :
 #          concourse-web      : [ 'simple-centos7' ]
