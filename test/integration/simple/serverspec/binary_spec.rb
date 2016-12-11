@@ -1,7 +1,5 @@
 require_relative '../../helper_spec.rb'
 
-
-
 describe file('/opt/concourseci/bin/concourse') do
   it 'concourse binary has right permission' do
     expect(subject).to be_file

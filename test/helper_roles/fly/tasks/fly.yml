@@ -1,0 +1,38 @@
+---
+
+
+- name: fly | copy pipelines
+  copy:
+    src="{{ item }}"
+    dest="{{ pipeline_dest }}/{{ item }}"
+  changed_when: false
+  with_items: "{{ pipelines }}"
+
+- name: fly | download fly
+  get_url:
+    url: "http://127.0.0.1:8080/api/v1/cli?arch=amd64&platform={{ ansible_system | lower }}"
+    dest: "/usr/local/bin/fly"
+    mode: 0755
+
+- name: login with fly
+  command: /usr/local/bin/fly -t kitchen login -c http://127.0.0.1:8080  -u {{ CONCOURSE_WEB_BASIC_AUTH_USERNAME }} -p {{ CONCOURSE_WEB_BASIC_AUTH_PASSWORD }}
+  become: False
+  changed_when: false
+
+- name: upload pipelines
+  command: /usr/local/bin/fly -t kitchen sp -p {{ item }} -c {{ pipeline_dest }}/{{ item }} -n
+  changed_when: false
+  become: False
+  with_items: "{{ pipelines }}"
+
+- name: unpause pipelines
+  command: /usr/local/bin/fly -t kitchen unpause-pipeline -p {{ item }}
+  changed_when: false
+  become: False
+  with_items: "{{ pipelines }}"
+
+- name: trigger pipelines
+  command: /usr/local/bin/fly -t kitchen trigger-job -j "{{ item }}/job"
+  changed_when: false
+  become: False
+  with_items: "{{ pipelines }}"

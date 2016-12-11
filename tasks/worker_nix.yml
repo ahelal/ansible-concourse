@@ -11,7 +11,7 @@
 - name: worker | Copy session public key
   copy:
     content="{{ concourseci_key_session_public }}"
-    dest="{{ concourseci_key_session_path }}.pub"
+    dest="{{ CONCOURSE_WEB_SESSION_SIGNING_KEY }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -21,7 +21,7 @@
 - name: worker | Copy tsa public key
   copy:
     content="{{ concourseci_key_tsa_public }}"
-    dest="{{ concourseci_key_tsa_path }}.pub"
+    dest="{{ CONCOURSE_WEB_TSA_HOST_KEY }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -31,7 +31,7 @@
 - name: worker | Copy worker public key
   copy:
     content="{{ concourseci_key_worker_public }}"
-    dest="{{ concourseci_key_worker_path }}.pub"
+    dest="{{ CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -39,7 +39,7 @@
 - name: worker | Copy worker private key
   copy:
     content="{{ concourseci_key_worker_private }}"
-    dest="{{ concourseci_key_worker_path }}"
+    dest="{{ CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY }}"
     mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -55,7 +55,7 @@
   notify:
    - restart concourse-worker
 
-- name: Worker | Concourse worker start init script
+- name: Worker | Concourse worker start init script (linux)
   template:
     src="concourse-worker-init.sh.j2"
     dest="/etc/init.d/concourse-worker"
@@ -64,9 +64,28 @@
    - restart concourse-worker
   when: "{{ ansible_system == 'Linux' }}"
 
-- name: Worker | Ensure Concourse worker is running and Starts on boot
+- name: Worker | Ensure Concourse worker is running and Starts on boot (linux)
   service:
     name="concourse-worker"
     state="started"
     enabled=True
   ignore_errors: "{{ concourse_ignore_errors }}"
+  when: "{{ ansible_system == 'Linux' }}"
+
+- name: worker | Templating concourse worker start launchd plist (macOSx)
+  template:
+    src="{{ concourseci_launchd_worker }}.plist.j2"
+    dest="{{ concourseci_launchd_path }}/{{ concourseci_launchd_worker }}.plist"
+    mode=0750
+    owner="root"
+    group="wheel"
+    validate='plutil %s'
+  notify:
+   - restart concourse-worker
+  register: launchd_template
+  when: "{{ ansible_system == 'Darwin' }}"
+
+- name: worker | Ensure Concourse worker is running and Starts on boot (macOSx)
+  shell: launchctl load -w {{ concourseci_launchd_path }}/{{ concourseci_launchd_worker }}.plist && launchctl start {{ concourseci_launchd_worker }}
+  changed_when: False # since no way to detect if it started or not
+  when: "{{ ansible_system == 'Darwin' }}"

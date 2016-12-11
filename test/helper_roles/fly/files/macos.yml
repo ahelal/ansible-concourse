@@ -1,0 +1,22 @@
+---
+resources:
+- name: resource-tutorial
+  type: git
+  source:
+    uri: https://github.com/starkandwayne/concourse-tutorial.git
+
+jobs:
+- name: navi
+  plan:
+  - get: resource-tutorial
+  - task: annoy
+    config:
+      platform: darwin
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          uname -a
+          echo "xxx" > /tmp/x1.local
+          hostname

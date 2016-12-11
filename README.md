@@ -4,9 +4,9 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 ## Requirements
 * Platforms
   * Ubuntu 14.04/16.04
-  * MacOS (early support WIP. Accpeting PRs)
-  * Redhat (early support WIP. Accpeting PRs)
-  * Windows (not supproted yet. Accpeting PRs)
+  * MacOS (Early support. Accepting PRs)
+  * Redhat 7 (WIP. Accepting PRs)
+  * Windows (not supported yet. Accepting PRs)
 
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
@@ -15,8 +15,12 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 ## Overview
 I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
 
-## Example
-You can use test-kitchen to spin a test machine.
+## Note breaking changes as of version 1.0.0
+version 1.0.0 now support all options for web and worker, but you need to adapt to the new config.
+Please look at config section.
+
+## vagrant demo
+You can use vagrant to spin a test machine.
 ```
 vagrant up
 ```
@@ -28,50 +32,99 @@ Once your done
 vagrant destroy
 ```
 
+## Example
 Play example
 
 ```yaml
 ---
 - name: Create Single node host
-  hosts: ci
+  hosts: ci.example.com
   become: True
   vars:
-    concourseci_external_url         : "http://192.168.50.150:8080"
-    concourseci_basic_auth_username  : "myuser"
-    concourseci_basic_auth_password  : "mypass"
+    CONCOURSE_WEB_EXTERNAL_URL        : "http://{{ inventory_hostname }}:8080"
+    CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
+    CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
   roles:
-    - { name: "postgresql", tags: "postgres" }
-    - { name: "ansible-concourse", tags: "concourse" }
+    - { name: "postgresql",        tags: "postgresql" }
+    - { name: "ansible-concourse", tags: "concourse"  }
 ```
 
 ```ìni
 [concourse-web]
-ci
+ci.example.com
 [concourse-worker]
-ci
+ci.example.com
 ```
 
-## Cluster 1 web and 4 worker example
+## Cluster 2 web and 4 worker example
+```yaml
+---
+- name: Create web nodes
+  hosts: concourse-web
+  become: True
+  vars:
+    CONCOURSE_WEB_EXTERNAL_URL        : "http://{{ inventory_hostname }}:8080"
+    CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
+    CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
+  roles:
+    - { name: "ansible-concourse", tags: "concourse"  }
+```
+```yaml
+---
+- name: Create worker nodes
+  hosts: concourse-worker
+  become: True
+  vars:
+    CONCOURSE_WEB_EXTERNAL_URL        : "http://{{ inventory_hostname }}:8080"
+    CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
+    CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
+  roles:
+    - { name: "ansible-concourse", tags: "concourse"  }
+```
 
 In order to make a cluster of servers you can easily add the host to groups
 ```ini
 [concourse-web]
-ci01
+ci-web01.example.com
+ci-web02.example.com
 [concourse-worker]
-ci01
-worker01
-worker02
-worker03
+ci-worker01.example.com
+ci-worker02.example.com
+ci-worker03.example.com
+ci-worker04.example.com
 ```
 
 You would also need to generate keys for workers check key section
 
-## Variables
+## Config
+All options are now supported since version 1.0.0 in *Web* and *worker*.
+to view all web. If your upgrading you have to change some variables.
+You can simply look at the template for template/concourse-web and template/concourse-worker for all options.
+i.e.
+```{{ build_option("CONCOURSE_POSTGRES_DATA_SOURCE", CONCOURSE_WEB_POSTGRES_DATA_SOURCE | default("omit")) -}}```
+
+this means **CONCOURSE_WEB_POSTGRES_DATA_SOURCE** is variable for setting web.
+The options are one to one match to the binary variables in concourse with the exceptions of **WEB** and **WORKER** appended to be able to define variables within the same namespace.
+
+i.e. **CONCOURSE_BAGGAGECLAIM_BIND_IP** becomes **CONCOURSE_WORKER_BAGGAGECLAIM_BIND_IP**
+
+## Concourse versions
+This role supports installation of release candidate and final releases.
+
+Simply Overriding **concourseci_version** with https://github.com/concourse/bin/releases/
+i.e. ```concourseci_version : "vx.x.x-rc.xx"```
+that will install release candidate.
+
+For final release use https://github.com/concourse/concourse/releases
+i.e. ```concourseci_version : "vx.x.x"```
+
+by default this role will try to have the latest stable release look at defaults/main.yml
+
+## Default variables
 ```yaml
 ---
-
 # Concourse version
-concourseci_version                         : "vx.x.x"
+concourseci_version                         : "v2.5.1-rc.22"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
@@ -88,79 +141,53 @@ concourseci_log_web                         : "{{ concourseci_log_dir }}/concour
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
 
-## Concourse web
-concourseci_bind_ip                         : "0.0.0.0"
-concourseci_bind_port                       : "8080"
-concourseci_external_url                    : "http://127.0.0.1:8080" #URL used to reach any ATC from the outside world.
-# concourseci_oauth_base_url                # URL used as the base of OAuth redirect URIs. If not specified, the external URL is used.
-# concourseci_peer_url                      # URL used to reach this ATC from other ATCs in the cluster. (default: http://127.0.0.1:8080)
-
-## Cocnourse resources
-# concourseci_resource_checking_interval      # Interval on which to check for new versions of resources. (default: 1m)
-# concourseci_old_resource_grace_period       # How long to cache the result of a get step after a newer version of the resource is found. (default: 5m)
-# concourseci_resource_cache_cleanup_interval # Interval on which to cleanup old caches of resources. (default: 30s)
-
-## Concourse Container Retention
-# concourseci_container_retention_success_duration  # The duration to keep a succeeded step's containers before expiring them. (default: 5m)
-# concourseci_container_retention_failure_duration  # The duration to keep a failed step's containers before expiring them. (default: 1h)
-
-## Concuorse authentication
-### Basic
-# concourseci_basic_auth_username          # Username to use for basic auth.
-# concourseci_basic_auth_password          # Password to use for basic auth.
-### Github
-# concourseci_github_auth_client_id        # Application client ID for enabling GitHub OAuth.
-# concourseci_github_auth_client_secret    # Application client secret for enabling GitHub OAuth.
-# concourseci_github_auth_organization     # GitHub organization whose members will have access.
-# concourseci_github_auth_team             # GitHub team whose members will have access.
-# concourseci_github_auth_user             # GitHub user to permit access.
-# concourseci_github_auth_auth_url         # Override default endpoint AuthURL for Github Enterprise
-# concourseci_github_auth_token_url        # Override default endpoint TokenURL for Github Enterprise
-# concourseci_github_auth_api_url          # Override default API endpoint URL for Github Enterprise
-
+## Concourse Web
+## For full support variables web templates/concourse-web.j2
+CONCOURSE_WEB_BIND_IP                       : "0.0.0.0"
+CONCOURSE_WEB_BIND_PORT                     : "8080"
+#CONCOURSE_WEB_EXTERNAL_URL                  : "http://127.0.0.1:8080" #URL used to reach any ATC from the outside world.
 # Concourse TSA Config
-concourseci_tsa_host                        : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
-concourseci_tsa_bind_ip                     : "0.0.0.0"
-concourseci_tsa_bind_port                   : "2222"
-concourseci_tsa_heartbeat_interval          : "30s"
-concourseci_tsa_authorization_keys          : "{{ concourseci_ssh_dir }}/tsa_authorization"
-# concourseci_peer_url                      : # URL used to reach this ATC from other ATCs in the cluster. (default:http://127.0.0.1:8080)
+CONCOURSE_WEB_TSA_HOST                      : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
+CONCOURSE_WEB_TSA_BIND_IP                   : "0.0.0.0"
+CONCOURSE_WEB_TSA_BIND_PORT                 : "2222"
+CONCOURSE_WEB_TSA_AUTHORIZED_KEYS           : "{{ concourseci_ssh_dir }}/tsa_authorization"
+CONCOURSE_WEB_TSA_HOST_KEY                  : "{{ concourseci_ssh_dir }}/tsa"
+CONCOURSE_WEB_SESSION_SIGNING_KEY           : "{{ concourseci_ssh_dir }}/session_signing"
 
-## Concourse Extra raw options
-concourseci_web_extra_options               : ""
-
-## Concourse worker
-concourseci_worker_name                     : "{{ inventory_hostname }}"
-
-## Concourse garden linux
-concourseci_garden_listen                   : "127.0.0.1:7777"
-concourseci_garden_log_level                : "info" # [debug|info|error|fatal]
-# concourseci_peer_ip                       # IP used to reach this worker from the ATC nodes. If omitted, the worker will be forwarded through the SSH connection to the TSA.
-# concourseci_garden_network_pool           # Network range to use for dynamically allocated container subnets. (default: 10.254.0.0/22)
-# concourseci_garden_max_containers         # Maximum number of containers that can be created. (default: )
-# concourseci_garden_graph_cleanup_threshold_in_megabytesDirectory # Disk usage of the graph dir at which cleanup should trigger, or -1 to disable graph cleanup. (default: -1)
-
+#concourseci_key_tsa_path                    : "{{ concourseci_ssh_dir }}/tsa"
 ## PostgreSQL
 concourseci_postgresql_user                 : "concourseci"
 concourseci_postgresql_pass                 : "conpass"
 concourseci_postgresql_host                 : "127.0.0.1"
 concourseci_postgresql_db                   : "concourse"
 concourseci_postgresql_ssl                  : "disable"
-concourseci_postgresql_source               : "postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }}?sslmode={{ concourseci_postgresql_ssl }}"
+CONCOURSE_WEB_POSTGRES_DATA_SOURCE          : "postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }}?sslmode={{ concourseci_postgresql_ssl }}"
 
-## Ansible Groups
+## Concourse worker
+## For full support variables worker templates/concourse-worker.j2
+CONCOURSE_WORKER_WORK_DIR                   : "{{ concourseci_worker_dir }}"
+CONCOURSE_WORKER_NAME                       : "{{ inventory_hostname }}"
+CONCOURSE_WORKER_BIND_PORT                  : "{{ CONCOURSE_WEB_BIND_PORT }}"
+CONCOURSE_WORKER_TSA_HOST                   : "{{ CONCOURSE_WEB_TSA_HOST }}"
+CONCOURSE_WORKER_TSA_PORT                   : "{{ CONCOURSE_WEB_TSA_BIND_PORT }}"
+CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY     : "{{ concourseci_ssh_dir }}/worker"
+CONCOURSE_WORKER_TSA_PUBLIC_KEY             : "{{ CONCOURSE_WEB_TSA_HOST_KEY }}.pub"
+
+## Concourse garden linux
+CONCOURSE_WORKER_GARDEN_LOG_LEVEL           : "info" # [debug|info|error|fatal]
+
+## Ansible Groups to form clusters
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
+
+## Reboot when updating kernel (we disable this for test :( on docker)
+concourseci_reboot                          : True
 
 # ********************* Example Keys (YOU MUST OVERRIDE THEM) *********************
 # This keys are used for demo only you should generate your own and store them
 # safely i.e. ansible-vault
 # **********************************************************************************
 
-# If you dont know how to generate keys check https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
-# You would need to Generate a minumum of 2 keys for web
-# And one key for each worker node
-concourseci_key_session_path               : "{{ concourseci_ssh_dir }}/session_signing"
 concourseci_key_session_public             : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6tKHmRtRp0a5SAeqbVy3pJSuoWQfmTIk106Md1bGjELPDkj0A8Z4a5rJZrAR7WqrRmHr2dTL9eKroymtIqxgJdu1RO+SM3uZVV5UFfYrBV0rmp5fP2g/+Wom2RB+zCzPT1TjDnKph8xPqj19P/0FY9rKbU8h6EzEp6Z5DjwKZKvxAF8p9r6wJde4nY+oneIuG1qpxYmLpNvdM3G44vgNeMg20jVywjJVwYDNe8ourqPu8rBauLbSiQI8Uxx6dlJSTsVawrKwHQUPEI9B5LPwUzZ9t/d7k2uJnCig6aJwM8dcyr8tqxlfdfmQiHRlZozail8UzIv65MbVngji5sqoB
 concourseci_key_session_private            : |
                                               -----BEGIN RSA PRIVATE KEY-----
@@ -191,7 +218,6 @@ concourseci_key_session_private            : |
                                               N1EQdIhtxo4mgHXjF/8L32SqinAJb5ErNXQQwT5k9G22mZkHZY7Y
                                               -----END RSA PRIVATE KEY-----
 
-concourseci_key_tsa_path                    : "{{ concourseci_ssh_dir }}/tsa"
 concourseci_key_tsa_public                  : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjddjviqF3BjVnxrledNsKM0wm7bwJwRgnUomLVrwHXjfArEz5yFa2C87IT9CYpIxkZMgmd0Bdtwj3kiNPP0qYpcj/uTqQTE5xLzTiJIUFsgSQwrMt/zd5x44g71qiHF/1KtHdcZq1dW3+5IwBog692HjcytbAxpUEGGpocHs/aoJ5/xn2tx61QOhkr5+PP1Ft7eHu719/pb1czhH8tZwCwNJQs4vzf79Mlgt0ikjJ84o9kOiUGP+Fc0+EjapBg9M2GE6/l86IJzcx/t/uQYCFOdKbg5ukck9NztldaOUeAPkUttPtf2vdjZU+EwSYc3XvhyQlN/QQmZ8tvG3gV9wv
 concourseci_key_tsa_private                 : |
                                               -----BEGIN RSA PRIVATE KEY-----
@@ -222,9 +248,7 @@ concourseci_key_tsa_private                 : |
                                               uPTcE+vQzvMV3lJo0CHTlNMo1JgHOO5UsFZ1cBxO7MZXCzChGE8=
                                               -----END RSA PRIVATE KEY-----
 
-
 concourseci_worker_position                 : "{{ groups[concourseci_worker_group].index(inventory_hostname)| default(0) }}"
-concourseci_key_worker_path                 : "{{ concourseci_ssh_dir }}/worker"
 concourseci_key_worker_public               : "{{ concourseci_worker_keys[concourseci_worker_position | int ].public}}"
 concourseci_key_worker_private              : "{{ concourseci_worker_keys[concourseci_worker_position | int ].private}}"
 concourseci_worker_keys                     :
@@ -288,20 +312,25 @@ concourseci_worker_keys                     :
                                               4g6kUWry+NNuiaH6fsDA0FWnT3Kyc59/M/EuKNCR7ci1Gnkunc0IUn78aWtNcxX5
                                               RsCKJUM8l63P0jyUufpTbG6nAP8fMdWCdtDBidFLV2JMPYnWb4aP
                                               -----END RSA PRIVATE KEY-----
+
+# temp solution to systemV issue and ansible :(
+concourse_ignore_errors                       : "{{ ansible_lsb['codename'] == 'xenial' | default(False)}}"
 ```
 ## Keys
 
-Warning the role comes with default keys. This keys are used for demo only you should generate your own and store them **safely** i.e. ansible-vault
+**Warning** the role comes with default keys. This keys are used for demo only you should generate your own and store them **safely** i.e. ansible-vault
 
 You would need to generate 2 keys for web and one key for each worker node.
 An easy way to generate your keys to use a script in ```keys/key.sh```
-The script will ask you the number of workers you require and generate to files in ```keys/vars``` you can than copy the content in your group vars  or pass it somehow.
+
+The bash script will ask you for the number of workers you require. It will then generate ansible compatible yaml files in ```keys/vars```
+You can than copy the content in your group vars or pass it somehow.
 
 ## TODO
 * MacOS support
-* Support all flags in concoursebinary
-* Add more tests
+* Redhat Support
 * Windows support
+* Add disterbuted cluster tests
 
 ## License
 MIT

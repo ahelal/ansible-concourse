@@ -13,6 +13,7 @@
   hosts: all
   become: True
   vars:
+    CONCOURSE_WEB_EXTERNAL_URL        : "http://192.168.50.150:8080"
     CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
     CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
     concourseci_reboot                : false
@@ -20,4 +21,3 @@
     - { name: "hosts",             tags: "hosts"      }
     - { name: "postgresql",        tags: "postgresql" }
     - { name: "ansible-concourse", tags: "concourse"  }
-    - { name: "fly",               tags: "fly"        }

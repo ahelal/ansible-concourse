@@ -11,7 +11,7 @@
 - name: web | Copy session public key
   copy:
     content="{{ concourseci_key_session_public }}"
-    dest="{{ concourseci_key_session_path }}.pub"
+    dest="{{ CONCOURSE_WEB_SESSION_SIGNING_KEY }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -21,7 +21,7 @@
 - name: web | Copy session private key
   copy:
     content="{{ concourseci_key_session_private }}"
-    dest="{{ concourseci_key_session_path }}"
+    dest="{{ CONCOURSE_WEB_SESSION_SIGNING_KEY }}"
     mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -32,7 +32,7 @@
 - name: web | Copy tsa private key
   copy:
     content="{{ concourseci_key_tsa_private }}"
-    dest="{{ concourseci_key_tsa_path }}"
+    dest="{{ CONCOURSE_WEB_TSA_HOST_KEY }}"
     mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -44,7 +44,7 @@
   authorized_key:
     user: "{{ concourseci_user }}"
     key: "{{ item.public }}"
-    path: "{{ concourseci_tsa_authorization_keys }}"
+    path: "{{ CONCOURSE_WEB_TSA_AUTHORIZED_KEYS }}"
     manage_dir: no
   with_items: "{{ concourseci_worker_keys }}"
   notify:
@@ -58,7 +58,7 @@
   notify:
     - restart concourse-web
 
-- name: web | Templating concourse web start init script
+- name: web | Templating concourse web start init script (linux)
   template:
     src="concourse-web-init.sh.j2"
     dest="/etc/init.d/concourse-web"
@@ -67,9 +67,28 @@
    - restart concourse-web
   when: "{{ ansible_system == 'Linux' }}"
 
-- name: web | Ensure Concourse web is running and Starts on boot
+- name: web | Ensure Concourse web is running and Starts on boot (linux)
   service:
     name="concourse-web"
     state="started"
     enabled=True
   ignore_errors: "{{ concourse_ignore_errors }}"
+  when: "{{ ansible_system == 'Linux' }}"
+
+- name: web | Templating concourse web start launchd plist (macOSx)
+  template:
+    src="{{ concourseci_launchd_web }}.plist.j2"
+    dest="{{ concourseci_launchd_path }}/{{ concourseci_launchd_web }}.plist"
+    mode=0750
+    owner="root"
+    group="wheel"
+    validate='plutil %s'
+  notify:
+   - restart concourse-web
+  register: launchd_template
+  when: "{{ ansible_system == 'Darwin' }}"
+
+- name: web | Ensure Concourse web is running and Starts on boot (macOSx)
+  shell: launchctl load -w {{ concourseci_launchd_path }}/{{ concourseci_launchd_web }}.plist && launchctl start {{ concourseci_launchd_web }}
+  changed_when: False # since no way to detect if it started or not
+  when: "{{ ansible_system == 'Darwin' }}"

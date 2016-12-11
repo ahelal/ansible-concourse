@@ -1,0 +1,7 @@
+---
+
+pipelines   :
+                - simple_failure.yml
+                - simple_success.yml
+
+pipeline_dest : "/opt/concourseci"
