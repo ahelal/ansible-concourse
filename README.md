@@ -324,10 +324,12 @@ concourse_ignore_errors                       : "{{ ansible_lsb['codename'] == '
 ```
 
 ## TODO
-* MacOS support
+* Support setting teams up
+* Support pipeline upload
+* Full MacOS support
+* Add distributed cluster tests
 * Redhat Support
 * Windows support
-* Add disterbuted cluster tests
 
 ## License
 MIT
