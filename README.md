@@ -10,7 +10,9 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
-* Optional SSL termination service I recommend [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
+* Optional SSL termination service 
+ * Use concourse web argument to configure SSL
+ * [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
 
 ## Overview
 I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
