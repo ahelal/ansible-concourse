@@ -58,7 +58,7 @@ ci.example.com
 ci.example.com
 ```
 
-## Clustered nodes 2x web and 4x worker example
+## Clustered nodes 2x web & 4x worker
 ```yaml
 ---
 - name: Create web nodes
