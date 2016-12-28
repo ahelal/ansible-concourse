@@ -35,7 +35,7 @@ vagrant destroy
 ```
 
 ## Examples
-Play example
+### Single node
 
 ```yaml
 ---
@@ -58,7 +58,7 @@ ci.example.com
 ci.example.com
 ```
 
-## Cluster 2 web and 4 worker example
+## Clustered nodes 2x web and 4x worker example
 ```yaml
 ---
 - name: Create web nodes
