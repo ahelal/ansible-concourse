@@ -95,14 +95,11 @@ ci-worker04.example.com
 You would also need to generate keys for workers check [key section](https://github.com/ahelal/ansible-concourse#keys)
 
 ## Config
-All options are now supported since version 1.0.0 in *Web* and *worker*.
-to view all web. If your upgrading you have to change some variables.
-You can simply look at the template for template/concourse-web and template/concourse-worker for all options.
-i.e.
-```{{ build_option("CONCOURSE_POSTGRES_DATA_SOURCE", CONCOURSE_WEB_POSTGRES_DATA_SOURCE | default("omit")) -}}```
+All command line options are now supported since version 1.0.0 in *Web* and *worker*
 
-this means **CONCOURSE_WEB_POSTGRES_DATA_SOURCE** is variable for setting web.
-The options are one to one match to the binary variables in concourse with the exceptions of **WEB** and **WORKER** appended to be able to define variables within the same namespace.
+If your upgrading you have to change some variables. You can simply look at the template for [template/concourse-web](https://github.com/ahelal/ansible-concourse/blob/master/templates/concourse-web.j2) and [template/concourse-worker](https://github.com/ahelal/ansible-concourse/blob/master/templates/concourse-worker.j2) for all options.
+
+The options are one to one match to the binary variables in concourse with the exceptions of **WEB** and **WORKER**.
 
 i.e. **CONCOURSE_BAGGAGECLAIM_BIND_IP** becomes **CONCOURSE_WORKER_BAGGAGECLAIM_BIND_IP**
 
