@@ -37,3 +37,7 @@
 - name: restart concourse-worker macosx
   shell: launchctl stop {{ concourseci_launchd_worker }} && launchctl start {{ concourseci_launchd_worker }}
   when: "groups[concourseci_worker_group] is defined and inventory_hostname in groups[concourseci_worker_group] and ansible_system == 'Darwin'"
+
+- name: reload systemd
+  command: systemctl daemon-reload
+  when: ansible_service_mgr == "systemd"

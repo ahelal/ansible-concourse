@@ -64,6 +64,7 @@
     dest="/etc/init.d/concourse-web"
     mode=0755
   notify:
+   - reload systemd
    - restart concourse-web
   when: "{{ ansible_system == 'Linux' }}"
 
