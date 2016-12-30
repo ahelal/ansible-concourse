@@ -55,6 +55,9 @@ CONCOURSE_WORKER_GARDEN_LOG_LEVEL           : "info" # [debug|info|error|fatal]
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
+## Manage pipelines
+manage_pipelines                            : False
+
 ## Reboot when updating kernel (we disable this for test :( on docker)
 concourseci_reboot                          : True
 
