@@ -61,6 +61,7 @@
     dest="/etc/init.d/concourse-worker"
     mode=0755
   notify:
+   - reload systemd
    - restart concourse-worker
   when: "{{ ansible_system == 'Linux' }}"
 
