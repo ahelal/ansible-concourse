@@ -10,7 +10,8 @@ end
 
 describe command('/opt/concourseci/bin/concourse --help') do
   it 'concourse binary execute and print help' do
-    expect(subject.stdout).to match('<web | worker>')
+    expect(subject.stdout).to match('worker')
+    expect(subject.stdout).to match('web')
   end
 end
 
