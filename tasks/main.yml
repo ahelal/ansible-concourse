@@ -25,3 +25,6 @@
 
 - name: Flush handlers
   meta: flush_handlers
+
+- name: Manage Teams & Pipelines
+  include: manage/main.yml

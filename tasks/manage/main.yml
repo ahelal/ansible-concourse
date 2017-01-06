@@ -2,8 +2,8 @@
 
 - name: manage | Include fily
   include: fly.yml
-  when: "{{ manage_pipelines }}"
+  when: "{{ concourseci_manage_teams or concourseci_manage_pipelines }}"
 
-- name: manage |  Manage Pipeline
+- name: manage | Manage Pipeline
   include: set-pipeline.yml
-  when: "{{ manage_pipelines }}"
+  when: "{{ concourseci_manage_teams or concourseci_manage_pipelines }}"

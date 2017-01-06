@@ -16,6 +16,7 @@
     CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
     CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
     concourseci_reboot                : false
+    concourseci_manage_teams          : True
   roles:
     - { name: "hosts",             tags: "hosts"      }
     - { name: "postgresql",        tags: "postgresql" }

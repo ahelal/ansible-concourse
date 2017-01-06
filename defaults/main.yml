@@ -56,7 +56,9 @@ concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
 ## Manage pipelines
-manage_pipelines                            : False
+concourseci_manage_url                      : "{{ CONCOURSE_WEB_EXTERNAL_URL | default('http://127.0.0.1:8080') }}"
+concourseci_manage_teams                    : False
+concourseci_manage_pipelines                : False
 
 ## Reboot when updating kernel (we disable this for test :( on docker)
 concourseci_reboot                          : True

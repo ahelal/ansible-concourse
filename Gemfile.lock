@@ -3,8 +3,8 @@ GEM
   specs:
     artifactory (2.5.1)
     diff-lcs (1.2.5)
-    kitchen-ansiblepush (0.5.1)
-      test-kitchen
+    kitchen-ansiblepush (0.5.2)
+      test-kitchen (~> 1.4)
     kitchen-docker (2.6.0)
       test-kitchen (>= 1.0.0)
     kitchen-verifier-serverspec (0.6.2)
@@ -47,7 +47,7 @@ GEM
       rspec-its
       specinfra (~> 2.53)
     sfl (2.3)
-    specinfra (2.66.2)
+    specinfra (2.66.3)
       net-scp
       net-ssh (>= 2.7, < 4.0)
       net-telnet
