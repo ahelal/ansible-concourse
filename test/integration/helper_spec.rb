@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'bundler/setup'
+#require 'bundler/setup'
 require 'serverspec'
 require 'pathname'
 require 'net/ssh'
@@ -28,7 +28,7 @@ RSpec.configure do |config|
     set :request_pty, true
     puts "serverspec config ssh '#{ENV['KITCHEN_USERNAME']}@#{ENV['KITCHEN_HOSTNAME']} -p #{ENV['KITCHEN_PORT']} -i #{ENV['KITCHEN_SSH_KEY']}'"
   elsif verify_conn == "exec"
-puts "serverspec :backend, :exec"
+    puts "serverspec :backend, :exec"
     set :backend, :exec
   else
     puts "invalid serverspec backend #{verify_conn}"

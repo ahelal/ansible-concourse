@@ -9,6 +9,9 @@ verifier                    :
   name                      : serverspec
   remote_exec               : false
   default_pattern           : true
+  bundler_path              : <%= '/opt/hellofresh/kitchen/embedded/bin' if File.exist?('/opt/hellofresh/kitchen/embedded/bin/bundler') %>
+  rspec_path                : <%= '/opt/hellofresh/kitchen/embedded/bin' if File.exist?('/opt/hellofresh/kitchen/embedded/bin/rspec') %>
+  gemfile                   : ./test/integration/Gemfile
 
 provisioner                 :
     name                    : ansible_push
