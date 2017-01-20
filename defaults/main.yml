@@ -56,9 +56,16 @@ concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
 ## Manage pipelines
+concourseci_manage                          : False
 concourseci_manage_url                      : "{{ CONCOURSE_WEB_EXTERNAL_URL | default('http://127.0.0.1:8080') }}"
+concourseci_manage_worker_health            : False
 concourseci_manage_teams                    : False
 concourseci_manage_pipelines                : False
+concourseci_manage_credential_team          : "manage"
+concourseci_manage_credential_user          : "api_manager"
+## WARNING if you use manage DO NOT USE DAFAULT PASSWORD
+## YOU SHOULD set your own password and save it securly in vault
+concourseci_manage_credential_password      : "api_manager"
 
 ## Reboot when updating kernel (we disable this for test :( on docker)
 concourseci_reboot                          : True

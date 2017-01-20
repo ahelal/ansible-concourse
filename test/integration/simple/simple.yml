@@ -13,10 +13,12 @@
   hosts: all
   become: True
   vars:
-    CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
-    CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
+    #CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
+    #CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
+    concourseci_manage_credential_user          : "myuser"
+    concourseci_manage_credential_password      : "mypass"
     concourseci_reboot                : false
-    concourseci_manage_teams          : True
+    concourseci_manage                : True
   roles:
     - { name: "hosts",             tags: "hosts"      }
     - { name: "postgresql",        tags: "postgresql" }

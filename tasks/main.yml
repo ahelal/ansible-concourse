@@ -28,3 +28,4 @@
 
 - name: Manage Teams & Pipelines
   include: manage/main.yml
+  when: concourseci_manage

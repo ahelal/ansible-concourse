@@ -1,9 +1,0 @@
----
-
-- name: set-teams | Manage teams
-  fly:
-    url=http://192.168.50.150:8080/
-    username=myuser
-    password=mypass
-    teams=[{name:x,blaa-1:2}]
-  tags: t2

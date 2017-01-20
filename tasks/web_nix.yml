@@ -1,5 +1,9 @@
 ---
 
+- name: web | Manage set include
+  include: manage/set.yml
+  when: concourseci_manage
+
 - name: web | Concourse web start script
   template:
     src="concourse-web.j2"
