@@ -1,32 +1,127 @@
 #!/usr/bin/python
+# (c) 2017, Adham Helal MIT
+
+ANSIBLE_METADATA = {'status': ['preview'],
+                    'version': '0.1'}
+
+DOCUMENTATION = '''
+---
+module: concourse
+version_added: 2.2
+short_description: Manages Concourse
+description:
+     - Manages Concourse teams, Pipeline
+options:
+  url:
+    description:
+      - Concourse URL including the protocol and port i.e. http://127.0.0.1:8080
+    required: true
+    default: null
+  username:
+    description:
+      - username used for login
+    required: true
+  password:
+    description:
+      - Password use for login
+    required: true
+    default: null
+  teams:
+    description:
+      - Defines the teams that will managed in as a list
+    required: false
+    default: null
+  manage_exclusively:
+    description:
+      - Assume this module is the exclusive truth and remove anything else
+    required: false
+    default: false
+notes:
+   - Limitation of authentication methods.
+requirements: [ ]
+author: Adham Helal
+'''
+RETURN = '''
+ changed:
+     description: A flag indicating if any change was made or not.
+     returned: success
+     type: boolean
+     sample: True
+ teams:
+     description: A flag indicating if teams change was made or not.
+     returned: success
+     type: boolean
+     sample: True
+ '''
+
+
+EXAMPLES = '''
+# team variable
+teams:
+    - name: "team1"
+      state: "present"
+      auth:
+        basic_auth:
+          basic_auth_username: user2
+          basic_auth_password: pass2
+
+    - name: "team2"
+      state: "absent"
+
+    - name: "team3"
+      state: "present"
+      auth:
+        github_auth           :
+          client_id           : "21cxre7d1f12666nv721"
+          client_secret       : "10b246hxf612f0c5d42ba97dbb5f33r115112g2x"
+          organizations       : ["SuperOrg"]
+
+# Module
+- concourse:
+    url: "http://127.0.0.1:18081"
+    username: "myuser"
+    password: "mypass"
+    teams: "{{ teams }}"
+'''
+# TODO:
+#     Support auth diff somehow
+#     Support check mode
+#     Support reporting workers
+#     Support uploading Pipelines
 
 # import module snippets
-from ansible.module_utils.basic import *
-from ansible.module_utils.facts import *
-from ansible.module_utils.urls import *
-import urllib2
 import base64
 import json
+from ansible.module_utils.basic import *
+from ansible.module_utils.urls import *
+#import urllib2
+#from ansible.module_utils.facts import *
 
-from ansible.module_utils._text import to_bytes, to_native
 
-
-class Fly(object):
+class Concourse(object):
 
   def __init__(self, module):
     self.module = module
     self.url = module.params['url']
-    self.token = module.params['token']
     self.username = module.params['username']
     self.password = module.params['password']
     self.teams = module.params['teams']
     self.manage_exclusively = module.params['manage_exclusively']
+    ##
+    self.base_api_path = "/api/v1"
     self.changed = False
     self.authorization_header = None
-    self.base_api_path = "/api/v1"
     self.concourse_teams = {}
     self.teams_to_update = []
     self.teams_to_remove = []
+    self.teams_changed = False
+    # Check if this ansible version supports diff
+    try:
+      self.do_diff = self.module._diff
+    except AttributeError:
+      self.do_diff = False
+    self.diff = ''
+
 
   def _api_call(self, action_url, action_name, return_json=False, headers=None, method="GET", payload=None, use_authorization=False):
     ''' Responsible to do RAW api call to ATC '''
@@ -104,7 +199,7 @@ class Fly(object):
     # We always need to ignore team main
     self.concourse_teams.pop('main', None)
 
-  def _compile_list(self, teams_in_concourse, desired_teams, manage_true=False):
+  def _compile_list(self, teams_in_concourse, desired_teams, exec_manage=False):
       ''' Create a list of teams that need updating and removing '''
 
       desired_to_be_present = [ t.get("name") for t in desired_teams if t.get("state", "present").lower() == "present"]
@@ -112,8 +207,9 @@ class Fly(object):
       desired_to_be_latest  = [ t.get("name") for t in desired_teams if t.get("state", "present").lower() == "latest"]
 
       self.teams_to_update = list( set(desired_to_be_present) - set(teams_in_concourse) ) + desired_to_be_latest
-      if manage_true:
-          self.teams_to_remove = list( set(teams_in_concourse) - set( teams_to_update  + desired_to_be_present) )
+      if exec_manage:
+          print "00", teams_in_concourse
+          self.teams_to_remove = list( set(teams_in_concourse) - set( self.teams_to_update  + desired_to_be_present) )
       else:
           self.teams_to_remove = list( set(desired_to_be_absent).intersection(set(teams_in_concourse)) )
 
@@ -128,19 +224,27 @@ class Fly(object):
 
     if len(self.teams_to_update) > 0:
         self.changed = True
+        self.teams_changed = True
         for team_to_update in self.teams_to_update:
           team_auth = [ t.get("auth",{}) for t in self.teams if t.get("name") == team_to_update]
           self._set_team(team_to_update, team_auth[0])
+          self._add_to_diff("+Team '{}' Added/Updated".format(team_to_update))
 
     if len(self.teams_to_remove) > 0:
         self.changed = True
+        self.teams_changed = True
         for team_to_delete in self.teams_to_remove:
           self._delete_team(team_to_delete)
+          self._add_to_diff("-Team '{}' Removed".format(team_to_delete))
 
   def _ping(self):
     ''' Ping concourse to see if it's alive '''
 
     self._api_call("/info", "ping")
+
+  def _add_to_diff(self, message):
+      if self.do_diff:
+            self.diff += message
 
   def take_off(self):
     ''' Main function '''
@@ -149,25 +253,27 @@ class Fly(object):
     self._authenticate()
     if self.teams:
         self.manage_teams()
-    self.module.exit_json(changed=self.changed, msg="", removed=self.teams_to_remove, updated=self.teams_to_update)
+
+    result = dict()
+    if self.do_diff:
+        result['diff'] = dict(prepared=self.diff)
+
+    self.module.exit_json(changed=self.changed, msg="", **result)
 
 
 def main():
   module = AnsibleModule(
     argument_spec = dict(
       url=dict(required=True),
-      token=dict(type='str'),
-      username=dict(type='str'),
-      password=dict(type='str'),
+      username=dict(type='str', required=True),
+      password=dict(type='str', required=True),
       teams=dict(type='list'),
       manage_exclusively=dict(default=False, type='bool'),
     ),
     required_together = [['username', 'password']],
-    required_one_of   = [['username', 'token']]
   )
   fly = Fly(module)
   fly.take_off()
-  # changed = hostname.update_current_and_permanent_hostname()
 
 if __name__ == '__main__':
     main()
