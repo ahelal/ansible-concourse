@@ -27,7 +27,7 @@ platforms                   :
      image                  : ubuntu:14.04
      platform               : ubuntu
      forward:
-        - 8080:8080
+        - 18080:8080
    provisioner              :
       ansible_playbook_bin  : "`avm path v2.0`ansible-playbook"
       # Hash of other groups
@@ -40,7 +40,7 @@ platforms                   :
      image                  : ubuntu:16.04
      platform               : ubuntu
      forward:
-        - 8081:8080
+        - 18081:8080
    provisioner              :
       ansible_playbook_bin  : "`avm path v2.2`ansible-playbook"
       # Hash of other groups
