@@ -23,14 +23,18 @@ Please look at [config section](https://github.com/ahelal/ansible-concourse#conf
 
 ## vagrant demo
 You can use vagrant to spin a test machine.
+
 ```
 vagrant up
 ```
+
 The vagrant machine will have an IP of **192.168.50.150**
 
 You can access the web and API on port 8080 with username **myuser** and **mypass**
+
 Once your done
-````
+
+```
 vagrant destroy
 ```
 
@@ -71,6 +75,7 @@ ci.example.com
   roles:
     - { name: "ansible-concourse", tags: "concourse"  }
 ```
+
 ```yaml
 ---
 - name: Create worker nodes
