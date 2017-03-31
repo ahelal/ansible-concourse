@@ -5,7 +5,6 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 * Platforms
   * Ubuntu 14.04/16.04
   * MacOS (Early support. Accepting PRs)
-  * Redhat 7 (WIP. Accepting PRs)
   * Windows (not supported yet. Accepting PRs)
 
 * Ansible 2.0 or higher
