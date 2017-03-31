@@ -9,8 +9,8 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
-* Optional SSL termination service 
- * Use concourse web argument to configure SSL
+* Optional TLS termination
+ * Use concourse web argument to configure TLS
  * [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
 
 ## Overview
@@ -127,7 +127,7 @@ You would need to generate 2 keys for web and one key for each worker node.
 An easy way to generate your keys to use a script in ```keys/key.sh```
 
 The bash script will ask you for the number of workers you require. It will then generate ansible compatible yaml files in ```keys/vars```
-You can than copy the content in your group vars or pass it somehow.
+You can than copy the content in your group vars or anyother method you prefer.
 
 ## Default variables
 ```yaml
@@ -155,7 +155,7 @@ concourseci_group                           : "concourseci"
 CONCOURSE_WEB_BIND_IP                       : "0.0.0.0"
 CONCOURSE_WEB_BIND_PORT                     : "8080"
 #CONCOURSE_WEB_EXTERNAL_URL                  : "http://127.0.0.1:8080" #URL used to reach any ATC from the outside world.
-# Concourse TSA Config
+## Concourse TSA Config
 CONCOURSE_WEB_TSA_HOST                      : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
 CONCOURSE_WEB_TSA_BIND_IP                   : "0.0.0.0"
 CONCOURSE_WEB_TSA_BIND_PORT                 : "2222"
@@ -331,7 +331,6 @@ concourse_ignore_errors                       : "{{ ansible_lsb['codename'] == '
 * Support pipeline upload
 * Full MacOS support
 * Add distributed cluster tests
-* Redhat Support
 * Windows support
 
 ## License
