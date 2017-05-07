@@ -1,6 +1,6 @@
 ---
 # Concourse version
-concourseci_version                         : "v2.7.3"
+concourseci_version                         : "v2.7.4"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
