@@ -12,6 +12,7 @@ concourseci_ssh_dir                         : "{{ concourseci_base_dir }}/.ssh"
 concourseci_log_dir                         : "/var/log/concourse"
 concourseci_log_worker                      : "{{ concourseci_log_dir }}/concourseci_worker.log"
 concourseci_log_web                         : "{{ concourseci_log_dir }}/concourseci_web.log"
+concourseci_log_rotate                      : True
 
 ## Concourse User
 concourseci_user                            : "concourseci"

@@ -1,0 +1,9 @@
+{{ concourseci_log_dir }}/*.log {
+        size 100M
+        copytruncate
+        missingok
+        rotate 3
+        compress
+        notifempty
+        nocreate
+}
