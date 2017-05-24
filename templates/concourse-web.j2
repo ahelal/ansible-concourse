@@ -70,6 +70,8 @@ export {{ option }}="{{ value }}"
 {{ build_option("CONCOURSE_TSA_AUTHORIZED_KEYS", CONCOURSE_WEB_TSA_AUTHORIZED_KEYS | default("omit")) -}}
 {{ build_option("CONCOURSE_TSA_TEAM_AUTHORIZED_KEYS", CONCOURSE_WEB_TSA_TEAM_AUTHORIZED_KEYS | default("omit")) -}}
 {{ build_option("CONCOURSE_TSA_HEARTBEAT_INTERVAL", CONCOURSE_WEB_TSA_HEARTBEAT_INTERVAL | default("omit")) -}}
+{{ build_option("CONCOURSE_LOG_LEVEL", CONCOURSE_WEB_LOG_LEVEL | default("omit")) -}}
+
 
 echo "" >> {{ concourseci_log_web }}
 echo "$(date) starting " >> {{ concourseci_log_web }}
