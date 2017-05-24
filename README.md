@@ -185,6 +185,9 @@ CONCOURSE_WORKER_TSA_PUBLIC_KEY             : "{{ CONCOURSE_WEB_TSA_HOST_KEY }}.
 ## Concourse garden linux
 CONCOURSE_WORKER_GARDEN_LOG_LEVEL           : "info" # [debug|info|error|fatal]
 
+## Concourse web linux
+CONCOURSE_WEB_LOG_LEVEL                     : "info" # [debug|info|error|fatal]
+
 ## Ansible Groups to form clusters
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
