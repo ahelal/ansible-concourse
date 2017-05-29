@@ -32,6 +32,7 @@ export {{ option }}="{{ value }}"
 {{ build_option("CONCOURSE_WORKER_GARDEN_URL", CONCOURSE_WEB_WORKER_GARDEN_URL | default("omit")) -}}
 {{ build_option("CONCOURSE_WORKER_BAGGAGECLAIM_URL", CONCOURSE_WEB_WORKER_BAGGAGECLAIM_URL | default("omit")) -}}
 {{ build_option("CONCOURSE_WORKER_RESOURCE", CONCOURSE_WEB_WORKER_RESOURCE | default("omit")) -}}
+{{ build_option("CONCOURSE_NO_REALLY_I_DONT_WANT_ANY_AUTH", CONCOURSE_WEB_NO_REALLY_I_DONT_WANT_ANY_AUTH | default("omit")) -}}
 {{ build_option("CONCOURSE_BASIC_AUTH_USERNAME", CONCOURSE_WEB_BASIC_AUTH_USERNAME | default("omit")) -}}
 {{ build_option("CONCOURSE_BASIC_AUTH_PASSWORD", CONCOURSE_WEB_BASIC_AUTH_PASSWORD | default("omit")) -}}
 {{ build_option("CONCOURSE_GITHUB_AUTH_CLIENT_ID", CONCOURSE_WEB_GITHUB_AUTH_CLIENT_ID | default("omit")) -}}
