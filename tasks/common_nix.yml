@@ -30,3 +30,9 @@
     mode=0750
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
+
+- name: common | Ensure basic logrotation
+  template:
+    dest: /etc/logrotate.d/concourse
+    src: logrotate-concourse.j2
+  when: concourseci_log_rotate
