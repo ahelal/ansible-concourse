@@ -25,6 +25,7 @@ provisioner                 :
     verbose                 : "vvvv"
 
 platforms                   :
+
  - name                     : "ubuntu1404_20"
    driver_config            :
      image                  : ubuntu:14.04
@@ -67,8 +68,8 @@ suites:
     driver_config           :
       hostname              : "simple"
 
-  - name                    : manage
-    provisioner             :
-      playbook              : "test/integration/manage/manage.yml"
-    driver_config           :
-      hostname              : "manage"
+  # - name                    : manage
+  #   provisioner             :
+  #     playbook              : "test/integration/manage/manage.yml"
+  #   driver_config           :
+  #     hostname              : "manage"
