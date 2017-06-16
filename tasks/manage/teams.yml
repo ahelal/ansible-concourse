@@ -1,0 +1,41 @@
+---
+
+- name: manage | team | login
+  command: "{{ concourse_fly }} login -n main  -c {{ concourseci_manage_url }} -u {{ CONCOURSE_WEB_BASIC_AUTH_USERNAME }} -p {{ CONCOURSE_WEB_BASIC_AUTH_PASSWORD }}"
+  changed_when: false
+
+- name: manage | team | Get registered teams
+  shell: "{{ concourse_fly }} teams | grep -vwE 'main' | awk '{$1=$1;print}'"
+  register: registered_teams
+  changed_when: false
+
+- name: manage | team | Extract teams that must be present and absent
+  set_fact:
+    teams_present : "{{ concourseci_teams | selectattr('state', 'equalto', 'present') | list | map(attribute='name') | list }}"
+    teams_absent : "{{ concourseci_teams | selectattr('state', 'equalto', 'absent') | list | map(attribute='name') | list }}"
+
+- name: manage | team | Compile list of diff of teams to be added and removed
+  set_fact:
+    teams_to_add : "{{ teams_present | difference(registered_teams.stdout_lines) }}"
+    teams_to_remove : "{{ teams_absent | intersect(registered_teams.stdout_lines) }}"
+
+- name: manage | team | Print teams that will be added
+  debug:
+    var=teams_to_add
+  when: teams_to_add | length > 0
+
+- name: manage | team | Ensure teams that are present exists
+  shell : "yes | {{ concourse_fly }} set-team -n {{ item }}{% set attr=concourseci_teams | selectattr('name', 'equalto', item) | list | map(attribute='flags') | list | first%} {% for key, value in attr.iteritems() %} --{{key}}={{value}}{% endfor %}"
+  with_items: "{{ teams_to_add }}"
+  when: teams_to_add | length > 0
+
+
+- name: manage | team | Print teams that will be removed
+  debug:
+    var=teams_to_remove
+  when: teams_to_remove | length > 0
+
+- name: manage | team | Ensure teams that are absent does not exists
+  shell : "echo {{ item }} | {{ concourse_fly }} destroy-team -n {{ item }}"
+  with_items: "{{ teams_to_remove }}"
+  when: teams_to_remove | length > 0

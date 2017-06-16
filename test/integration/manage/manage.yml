@@ -1,0 +1,50 @@
+---
+
+- name: Check for python2.7
+  hosts: all
+  gather_facts: False
+  become: True
+  tasks:
+    - name: install python 2
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      changed_when: False
+    - raw: echo "x"
+- name: Provision Concourse
+  hosts: all
+  become: True
+  vars:
+    CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
+    CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
+    concourseci_reboot                : false
+    concourseci_manage_teams          : true
+    concourseci_teams                 :
+          - name: "x1"
+            state: "present"
+            flags:
+              basic-auth-username: user1
+              basic-auth-password: pass1
+          - name: "x2"
+            state: "absent"
+            flags:
+                basic-auth-username: user2
+                basic-auth-password: pass2
+          - name: "x3"
+            state: "present"
+            flags:
+                basic-auth-username: user2
+                basic-auth-password: pass2
+          - name: "x4"
+            state: "present"
+            flags:
+                basic-auth-username: user4
+                basic-auth-password: pass4
+          - name: "x5"
+            state: "absent"
+            flags:
+                basic-auth-username: user5
+                basic-auth-password: pass5
+  roles:
+    - { name: "hosts",             tags: "hosts"      }
+    - { name: "postgresql",        tags: "postgresql" }
+    - { name: "ansible-concourse", tags: "concourse"  }
+    - { name: "fly",               tags: "fly"        }

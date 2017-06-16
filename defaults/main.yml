@@ -58,9 +58,24 @@ CONCOURSE_WEB_LOG_LEVEL                     : "info" # [debug|info|error|fatal]
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
+## Management
+concourseci_manage_url                      : "{{ CONCOURSE_WEB_EXTERNAL_URL | default('http://127.0.0.1:8080') }}"
+concourseci_manage_credential_team          : "manage"
+concourseci_manage_credential_user          : "api_manager"
+# WARNING if you use manage DO NOT USE DAFAULT PASSWORD
+# YOU SHOULD set your own password and save it securly in vault
+concourseci_manage_credential_password      : "api_manager"
+concourseci_manage_worker_health            : False
+
+## Manage pipelines
+concourseci_manage_pipelines                : False
+
+## Teams
+concourseci_manage_teams                    : False
+concourseci_teams                           : []
+
 ## Reboot when updating kernel (we disable this for test :( on docker)
 concourseci_reboot                          : True
-
 
 # ********************* Example Keys (YOU MUST OVERRIDE THEM) *********************
 # This keys are used for demo only you should generate your own and store them

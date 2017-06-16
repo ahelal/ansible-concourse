@@ -25,7 +25,7 @@ provisioner                 :
     verbose                 : "vvvv"
 
 platforms                   :
- - name                     : "ubuntu1404"
+ - name                     : "ubuntu1404_20"
    driver_config            :
      image                  : ubuntu:14.04
      platform               : ubuntu
@@ -38,7 +38,7 @@ platforms                   :
          concourse-web      : [ 'simple-ubuntu1404' ]
          concourse-worker   : [ 'simple-ubuntu1404', 'worker-ubuntu1404' ]
 
- - name                     : "ubuntu1604"
+ - name                     : "ubuntu1604_22"
    driver_config            :
      image                  : ubuntu:16.04
      platform               : ubuntu
@@ -49,18 +49,16 @@ platforms                   :
          concourse-web      : [ 'simple-ubuntu1604' ]
          concourse-worker   : [ 'simple-ubuntu1604', 'worker-ubuntu1604' ]
 
-#  - name                     : "centos7"
-#    driver_config            :
-#       image                 : "cthulhuology/postgresql"
-#       dockerfile            : './test/centos7-dockerfile'
-#       platform              : centos
-#    provisioner              :
-#       ansible_playbook_bin  : "`avm path v2.2`ansible-playbook"
-#       sudo                  : true
-#       # Hash of other groups
-#       groups                :
-#          concourse-web      : [ 'simple-centos7' ]
-#          concourse-worker   : [ 'simple-centos7' ]
+ - name                     : "ubuntu1604_23"
+   driver_config            :
+     image                  : ubuntu:16.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.3`ansible-playbook"
+      # Hash of other groups
+      groups                :
+         concourse-web      : [ 'simple-ubuntu1604' ]
+         concourse-worker   : [ 'simple-ubuntu1604', 'worker-ubuntu1604' ]
 
 suites:
   - name                    : simple
@@ -68,3 +66,9 @@ suites:
       playbook              : "test/integration/simple/simple.yml"
     driver_config           :
       hostname              : "simple"
+
+  - name                    : manage
+    provisioner             :
+      playbook              : "test/integration/manage/manage.yml"
+    driver_config           :
+      hostname              : "manage"
