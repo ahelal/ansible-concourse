@@ -35,8 +35,8 @@ platforms                   :
       ansible_playbook_bin  : "`avm path v2.0`ansible-playbook"
       # Hash of other groups
       groups                :
-         concourse-web      : [ 'simple-ubuntu1404' ]
-         concourse-worker   : [ 'simple-ubuntu1404', 'worker-ubuntu1404' ]
+         concourse-web      : [ 'simple-ubuntu1404-20' ]
+         concourse-worker   : [ 'simple-ubuntu1404-20', 'worker-ubuntu1404-20' ]
 
  - name                     : "ubuntu1604_22"
    driver_config            :
@@ -46,8 +46,8 @@ platforms                   :
       ansible_playbook_bin  : "`avm path v2.2`ansible-playbook"
       # Hash of other groups
       groups                :
-         concourse-web      : [ 'simple-ubuntu1604' ]
-         concourse-worker   : [ 'simple-ubuntu1604', 'worker-ubuntu1604' ]
+         concourse-web      : [ 'simple-ubuntu1604-22' ]
+         concourse-worker   : [ 'simple-ubuntu1604-22', 'worker-ubuntu1604-22' ]
 
  - name                     : "ubuntu1604_23"
    driver_config            :
@@ -57,8 +57,8 @@ platforms                   :
       ansible_playbook_bin  : "`avm path v2.3`ansible-playbook"
       # Hash of other groups
       groups                :
-         concourse-web      : [ 'simple-ubuntu1604' ]
-         concourse-worker   : [ 'simple-ubuntu1604', 'worker-ubuntu1604' ]
+         concourse-web      : [ 'simple-ubuntu1604-23' ]
+         concourse-worker   : [ 'simple-ubuntu1604-23', 'worker-ubuntu1604-23' ]
 
 suites:
   - name                    : simple
