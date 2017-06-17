@@ -4,6 +4,12 @@ python: "2.7"
 services:
   - docker
 
+
+env:
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1404-20"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-22"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-23"
+
 before_install:
   # Make sure everything's up to date.
   - sudo apt-get update -qq
@@ -17,7 +23,7 @@ install:
 script:
     - ansible --version
     - export TRAVIS=True
-    - bundle exec kitchen test
+    - $TEST_COMMAND
 
 after_success:
     - echo "Success"
