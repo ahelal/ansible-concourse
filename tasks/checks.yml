@@ -3,14 +3,14 @@
 - name: checks | Fail if not running 64bit
   fail:
     msg=" Only 64 bit arch is supported. "
-  when: "{{ ansible_userspace_bits != '64' }}"
+  when: "ansible_userspace_bits != '64'"
 
 - name: checks | Set downloaded url to rc (if release candidate)
   set_fact:
     concourseci_download_url: "{{ concourseci_download_rc_url }}"
-  when: "{{ 'rc' in concourseci_version }}"
+  when: "'rc' in concourseci_version"
 
 - name: checks | Set downloaded url to final release (if final release)
   set_fact:
     concourseci_download_url: "{{ concourseci_download_fr_url }}"
-  when: "{{ 'rc' not in concourseci_version }}"
+  when: "'rc' not in concourseci_version"

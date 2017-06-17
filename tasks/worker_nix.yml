@@ -63,7 +63,7 @@
   notify:
    - reload systemd
    - restart concourse-worker
-  when: "{{ ansible_system == 'Linux' }}"
+  when: "ansible_system == 'Linux'"
 
 - name: Worker | Ensure Concourse worker is running and Starts on boot (linux)
   service:
@@ -71,7 +71,7 @@
     state="started"
     enabled=True
   ignore_errors: "{{ concourse_ignore_errors }}"
-  when: "{{ ansible_system == 'Linux' }}"
+  when: "ansible_system == 'Linux'"
 
 - name: worker | Templating concourse worker start launchd plist (macOSx)
   template:
@@ -84,9 +84,9 @@
   notify:
    - restart concourse-worker
   register: launchd_template
-  when: "{{ ansible_system == 'Darwin' }}"
+  when: "ansible_system == 'Darwin'"
 
 - name: worker | Ensure Concourse worker is running and Starts on boot (macOSx)
   shell: launchctl load -w {{ concourseci_launchd_path }}/{{ concourseci_launchd_worker }}.plist && launchctl start {{ concourseci_launchd_worker }}
   changed_when: False # since no way to detect if it started or not
-  when: "{{ ansible_system == 'Darwin' }}"
+  when: "ansible_system == 'Darwin'"

@@ -66,7 +66,7 @@
   notify:
    - reload systemd
    - restart concourse-web
-  when: "{{ ansible_system == 'Linux' }}"
+  when: "ansible_system == 'Linux'"
 
 - name: web | Ensure Concourse web is running and Starts on boot (linux)
   service:
@@ -74,7 +74,7 @@
     state="started"
     enabled=True
   ignore_errors: "{{ concourse_ignore_errors }}"
-  when: "{{ ansible_system == 'Linux' }}"
+  when: "ansible_system == 'Linux'"
 
 - name: web | Templating concourse web start launchd plist (macOSx)
   template:
@@ -87,9 +87,9 @@
   notify:
    - restart concourse-web
   register: launchd_template
-  when: "{{ ansible_system == 'Darwin' }}"
+  when: "ansible_system == 'Darwin'"
 
 - name: web | Ensure Concourse web is running and Starts on boot (macOSx)
   shell: launchctl load -w {{ concourseci_launchd_path }}/{{ concourseci_launchd_web }}.plist && launchctl start {{ concourseci_launchd_web }}
   changed_when: False # since no way to detect if it started or not
-  when: "{{ ansible_system == 'Darwin' }}"
+  when: "ansible_system == 'Darwin'"
