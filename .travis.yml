@@ -4,6 +4,12 @@ python: "2.7"
 services:
   - docker
 
+
+env:
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1404-20"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-22"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-23"
+
 before_install:
   # Make sure everything's up to date.
   - sudo apt-get update -qq
@@ -11,13 +17,13 @@ before_install:
   - gem install bundler
 
 install:
+  - sudo locale-gen en_US.UTF-8
+  - sudo dpkg-reconfigure locales
   - bash ./test/ansible-setup.sh
   - bundle install
 
 script:
-    - ansible --version
-    - export TRAVIS=True
-    - bundle exec kitchen test
+    - LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $TEST_COMMAND
 
 after_success:
     - echo "Success"

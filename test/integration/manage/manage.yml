@@ -8,7 +8,7 @@
     - name: install python 2
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
       changed_when: False
-
+    - raw: echo "x"
 - name: Provision Concourse
   hosts: all
   become: True

@@ -15,7 +15,9 @@ export {{ option }}="{{ value }}"
 {{ build_option("CONCOURSE_TLS_KEY", CONCOURSE_WEB_TLS_KEY | default("omit")) -}}
 {{ build_option("CONCOURSE_EXTERNAL_URL", CONCOURSE_WEB_EXTERNAL_URL | default("omit")) -}}
 {{ build_option("CONCOURSE_PEER_URL", CONCOURSE_WEB_PEER_URL | default("omit")) -}}
-{{ build_option("CONCOURSE_OAUTH_BASE_URL", CONCOURSE_WEB_OAUTH_BASE_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_OAUTH_BASE_URL", CONCOURSE_OAUTH_BASE_URL | default("omit")) -}}
+{{ build_option("CONCOURSE_ENCRYPTION_KEY", CONCOURSE_ENCRYPTION_KEY | default("omit")) -}}
+{{ build_option("CONCOURSE_OLD_ENCRYPTION_KEY", CONCOURSE_OLD_ENCRYPTION_KEY | default("omit")) -}}
 {{ build_option("CONCOURSE_AUTH_DURATION", CONCOURSE_WEB_AUTH_DURATION | default("omit")) -}}
 {{ build_option("CONCOURSE_POSTGRES_DATA_SOURCE", CONCOURSE_WEB_POSTGRES_DATA_SOURCE | default("omit")) -}}
 {{ build_option("CONCOURSE_DEBUG_BIND_IP", CONCOURSE_WEB_DEBUG_BIND_IP | default("omit")) -}}
@@ -27,7 +29,8 @@ export {{ option }}="{{ value }}"
 {{ build_option("CONCOURSE_CLI_ARTIFACTS_DIR", CONCOURSE_WEB_CLI_ARTIFACTS_DIR | default("omit")) -}}
 {{ build_option("CONCOURSE_ALLOW_SELF_SIGNED_CERTIFICATES", CONCOURSE_WEB_ALLOW_SELF_SIGNED_CERTIFICATES | default("omit")) -}}
 {{ build_option("CONCOURSE_LOG_DB_QUERIES", CONCOURSE_WEB_LOG_DB_QUERIES | default("omit")) -}}
-{{ build_option("CONCOURSE_DEVELOPMENT_MODE", CONCOURSE_WEB_DEVELOPMENT_MODE | default("omit")) -}}
+{{ build_option("CONCOURSE_GC_INTERVAL", CONCOURSE_WEB_GC_INTERVAL | default("omit")) -}}
+{{ build_option("CONCOURSE_BUILD_TRACKER_INTERVAL", CONCOURSE_WEB_BUILD_TRACKER_INTERVAL | default("omit")) -}}
 {{ build_option("CONCOURSE_NOOP", CONCOURSE_WEB_NOOP | default("omit")) -}}
 {{ build_option("CONCOURSE_WORKER_GARDEN_URL", CONCOURSE_WEB_WORKER_GARDEN_URL | default("omit")) -}}
 {{ build_option("CONCOURSE_WORKER_BAGGAGECLAIM_URL", CONCOURSE_WEB_WORKER_BAGGAGECLAIM_URL | default("omit")) -}}
@@ -72,7 +75,6 @@ export {{ option }}="{{ value }}"
 {{ build_option("CONCOURSE_TSA_TEAM_AUTHORIZED_KEYS", CONCOURSE_WEB_TSA_TEAM_AUTHORIZED_KEYS | default("omit")) -}}
 {{ build_option("CONCOURSE_TSA_HEARTBEAT_INTERVAL", CONCOURSE_WEB_TSA_HEARTBEAT_INTERVAL | default("omit")) -}}
 {{ build_option("CONCOURSE_LOG_LEVEL", CONCOURSE_WEB_LOG_LEVEL | default("omit")) -}}
-
 
 echo "" >> {{ concourseci_log_web }}
 echo "$(date) starting " >> {{ concourseci_log_web }}
