@@ -1,34 +1,30 @@
 #!/bin/bash
 set -e
-echo "Running travis "
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-SETUP_VERSION="v0.0.5"
-#SETUP_VERBOSITY="vv"
+#!/bin/sh
+set -e
 
-## Install Ansible 2.0
-ANSIBLE_VERSIONS[0]="2.0.2.0"
-INSTALL_TYPE[0]="pip"
-ANSIBLE_LABEL[0]="v2.0"
+AVM_VERSION="v1.0.0-rc.8"
 
-## Install Ansible 2.2
-ANSIBLE_VERSIONS[1]="2.2.0.0"
-INSTALL_TYPE[1]="pip"
-ANSIBLE_LABEL[1]="v2.2"
+export ANSIBLE_VERSIONS_0="2.0.2.0"
+export INSTALL_TYPE_0="pip"
+export ANSIBLE_LABEL_0="v2.0"
 
-## Install Ansible 2.3
-ANSIBLE_VERSIONS[1]="2.3.1.0"
-INSTALL_TYPE[1]="pip"
-ANSIBLE_LABEL[1]="v2.3"
+export ANSIBLE_VERSIONS_1="2.2.1.0"
+export INSTALL_TYPE_1="pip"
+export ANSIBLE_LABEL_1="v2.2"
+
+export ANSIBLE_VERSIONS_2="2.3.1.0"
+export INSTALL_TYPE_2="pip"
+export ANSIBLE_LABEL_2="v2.3"
 
 # Whats the default version
-ANSIBLE_DEFAULT_VERSION="v2.0"
+export ANSIBLE_DEFAULT_VERSION="v2.0"
 
-## Create a temp dir
-filename=$( echo ${0} | sed 's|/||g' )
-my_temp_dir="$(mktemp -dt ${filename}.XXXX)"
+## Create a temp dir to download avm
+avm_dir="$(mktemp -d 2> /dev/null || mktemp -d -t 'mytmpdir')"
+git clone https://github.com/ahelal/avm.git "${avm_dir}" > /dev/null 2>&1
+git checkout AVM_VERSION "${AVM_VERSION}"
+/bin/sh "${avm_dir}"/setup.sh
 
-curl -s https://raw.githubusercontent.com/ahelal/avm/${SETUP_VERSION}/setup.sh -o $my_temp_dir/setup.sh
-
-## Run the setup
-. $my_temp_dir/setup.sh
+exit 0
