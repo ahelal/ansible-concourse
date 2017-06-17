@@ -21,9 +21,7 @@ install:
   - bundle install
 
 script:
-    - ansible --version
-    - export TRAVIS=True
-    - $TEST_COMMAND
+    - LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $TEST_COMMAND
 
 after_success:
     - echo "Success"
