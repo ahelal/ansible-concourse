@@ -20,6 +20,7 @@ export ANSIBLE_DEFAULT_VERSION="v2.0"
 ## Create a temp dir to download avm
 avm_dir="$(mktemp -d 2> /dev/null || mktemp -d -t 'mytmpdir')"
 git clone https://github.com/ahelal/avm.git "${avm_dir}" > /dev/null 2>&1
+cd "${avm_dir}"
 git checkout ${AVM_VERSION}
 /bin/sh "${avm_dir}"/setup.sh
 
