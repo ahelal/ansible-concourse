@@ -22,7 +22,7 @@ provisioner                 :
     diff                    : True
     sudo                    : True
     #extra_vars                : "@kitchen_vars.yml"
-    verbose                 : "vvvv"
+    #verbose                 : "vvvv"
 
 platforms                   :
 
