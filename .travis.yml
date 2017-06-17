@@ -17,6 +17,8 @@ before_install:
   - gem install bundler
 
 install:
+  - sudo locale-gen en_US.UTF-8
+  - sudo dpkg-reconfigure locales
   - bash ./test/ansible-setup.sh
   - bundle install
 
