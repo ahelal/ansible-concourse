@@ -1,5 +1,6 @@
 ---
-
+- pause:
+    seconds: 20
 
 - name: fly | copy pipelines
   copy:
