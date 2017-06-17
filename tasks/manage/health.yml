@@ -1,0 +1,14 @@
+---
+
+- name: fly | Download fly
+  get_url:
+    url: "{{ concourseci_manage_url }}/api/v1/cli?arch=amd64&platform={{ ansible_system | lower }}"
+    dest: "{{ concourseci_bin_dir }}/fly"
+    mode: 0755
+   # maybe add a gaurd
+
+# - name: fly | sync
+#   command: "{{ concourseci_bin_dir }}/fly sync"
+#   register: sync_command
+#   changed_when: "'skipping' in sync_command.stdout"
+

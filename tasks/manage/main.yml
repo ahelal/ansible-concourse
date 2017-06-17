@@ -1,0 +1,14 @@
+---
+
+- name: manage | Include health
+  include: health.yml
+  when: "{{ concourseci_manage_worker_health }}"
+
+# This should run one and on on web node not both
+- name: manage | Main | Manage teams
+  concourse:
+    url="http://127.0.0.1:{{CONCOURSE_WEB_BIND_PORT}}"
+    username="{{ concourseci_manage_credential_user }}"
+    password="{{ concourseci_manage_credential_password }}"
+    teams="{{ concourseci_teams }}"
+  when: "{{ concourseci_manage_teams }}"

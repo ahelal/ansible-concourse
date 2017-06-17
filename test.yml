@@ -1,0 +1,18 @@
+- name: XXXXXXX
+  hosts: all
+  gather_facts: False
+  become: False
+  vars:
+   xx:
+    - name     : "2"
+    - name     : "x"
+      "blaa-1" : "y"
+  tasks:
+    - debug: var=xx
+    - fly:
+        url=http://192.168.50.150:8080/
+        username=myuser
+        password=mypass
+        fly_path=/opt/hellofresh/bin/fly
+        teams="{{ xx }}"
+      tags: t2

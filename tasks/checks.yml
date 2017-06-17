@@ -14,3 +14,8 @@
   set_fact:
     concourseci_download_url: "{{ concourseci_download_fr_url }}"
   when: "{{ 'rc' not in concourseci_version }}"
+
+- name: checks | Fail if you are managing and using Basic auth
+  fail:
+    msg="You can only manage your host if your not using BASIC AUTH :( for now"
+  when: "{{ concourseci_manage and CONCOURSE_WEB_BASIC_AUTH_USERNAME is defined }}"

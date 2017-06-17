@@ -3,3 +3,4 @@ keys/vars
 *.retry
 .vagrant
 *.log
+*.pyc

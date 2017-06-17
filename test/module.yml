@@ -1,0 +1,62 @@
+---
+- name: Check for python2.7
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  become: false
+  vars:
+# github_auth           :
+#   client_id           : "21cxre7d1f12666nv721"
+#   client_secret       : "10b246hxf612f0c5d42ba97dbb5f33r115112g2x"
+#   organizations       : ["hellofresh"]
+#   users               : ["ahelal"]
+    teams:
+        - name: "test1"
+          state: "present"
+          auth:
+            basic_auth:
+              basic_auth_username: user2
+              basic_auth_password: pass2
+        - name: "test2"
+          state: "absent"
+          auth:
+            basic_auth:
+              basic_auth_username: user2
+              basic_auth_password: pass2
+
+        - name: "test3"
+          state: "absent"
+          auth:
+            github_auth           :
+              client_id           : "21cxre7d1f12666nv721"
+              client_secret       : "10b246hxf612f0c5d42ba97dbb5f33r115112g2x"
+              organizations       : ["hellofresh"]
+
+        - name: "test4"
+          auth:
+            basic_auth:
+              basic_auth_username: user2
+              basic_auth_password: pass2
+            github_auth           :
+              client_id           : "21cxre7d1f12666nv721"
+              client_secret       : "10b246hxf612f0c5d42ba97dbb5f33r115112g2x"
+              organizations       : ["AutomationWithAnsible"]
+              users               : ["ahelal"]
+        - name: "test5"
+          auth:
+            basic_auth:
+              basic_auth_username: user2
+              basic_auth_password: pass2
+            github_auth           :
+              client_id           : "21cxre7d1f12666nv721"
+              client_secret       : "10b246hxf612f0c5d42ba97dbb5f33r115112g2x"
+              users               : ["ahelal"]
+
+  tasks:
+    - name: concourse teams
+      concourse_teams:
+        url=http://127.0.0.1:18081
+        username=myuser
+        password=mypass
+        teams="{{teams}}"
+

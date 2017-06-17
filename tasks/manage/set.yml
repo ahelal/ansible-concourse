@@ -1,0 +1,6 @@
+---
+
+- name: manage | set | Set Manage username and password
+  set_fact:
+    CONCOURSE_WEB_BASIC_AUTH_USERNAME: "{{ concourseci_manage_credential_user }}"
+    CONCOURSE_WEB_BASIC_AUTH_PASSWORD: "{{ concourseci_manage_credential_password }}"

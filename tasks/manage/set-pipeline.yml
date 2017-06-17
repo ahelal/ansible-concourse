@@ -1,0 +1,18 @@
+---
+
+# concourseci_concourseci_manage_pipelines_execulisly: False
+# concourseci_concourseci_manage_pipelines:
+#    - name: "test"
+#      type: "git"
+#      url: "git://github.com:hellofresh/automation"
+#      path: "ci/pipeline.yml"
+#      team: x
+#      paused: True
+
+#    - name: "test2"
+#      type: "http"
+#      url: "https://github.com/hellofresh/automation/ci/pipeline.git"
+#      path: "ci/pipeline.yml"
+#      state: "absent"
+
+
