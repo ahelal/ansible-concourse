@@ -1,0 +1,23 @@
+#!/bin/sh
+# {{ ansible_managed }}
+set -e
+
+export CONCOURSE_NAME="{{ CONCOURSE_WORKER_NAME }}"
+export CONCOURSE_TSA_PUBLIC_KEY="{{ CONCOURSE_WORKER_TSA_PUBLIC_KEY }}"
+export CONCOURSE_TSA_WORKER_PRIVATE_KEY="{{ CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY }}"
+
+echo "$(date) I AM being retired :( " | tee -a {{ concourseci_log_worker }}
+
+# Exec retire-worker
+exec {{ concourseci_bin_dir }}/concourse retire-worker >> {{ concourseci_log_worker }} 2>&1
+
+# Loop till worker retire
+while true; do
+  {{ concourseci_bin_dir }}/fly -t manage workers | grep ${CONCOURSE_NAME}
+  if [ "$?" -ne 0 ]; then
+    echo "$(date) officially Retired" | tee -a {{ concourseci_log_worker }}
+    break
+  fi
+  echo "$(date) still working. I will try again in 10s" | tee -a {{ concourseci_log_worker }}
+  sleep 10
+done
