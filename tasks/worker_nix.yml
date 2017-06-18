@@ -55,6 +55,12 @@
   notify:
    - restart concourse-worker
 
+- name: Worker | Concourse worker retire script
+  template:
+    src="concourse-worker-retire.j2"
+    dest="{{ concourseci_bin_dir }}/concourse-worker-retire"
+    mode=0755
+
 - name: Worker | Concourse worker start init script (linux)
   template:
     src="concourse-worker-init.sh.j2"

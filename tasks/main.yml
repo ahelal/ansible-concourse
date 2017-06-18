@@ -28,5 +28,5 @@
 
 - name: Manage Teams & Pipelines
   include: manage/main.yml
-  when: (concourseci_manage_pipelines or concourseci_manage_teams) and {{ groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin') }}
+  when: (concourseci_manage_pipelines or concourseci_manage_teams) and groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin')
   tags: ["manage"]

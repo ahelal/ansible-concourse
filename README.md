@@ -16,23 +16,6 @@ An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a c
 ## Overview
 I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
 
-## vagrant demo
-You can use vagrant to spin a test machine.
-
-```
-vagrant up
-```
-
-The vagrant machine will have an IP of **192.168.50.150**
-
-You can access the web and API on port 8080 with username **myuser** and **mypass**
-
-Once your done
-
-```
-vagrant destroy
-```
-
 ## Examples
 ### Single node
 
@@ -94,8 +77,8 @@ ci-worker04.example.com
 
 You would also need to generate keys for workers check [key section](https://github.com/ahelal/ansible-concourse#keys)
 
-## Config
-All command line options are now supported since version 1.0.0 in *Web* and *worker*
+## Configuration
+Most command line options are now supported since version 1.0.0 in *Web* and *worker*
 
 If your upgrading you have to change some variables. You can simply look at the template for [template/concourse-web](https://github.com/ahelal/ansible-concourse/blob/master/templates/concourse-web.j2) and [template/concourse-worker](https://github.com/ahelal/ansible-concourse/blob/master/templates/concourse-worker.j2) for all options.
 
@@ -115,24 +98,30 @@ i.e. ```concourseci_version : "vx.x.x"```
 
 By default this role will try to have the latest stable release look at [defaults/main.yml](https://github.com/ahelal/ansible-concourse/blob/master/defaults/main.yml#L2-L3)
 
+## Default variables
+
+Check [defaults/main.yml](/defaults/main.yml) for all bells and whistles.
+
 ## Keys
 
 **Warning** the role comes with default keys. This keys are used for demo only you should generate your own and store them **safely** i.e. ansible-vault
 
 You would need to generate 2 keys for web and one key for each worker node.
-An easy way to generate your keys to use a script in ```keys/key.sh```
+An easy way to generate your keys to use a script in ```keys/key.sh``` or you can reuse the same keys for all workers.
 
 The bash script will ask you for the number of workers you require. It will then generate ansible compatible yaml files in ```keys/vars```
 You can than copy the content in your group vars or any other method you prefer.
 
-## Default variables
-
-Check [defaults/main.yml](/defaults/main.yml) for all bells and whistles.
-
 ## Managing teams
 This role supports Managing teams. here is an example:
-```
-    concourseci_manage_teams          : True
+
+*NOTE* if you use manage _DO NOT USE DEFAULT PASSWORD_ your should set your own password and save it securely in vault.
+
+```yaml
+    concourseci_manage_teams                : True
+    concourseci_manage_credential_user      : "api_manager"
+    concourseci_manage_credential_password  : "{{ ENCRYPTED_VARIABLE }}"
+
     concourseci_teams                 :
           - name: "team_1"
             state: "present"
@@ -162,12 +151,33 @@ This role supports Managing teams. here is an example:
                 basic-auth-username: user5
                 basic-auth-password: pass5
 ```
+
 The role supports all arguments passed to fly for more info  `fly set-team --help`.
 *Please note if you delete a team you remove all the pipelines in that team*
 
+## Auto scaling
+* Scaling out: Is simple just add a new instance :)
+* Scaling in: Drain the worker first by running `/opt/concourseci/bin/concourse-worker-retire`
+
+## vagrant demo
+You can use vagrant to spin a test machine.
+
+```
+vagrant up
+```
+
+The vagrant machine will have an IP of **192.168.50.150**
+
+You can access the web and API on port 8080 with username **myuser** and **mypass**
+
+Once your done
+
+```
+vagrant destroy
+```
 
 ## Note breaking changes as of version 1.0.0
-version 1.0.0 now support all options for web and worker, but you need to adapt to the new config.
+version 1.0.0 now support most options for web and worker, but you need to adapt to the new config.
 Please look at [config section](https://github.com/ahelal/ansible-concourse#config).
 
 ## TODO

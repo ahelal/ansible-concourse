@@ -62,8 +62,8 @@ concourseci_worker_group                    : "concourse-worker"
 concourseci_manage_url                      : "{{ CONCOURSE_WEB_EXTERNAL_URL | default('http://127.0.0.1:8080') }}"
 concourseci_manage_credential_team          : "manage"
 concourseci_manage_credential_user          : "api_manager"
-# WARNING if you use manage DO NOT USE DAFAULT PASSWORD
-# YOU SHOULD set your own password and save it securly in vault
+# WARNING if you use manage DO NOT USE DEFAULT PASSWORD
+# YOU SHOULD set your own password and save it securely in vault
 concourseci_manage_credential_password      : "api_manager"
 concourseci_manage_worker_health            : False
 
