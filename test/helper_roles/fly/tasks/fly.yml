@@ -16,7 +16,7 @@
     mode: 0755
 
 - name: login with fly
-  command: /usr/local/bin/fly -t kitchen login -c http://127.0.0.1:8080  -u {{ CONCOURSE_WEB_BASIC_AUTH_USERNAME }} -p {{ CONCOURSE_WEB_BASIC_AUTH_PASSWORD }}
+  command: /usr/local/bin/fly -t kitchen login -c http://127.0.0.1:8080  -u {{ concourseci_manage_credential_user }} -p {{ concourseci_manage_credential_password }}
   become: False
   changed_when: false
 
