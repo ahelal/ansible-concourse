@@ -2,9 +2,9 @@
 # {{ ansible_managed }}
 set -e
 
-export CONCOURSE_NAME="{{ CONCOURSE_WORKER_NAME }}"
-export CONCOURSE_TSA_PUBLIC_KEY="{{ CONCOURSE_WORKER_TSA_PUBLIC_KEY }}"
-export CONCOURSE_TSA_WORKER_PRIVATE_KEY="{{ CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY }}"
+export CONCOURSE_NAME="{{ CONCOURSE_WORKER_NAME | default(concourse_worker_options['CONCOURSE_NAME']) }}"
+export CONCOURSE_TSA_PUBLIC_KEY="{{ concourseci_web_tsa_host_key }}.pub"
+export CONCOURSE_TSA_WORKER_PRIVATE_KEY="{{ concourseci_web_tsa_host_key }}"
 
 echo "$(date) I AM being retired :( " | tee -a {{ concourseci_log_worker }}
 

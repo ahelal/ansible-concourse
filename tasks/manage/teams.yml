@@ -1,7 +1,7 @@
 ---
 
 - name: manage | team | login
-  command: "{{ concourse_fly }} login -n main  -c {{ concourseci_manage_url }} -u {{ CONCOURSE_WEB_BASIC_AUTH_USERNAME }} -p {{ CONCOURSE_WEB_BASIC_AUTH_PASSWORD }}"
+  command: "{{ concourse_fly }} login -n main  -c {{ concourseci_manage_url }} -u {{ concourseci_manage_credential_user }} -p {{ concourseci_manage_credential_password }}"
   changed_when: false
 
 - name: manage | team | Get registered teams

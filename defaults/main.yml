@@ -17,42 +17,41 @@ concourseci_log_web                         : "{{ concourseci_log_dir }}/concour
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
 
-## Concourse Web
-## For full support variables web templates/concourse-web.j2
-CONCOURSE_WEB_BIND_IP                       : "0.0.0.0"
-CONCOURSE_WEB_BIND_PORT                     : "8080"
-#CONCOURSE_WEB_EXTERNAL_URL                  : "http://127.0.0.1:8080" #URL used to reach any ATC from the outside world.
-# Concourse TSA Config
-CONCOURSE_WEB_TSA_HOST                      : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
-CONCOURSE_WEB_TSA_BIND_IP                   : "0.0.0.0"
-CONCOURSE_WEB_TSA_BIND_PORT                 : "2222"
-CONCOURSE_WEB_TSA_AUTHORIZED_KEYS           : "{{ concourseci_ssh_dir }}/tsa_authorization"
-CONCOURSE_WEB_TSA_HOST_KEY                  : "{{ concourseci_ssh_dir }}/tsa"
-CONCOURSE_WEB_SESSION_SIGNING_KEY           : "{{ concourseci_ssh_dir }}/session_signing"
+# ## PostgreSQL
+# concourseci_postgresql_user                 : "concourseci"
+# # YOU SHOULD set your own password and save it securely in vault
+# concourseci_postgresql_pass                 : "conpass"
+# concourseci_postgresql_host                 : "127.0.0.1"
+# concourseci_postgresql_db                   : "concourse"
 
-#concourseci_key_tsa_path                    : "{{ concourseci_ssh_dir }}/tsa"
-## PostgreSQL
-concourseci_postgresql_user                 : "concourseci"
-concourseci_postgresql_pass                 : "conpass"
-concourseci_postgresql_host                 : "127.0.0.1"
-concourseci_postgresql_db                   : "concourse"
-concourseci_postgresql_ssl                  : "disable"
-CONCOURSE_WEB_POSTGRES_DATA_SOURCE          : "postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }}?sslmode={{ concourseci_postgresql_ssl }}"
+## New config dictionary based
+concourse_web_options                        :
+  CONCOURSE_BIND_IP                          : "0.0.0.0"
+  CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
+  CONCOURSE_TSA_BIND_IP                      : "0.0.0.0"
+  CONCOURSE_TSA_BIND_PORT                    : "2222"
+  CONCOURSE_TSA_AUTHORIZED_KEYS              : "{{ concourseci_ssh_dir }}/tsa_authorization"
+  CONCOURSE_TSA_HOST_KEY                     : "{{ concourseci_ssh_dir }}/tsa"
+  CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
+  CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
+  # Set your own password and save it securely in vault
+  CONCOURSE_BASIC_AUTH_PASSWORD              : "{{ random }}"
+  # Set your own password and save it securely in vault
+  CONCOURSE_POSTGRES_DATA_SOURCE             : "postgres://concourseci:conpass@127.0.0.1/concourse?sslmode=disable"
 
-## Concourse worker
-## For full support variables worker templates/concourse-worker.j2
-CONCOURSE_WORKER_WORK_DIR                   : "{{ concourseci_worker_dir }}"
-CONCOURSE_WORKER_NAME                       : "{{ inventory_hostname }}"
-CONCOURSE_WORKER_TSA_HOST                   : "{{ CONCOURSE_WEB_TSA_HOST }}"
-CONCOURSE_WORKER_TSA_PORT                   : "{{ CONCOURSE_WEB_TSA_BIND_PORT }}"
-CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY     : "{{ concourseci_ssh_dir }}/worker"
-CONCOURSE_WORKER_TSA_PUBLIC_KEY             : "{{ CONCOURSE_WEB_TSA_HOST_KEY }}.pub"
+concourse_worker_options                     :
+  CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
+  CONCOURSE_NAME                             : "{{ inventory_hostname }}"
+  CONCOURSE_TSA_HOST                         : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] }}"
+  CONCOURSE_TSA_PORT                         : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
+  CONCOURSE_TSA_WORKER_PRIVATE_KEY           : "{{ concourseci_ssh_dir }}/worker"
+  CONCOURSE_TSA_PUBLIC_KEY                   : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"
 
-## Concourse garden linux
-CONCOURSE_WORKER_GARDEN_LOG_LEVEL           : "info" # [debug|info|error|fatal]
-
-## Concourse web linux
-CONCOURSE_WEB_LOG_LEVEL                     : "info" # [debug|info|error|fatal]
+## Used for easy lookup can be removed later
+concourseci_web_session_signing_key         : "{{ concourse_web_options['CONCOURSE_SESSION_SIGNING_KEY'] }}"
+concourseci_web_tsa_host_key                : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}"
+concourseci_web_tsa_authorized_keys         : "{{ concourse_web_options['CONCOURSE_TSA_AUTHORIZED_KEYS'] }}"
+concourseci_worker_tsa_worker_private_key   : "{{ concourse_worker_options['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
 
 ## Ansible Groups to form clusters
 concourseci_web_group                       : "concourse-web"
@@ -60,19 +59,17 @@ concourseci_worker_group                    : "concourse-worker"
 
 ## Management
 concourseci_manage_url                      : "{{ CONCOURSE_WEB_EXTERNAL_URL | default('http://127.0.0.1:8080') }}"
-concourseci_manage_credential_team          : "manage"
-concourseci_manage_credential_user          : "api_manager"
+concourseci_manage_credential_user          : "myuser"
 # WARNING if you use manage DO NOT USE DEFAULT PASSWORD
 # YOU SHOULD set your own password and save it securely in vault
-concourseci_manage_credential_password      : "api_manager"
-concourseci_manage_worker_health            : False
+concourseci_manage_credential_password      : "mypass"
 
-## Manage pipelines
-concourseci_manage_pipelines                : False
-
-## Teams
+### Management Teams
 concourseci_manage_teams                    : False
 concourseci_teams                           : []
+
+### Management Pipelines (still not working )
+concourseci_manage_pipelines                : False
 
 ## Reboot when updating kernel (we disable this for test :( on docker)
 concourseci_reboot                          : True
