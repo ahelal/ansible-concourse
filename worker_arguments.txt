@@ -1,0 +1,134 @@
+worker.txtUsage:
+  concourse [OPTIONS] worker [worker-OPTIONS]
+
+Application Options:
+  -v, --version                                              Print the version of Concourse and exit [$CONCOURSE_VERSION]
+
+Help Options:
+  -h, --help                                                 Show this help message
+
+[worker command options]
+          --name=                                            The name to set for the worker during registration. If not specified, the hostname will be used. [$CONCOURSE_NAME]
+          --tag=                                             A tag to set during registration. Can be specified multiple times. [$CONCOURSE_TAG]
+          --team=                                            The name of the team that this worker will be assigned to. [$CONCOURSE_TEAM]
+          --http-proxy=                                      HTTP proxy endpoint to use for containers. [$http_proxy]
+          --https-proxy=                                     HTTPS proxy endpoint to use for containers. [$https_proxy]
+          --no-proxy=                                        Blacklist of addresses to skip the proxy when reaching. [$no_proxy]
+          --work-dir=                                        Directory in which to place container data. [$CONCOURSE_WORK_DIR]
+          --bind-ip=                                         IP address on which to listen for the Garden server. (default: 127.0.0.1) [$CONCOURSE_BIND_IP]
+          --bind-port=                                       Port on which to listen for the Garden server. (default: 7777) [$CONCOURSE_BIND_PORT]
+          --peer-ip=                                         IP used to reach this worker from the ATC nodes. If omitted, the worker will be forwarded through the SSH connection to
+                                                             the TSA. [$CONCOURSE_PEER_IP]
+
+    Garden Configuration:
+          --garden-log-level=[debug|info|error|fatal]        Minimum level of logs to see. (default: info) [$CONCOURSE_GARDEN_LOG_LEVEL]
+
+    Server Configuration:
+          --garden-bind-ip=                                  Bind with TCP on the given IP. [$CONCOURSE_GARDEN_BIND_IP]
+          --garden-bind-port=                                Bind with TCP on the given port. (default: 7777) [$CONCOURSE_GARDEN_BIND_PORT]
+          --garden-bind-socket=                              Bind with Unix on the given socket path. (default: /tmp/garden.sock) [$CONCOURSE_GARDEN_BIND_SOCKET]
+          --garden-debug-bind-ip=                            Bind the debug server on the given IP. [$CONCOURSE_GARDEN_DEBUG_BIND_IP]
+          --garden-debug-bind-port=                          Bind the debug server to the given port. (default: 17013) [$CONCOURSE_GARDEN_DEBUG_BIND_PORT]
+          --garden-skip-setup                                Skip the preparation part of the host that requires root privileges [$CONCOURSE_GARDEN_SKIP_SETUP]
+
+    Container Lifecycle:
+          --garden-depot=                                    Directory in which to store container data. (default: /var/run/gdn/depot) [$CONCOURSE_GARDEN_DEPOT]
+          --garden-properties-path=                          Path in which to store properties. [$CONCOURSE_GARDEN_PROPERTIES_PATH]
+          --garden-console-sockets-path=                     Path in which to store temporary sockets [$CONCOURSE_GARDEN_CONSOLE_SOCKETS_PATH]
+          --garden-cleanup-process-dirs-on-wait              Clean up proccess dirs on first invocation of wait [$CONCOURSE_GARDEN_CLEANUP_PROCESS_DIRS_ON_WAIT]
+          --garden-default-rootfs=                           Default rootfs to use when not specified on container creation. [$CONCOURSE_GARDEN_DEFAULT_ROOTFS]
+          --garden-default-grace-time=                       Default time after which idle containers should expire. [$CONCOURSE_GARDEN_DEFAULT_GRACE_TIME]
+          --garden-destroy-containers-on-startup             Clean up all the existing containers on startup. [$CONCOURSE_GARDEN_DESTROY_CONTAINERS_ON_STARTUP]
+          --garden-apparmor=                                 Apparmor profile to use for unprivileged container processes [$CONCOURSE_GARDEN_APPARMOR]
+
+    Binary Tools:
+          --garden-assets-dir=                               Directory in which to extract packaged assets (default: /var/gdn/assets) [$CONCOURSE_GARDEN_ASSETS_DIR]
+          --garden-dadoo-bin=                                Path to the 'dadoo' binary. [$CONCOURSE_GARDEN_DADOO_BIN]
+          --garden-nstar-bin=                                Path to the 'nstar' binary. [$CONCOURSE_GARDEN_NSTAR_BIN]
+          --garden-tar-bin=                                  Path to the 'tar' binary. [$CONCOURSE_GARDEN_TAR_BIN]
+          --garden-iptables-bin=                             path to the iptables binary (default: /sbin/iptables) [$CONCOURSE_GARDEN_IPTABLES_BIN]
+          --garden-iptables-restore-bin=                     path to the iptables-restore binary (default: /sbin/iptables-restore) [$CONCOURSE_GARDEN_IPTABLES_RESTORE_BIN]
+          --garden-init-bin=                                 Path execute as pid 1 inside each container. [$CONCOURSE_GARDEN_INIT_BIN]
+          --garden-runc-bin=                                 Path to the 'runc' binary. (default: runc) [$CONCOURSE_GARDEN_RUNC_BIN]
+          --garden-newuidmap-bin=                            Path to the 'newuidmap' binary. (default: newuidmap) [$CONCOURSE_GARDEN_NEWUIDMAP_BIN]
+          --garden-newgidmap-bin=                            Path to the 'newgidmap' binary. (default: newgidmap) [$CONCOURSE_GARDEN_NEWGIDMAP_BIN]
+
+    Image Graph:
+          --garden-graph=                                    Directory on which to store imported rootfs graph data. [$CONCOURSE_GARDEN_GRAPH]
+          --garden-graph-cleanup-threshold-in-megabytes=     Disk usage of the graph dir at which cleanup should trigger, or -1 to disable graph cleanup. (default: -1)
+                                                             [$CONCOURSE_GARDEN_GRAPH_CLEANUP_THRESHOLD_IN_MEGABYTES]
+          --garden-persistent-image=                         Image that should never be garbage collected. Can be specified multiple times. [$CONCOURSE_GARDEN_PERSISTENT_IMAGE]
+
+    Image:
+          --garden-image-plugin=                             Path to image plugin binary. [$CONCOURSE_GARDEN_IMAGE_PLUGIN]
+          --garden-image-plugin-extra-arg=                   Extra argument to pass to the image plugin to create unprivileged images. Can be specified multiple times.
+                                                             [$CONCOURSE_GARDEN_IMAGE_PLUGIN_EXTRA_ARG]
+          --garden-privileged-image-plugin=                  Path to privileged image plugin binary. [$CONCOURSE_GARDEN_PRIVILEGED_IMAGE_PLUGIN]
+          --garden-privileged-image-plugin-extra-arg=        Extra argument to pass to the image plugin to create privileged images. Can be specified multiple times.
+                                                             [$CONCOURSE_GARDEN_PRIVILEGED_IMAGE_PLUGIN_EXTRA_ARG]
+
+    Docker Image Fetching:
+          --garden-docker-registry=                          Docker registry API endpoint. (default: registry-1.docker.io) [$CONCOURSE_GARDEN_DOCKER_REGISTRY]
+          --garden-insecure-docker-registry=                 Docker registry to allow connecting to even if not secure. Can be specified multiple times.
+                                                             [$CONCOURSE_GARDEN_INSECURE_DOCKER_REGISTRY]
+
+    Container Networking:
+          --garden-network-pool=                             Network range to use for dynamically allocated container subnets. (default: 10.254.0.0/22)
+                                                             [$CONCOURSE_GARDEN_NETWORK_POOL]
+          --garden-allow-host-access                         Allow network access to the host machine. [$CONCOURSE_GARDEN_ALLOW_HOST_ACCESS]
+          --garden-deny-network=                             Network ranges to which traffic from containers will be denied. Can be specified multiple times.
+                                                             [$CONCOURSE_GARDEN_DENY_NETWORK]
+          --garden-allow-network=                            Network ranges to which traffic from containers will be allowed. Can be specified multiple times.
+                                                             [$CONCOURSE_GARDEN_ALLOW_NETWORK]
+          --garden-dns-server=                               DNS server IP address to use instead of automatically determined servers. Can be specified multiple times.
+                                                             [$CONCOURSE_GARDEN_DNS_SERVER]
+          --garden-additional-dns-server=                    DNS server IP address to append to the automatically determined servers. Can be specified multiple times.
+                                                             [$CONCOURSE_GARDEN_ADDITIONAL_DNS_SERVER]
+          --garden-external-ip=                              IP address to use to reach container's mapped ports. Autodetected if not specified. [$CONCOURSE_GARDEN_EXTERNAL_IP]
+          --garden-port-pool-start=                          Start of the ephemeral port range used for mapped container ports. (default: 60000) [$CONCOURSE_GARDEN_PORT_POOL_START]
+          --garden-port-pool-size=                           Size of the port pool used for mapped container ports. (default: 5000) [$CONCOURSE_GARDEN_PORT_POOL_SIZE]
+          --garden-port-pool-properties-path=                Path in which to store port pool properties. [$CONCOURSE_GARDEN_PORT_POOL_PROPERTIES_PATH]
+          --garden-mtu=                                      MTU size for container network interfaces. Defaults to the MTU of the interface used for outbound access by the host.
+                                                             [$CONCOURSE_GARDEN_MTU]
+          --garden-network-plugin=                           Path to network plugin binary. [$CONCOURSE_GARDEN_NETWORK_PLUGIN]
+          --garden-network-plugin-extra-arg=                 Extra argument to pass to the network plugin. Can be specified multiple times.
+                                                             [$CONCOURSE_GARDEN_NETWORK_PLUGIN_EXTRA_ARG]
+
+    Limits:
+          --garden-cpu-quota-per-share=                      Maximum number of microseconds each cpu share assigned to a container allows per quota period (default: 0)
+                                                             [$CONCOURSE_GARDEN_CPU_QUOTA_PER_SHARE]
+          --garden-default-container-blockio-weight=         Default block IO weight assigned to a container (default: 0) [$CONCOURSE_GARDEN_DEFAULT_CONTAINER_BLOCKIO_WEIGHT]
+          --garden-max-containers=                           Maximum number of containers that can be created. (default: 0) [$CONCOURSE_GARDEN_MAX_CONTAINERS]
+
+    Metrics:
+          --garden-metrics-emission-interval=                Interval on which to emit metrics. (default: 1m) [$CONCOURSE_GARDEN_METRICS_EMISSION_INTERVAL]
+          --garden-dropsonde-origin=                         Origin identifier for Dropsonde-emitted metrics. (default: garden-linux) [$CONCOURSE_GARDEN_DROPSONDE_ORIGIN]
+          --garden-dropsonde-destination=                    Destination for Dropsonde-emitted metrics. (default: 127.0.0.1:3457) [$CONCOURSE_GARDEN_DROPSONDE_DESTINATION]
+
+    DNS Proxy Configuration:
+          --garden-dns-proxy-enable                          Enable proxy DNS server. [$CONCOURSE_GARDEN_DNS_PROXY_ENABLE]
+
+    Baggageclaim Configuration:
+          --baggageclaim-log-level=[debug|info|error|fatal]  Minimum level of logs to see. (default: info) [$CONCOURSE_BAGGAGECLAIM_LOG_LEVEL]
+          --baggageclaim-bind-ip=                            IP address on which to listen for API traffic. (default: 127.0.0.1) [$CONCOURSE_BAGGAGECLAIM_BIND_IP]
+          --baggageclaim-bind-port=                          Port on which to listen for API traffic. (default: 7788) [$CONCOURSE_BAGGAGECLAIM_BIND_PORT]
+          --baggageclaim-volumes=                            Directory in which to place volume data. [$CONCOURSE_BAGGAGECLAIM_VOLUMES]
+          --baggageclaim-driver=[detect|naive|btrfs|overlay] Driver to use for managing volumes. (default: detect) [$CONCOURSE_BAGGAGECLAIM_DRIVER]
+          --baggageclaim-btrfs-bin=                          Path to btrfs binary (default: btrfs) [$CONCOURSE_BAGGAGECLAIM_BTRFS_BIN]
+          --baggageclaim-mkfs-bin=                           Path to mkfs.btrfs binary (default: mkfs.btrfs) [$CONCOURSE_BAGGAGECLAIM_MKFS_BIN]
+          --baggageclaim-overlays-dir=                       Path to directory in which to store overlay data [$CONCOURSE_BAGGAGECLAIM_OVERLAYS_DIR]
+          --baggageclaim-reap-interval=                      Interval on which to reap expired volumes. (default: 10s) [$CONCOURSE_BAGGAGECLAIM_REAP_INTERVAL]
+
+    Metrics & Diagnostics:
+          --baggageclaim-yeller-api-key=                     Yeller API key. If specified, all errors logged will be emitted. [$CONCOURSE_BAGGAGECLAIM_YELLER_API_KEY]
+          --baggageclaim-yeller-environment=                 Environment to tag on all Yeller events emitted. [$CONCOURSE_BAGGAGECLAIM_YELLER_ENVIRONMENT]
+
+    TSA Configuration:
+          --tsa-host=                                        TSA host to forward the worker through. (default: 127.0.0.1) [$CONCOURSE_TSA_HOST]
+          --tsa-port=                                        TSA port to connect to. (default: 2222) [$CONCOURSE_TSA_PORT]
+          --tsa-public-key=                                  File containing a public key to expect from the TSA. [$CONCOURSE_TSA_PUBLIC_KEY]
+          --tsa-worker-private-key=                          File containing the private key to use when authenticating to the TSA. [$CONCOURSE_TSA_WORKER_PRIVATE_KEY]
+
+    Metrics & Diagnostics:
+          --yeller-api-key=                                  Yeller API key. If specified, all errors logged will be emitted. [$CONCOURSE_YELLER_API_KEY]
+          --yeller-environment=                              Environment to tag on all Yeller events emitted. [$CONCOURSE_YELLER_ENVIRONMENT]

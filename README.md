@@ -1,6 +1,10 @@
 # ansible-concourse [![Build Status](https://travis-ci.org/ahelal/ansible-concourse.svg?branch=master)](https://travis-ci.org/ahelal/ansible-concourse)
 An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
+## Note breaking changes as of version v3.0.0
+As of version 3.0.0 of this role all options for web and worker are supported, but you need to adapt to the new config style.
+Please look at [config section](https://github.com/ahelal/ansible-concourse#config).
+
 ## Requirements
 * Platforms
   * Ubuntu 14.04/16.04
@@ -24,10 +28,6 @@ I am a big fan of concourse CI, not so much bosh. This role will install concour
 - name: Create Single node host
   hosts: ci.example.com
   become: True
-  vars:
-    CONCOURSE_WEB_EXTERNAL_URL        : "http://{{ inventory_hostname }}:8080"
-    CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
-    CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
   roles:
     - { name: "postgresql",        tags: "postgresql" }
     - { name: "ansible-concourse", tags: "concourse"  }
@@ -46,10 +46,6 @@ ci.example.com
 - name: Create web nodes
   hosts: concourse-web
   become: True
-  vars:
-    CONCOURSE_WEB_EXTERNAL_URL        : "http://{{ inventory_hostname }}:8080"
-    CONCOURSE_WEB_BASIC_AUTH_USERNAME : "myuser"
-    CONCOURSE_WEB_BASIC_AUTH_PASSWORD : "mypass"
   roles:
     - { name: "ansible-concourse", tags: "concourse"  }
 ```
@@ -78,13 +74,37 @@ ci-worker04.example.com
 You would also need to generate keys for workers check [key section](https://github.com/ahelal/ansible-concourse#keys)
 
 ## Configuration
-Most command line options are now supported since version 1.0.0 in *Web* and *worker*
+All command line options are now supported as of ansible-concourse version 3.0.0 in *Web* and *worker* as a dictionary.
+**Note:** *if you are upgrade from a version prior to 3.0.0 you would need to accommodate for changes*
 
-If your upgrading you have to change some variables. You can simply look at the template for [template/concourse-web](https://github.com/ahelal/ansible-concourse/blob/master/templates/concourse-web.j2) and [template/concourse-worker](https://github.com/ahelal/ansible-concourse/blob/master/templates/concourse-worker.j2) for all options.
+The configuration is split between two dictionaries *concourse_web_options* and *concourse_worker_options* all key values defined will be exported as an environmental variable to concourse process.
 
-The options are one to one match to the binary variables in concourse with the exceptions of **WEB** and **WORKER**.
+i.e.
+```yaml
+concourse_web_options                        :
+  CONCOURSE_BIND_IP                          : "0.0.0.0"
+  CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group if you have multipule web you might need to use index of the group
+  CONCOURSE_TSA_BIND_IP                      : "0.0.0.0"
+  CONCOURSE_TSA_BIND_PORT                    : "2222"
+  CONCOURSE_TSA_AUTHORIZED_KEYS              : "{{ concourseci_ssh_dir }}/tsa_authorization"
+  CONCOURSE_TSA_HOST_KEY                     : "{{ concourseci_ssh_dir }}/tsa"
+  CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
+  CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
+  CONCOURSE_BASIC_AUTH_PASSWORD              : "{{ SUPER_USER_ENCRYPTED_PASS_IN_VAULT }}"
+  CONCOURSE_POSTGRES_DATA_SOURCE             : "postgres://concourseci:{{ SUPER_DB_ENCRYPTED_PASS_IN_VAULT }}@127.0.0.1/concourse?sslmode=disable"
 
-i.e. **CONCOURSE_BAGGAGECLAIM_BIND_IP** becomes **CONCOURSE_WORKER_BAGGAGECLAIM_BIND_IP**
+concourse_worker_options                     :
+  CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
+  CONCOURSE_NAME                             : "{{ inventory_hostname }}"
+  CONCOURSE_TSA_HOST                         : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] }}"
+  CONCOURSE_TSA_PORT                         : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
+  CONCOURSE_TSA_WORKER_PRIVATE_KEY           : "{{ concourseci_ssh_dir }}/worker"
+  CONCOURSE_TSA_PUBLIC_KEY                   : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"                  :
+```
+
+To view all enviornmental options please check
+[web options](web_arguments.txt) and [worker options](worker_arguments.txt).
+
 
 ## Concourse versions
 This role supports installation of release candidate and final releases.
@@ -113,13 +133,17 @@ The bash script will ask you for the number of workers you require. It will then
 You can than copy the content in your group vars or any other method you prefer.
 
 ## Managing teams
-This role supports Managing teams. here is an example:
+This role supports Managing teams :
 
-*NOTE* if you use manage _DO NOT USE DEFAULT PASSWORD_ your should set your own password and save it securely in vault.
+*NOTE* if you use manage _DO NOT USE DEFAULT PASSWORD_ your should set your own password and save it securely in vault. or you can look it up from web options
+```yaml
+concourseci_manage_credential_user          : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_USERNAME'] }}"
+concourseci_manage_credential_password      : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_PASSWORD'] }}"
+```
 
 ```yaml
     concourseci_manage_teams                : True
-    concourseci_manage_credential_user      : "api_manager"
+    concourseci_manage_credential_user      : "USER_TO_USE"
     concourseci_manage_credential_password  : "{{ ENCRYPTED_VARIABLE }}"
 
     concourseci_teams                 :
@@ -157,7 +181,7 @@ The role supports all arguments passed to fly for more info  `fly set-team --hel
 
 ## Auto scaling
 * Scaling out: Is simple just add a new instance :)
-* Scaling in: Drain the worker first by running `/opt/concourseci/bin/concourse-worker-retire`
+* Scaling in: You would need to drain the worker first by running `/opt/concourseci/bin/concourse-worker-retire`
 
 ## vagrant demo
 You can use vagrant to spin a test machine.
@@ -176,9 +200,6 @@ Once your done
 vagrant destroy
 ```
 
-## Note breaking changes as of version 1.0.0
-version 1.0.0 now support most options for web and worker, but you need to adapt to the new config.
-Please look at [config section](https://github.com/ahelal/ansible-concourse#config).
 
 ## TODO
 * Support pipeline upload

@@ -1,0 +1,168 @@
+Usage:
+  concourse [OPTIONS] web [web-OPTIONS]
+
+Application Options:
+  -v, --version                                                         Print the version of Concourse and exit [$CONCOURSE_VERSION]
+
+Help Options:
+  -h, --help                                                            Show this help message
+
+[web command options]
+          --log-level=[debug|info|error|fatal]                          Minimum level of logs to see. (default: info) [$CONCOURSE_LOG_LEVEL]
+          --bind-ip=                                                    IP address on which to listen for web traffic. (default: 0.0.0.0) [$CONCOURSE_BIND_IP]
+          --bind-port=                                                  Port on which to listen for HTTP traffic. (default: 8080) [$CONCOURSE_BIND_PORT]
+          --tls-bind-port=                                              Port on which to listen for HTTPS traffic. [$CONCOURSE_TLS_BIND_PORT]
+          --tls-cert=                                                   File containing an SSL certificate. [$CONCOURSE_TLS_CERT]
+          --tls-key=                                                    File containing an RSA private key, used to encrypt HTTPS traffic. [$CONCOURSE_TLS_KEY]
+          --external-url=                                               URL used to reach any ATC from the outside world. (default: http://127.0.0.1:8080) [$CONCOURSE_EXTERNAL_URL]
+          --peer-url=                                                   URL used to reach this ATC from other ATCs in the cluster. (default: http://127.0.0.1:8080)
+                                                                        [$CONCOURSE_PEER_URL]
+          --auth-duration=                                              Length of time for which tokens are valid. Afterwards, users will have to log back in. (default: 24h)
+                                                                        [$CONCOURSE_AUTH_DURATION]
+          --oauth-base-url=                                             URL used as the base of OAuth redirect URIs. If not specified, the external URL is used.
+                                                                        [$CONCOURSE_OAUTH_BASE_URL]
+          --encryption-key=                                             A 16 or 32 length key used to encrypt sensitive information before storing it in the database.
+                                                                        [$CONCOURSE_ENCRYPTION_KEY]
+          --old-encryption-key=                                         Encryption key previously used for encrypting sensitive information. If provided without a new key, data is
+                                                                        encrypted. If provided with a new key, data is re-encrypted. [$CONCOURSE_OLD_ENCRYPTION_KEY]
+          --debug-bind-ip=                                              IP address on which to listen for the pprof debugger endpoints. (default: 127.0.0.1)
+                                                                        [$CONCOURSE_DEBUG_BIND_IP]
+          --debug-bind-port=                                            Port on which to listen for the pprof debugger endpoints. (default: 8079) [$CONCOURSE_DEBUG_BIND_PORT]
+          --session-signing-key=                                        File containing an RSA private key, used to sign session tokens. [$CONCOURSE_SESSION_SIGNING_KEY]
+          --resource-checking-interval=                                 Interval on which to check for new versions of resources. (default: 1m)
+                                                                        [$CONCOURSE_RESOURCE_CHECKING_INTERVAL]
+          --old-resource-grace-period=                                  How long to cache the result of a get step after a newer version of the resource is found. (default: 5m)
+                                                                        [$CONCOURSE_OLD_RESOURCE_GRACE_PERIOD]
+          --resource-cache-cleanup-interval=                            Interval on which to cleanup old caches of resources. (default: 30s)
+                                                                        [$CONCOURSE_RESOURCE_CACHE_CLEANUP_INTERVAL]
+          --cli-artifacts-dir=                                          Directory containing downloadable CLI binaries. [$CONCOURSE_CLI_ARTIFACTS_DIR]
+          --log-db-queries                                              Log database queries. [$CONCOURSE_LOG_DB_QUERIES]
+          --gc-interval=                                                Interval on which to perform garbage collection. (default: 30s) [$CONCOURSE_GC_INTERVAL]
+          --build-tracker-interval=                                     Interval on which to run build tracking. (default: 10s) [$CONCOURSE_BUILD_TRACKER_INTERVAL]
+
+    Authentication:
+          --no-really-i-dont-want-any-auth                              Ignore warnings about not configuring auth [$CONCOURSE_NO_REALLY_I_DONT_WANT_ANY_AUTH]
+
+    Basic Authentication:
+          --basic-auth-username=                                        Username to use for basic auth. [$CONCOURSE_BASIC_AUTH_USERNAME]
+          --basic-auth-password=                                        Password to use for basic auth. [$CONCOURSE_BASIC_AUTH_PASSWORD]
+
+    Github Authentication:
+          --github-auth-client-id=                                      Application client ID for enabling GitHub OAuth. [$CONCOURSE_GITHUB_AUTH_CLIENT_ID]
+          --github-auth-client-secret=                                  Application client secret for enabling GitHub OAuth. [$CONCOURSE_GITHUB_AUTH_CLIENT_SECRET]
+          --github-auth-organization=ORG                                GitHub organization whose members will have access. [$CONCOURSE_GITHUB_AUTH_ORGANIZATION]
+          --github-auth-team=ORG/TEAM                                   GitHub team whose members will have access. [$CONCOURSE_GITHUB_AUTH_TEAM]
+          --github-auth-user=LOGIN                                      GitHub user to permit access. [$CONCOURSE_GITHUB_AUTH_USER]
+          --github-auth-auth-url=                                       Override default endpoint AuthURL for Github Enterprise. [$CONCOURSE_GITHUB_AUTH_AUTH_URL]
+          --github-auth-token-url=                                      Override default endpoint TokenURL for Github Enterprise. [$CONCOURSE_GITHUB_AUTH_TOKEN_URL]
+          --github-auth-api-url=                                        Override default API endpoint URL for Github Enterprise. [$CONCOURSE_GITHUB_AUTH_API_URL]
+
+    GitLab Authentication:
+          --gitlab-auth-client-id=                                      Application client ID for enabling GitLab OAuth. [$CONCOURSE_GITLAB_AUTH_CLIENT_ID]
+          --gitlab-auth-client-secret=                                  Application client secret for enabling GitLab OAuth. [$CONCOURSE_GITLAB_AUTH_CLIENT_SECRET]
+          --gitlab-auth-group=GROUP                                     GitLab group whose members will have access. [$CONCOURSE_GITLAB_AUTH_GROUP]
+          --gitlab-auth-auth-url=                                       Override default endpoint AuthURL for GitLab. [$CONCOURSE_GITLAB_AUTH_AUTH_URL]
+          --gitlab-auth-token-url=                                      Override default endpoint TokenURL for GitLab. [$CONCOURSE_GITLAB_AUTH_TOKEN_URL]
+          --gitlab-auth-api-url=                                        Override default API endpoint URL for GitLab. [$CONCOURSE_GITLAB_AUTH_API_URL]
+
+    UAA Authentication:
+          --uaa-auth-client-id=                                         Application client ID for enabling UAA OAuth. [$CONCOURSE_UAA_AUTH_CLIENT_ID]
+          --uaa-auth-client-secret=                                     Application client secret for enabling UAA OAuth. [$CONCOURSE_UAA_AUTH_CLIENT_SECRET]
+          --uaa-auth-auth-url=                                          UAA AuthURL endpoint. [$CONCOURSE_UAA_AUTH_AUTH_URL]
+          --uaa-auth-token-url=                                         UAA TokenURL endpoint. [$CONCOURSE_UAA_AUTH_TOKEN_URL]
+          --uaa-auth-cf-space=                                          Space GUID for a CF space whose developers will have access. [$CONCOURSE_UAA_AUTH_CF_SPACE]
+          --uaa-auth-cf-url=                                            CF API endpoint. [$CONCOURSE_UAA_AUTH_CF_URL]
+          --uaa-auth-cf-ca-cert=                                        Path to CF PEM-encoded CA certificate file. [$CONCOURSE_UAA_AUTH_CF_CA_CERT]
+
+    Generic OAuth Authentication (allows access to ALL authenticated users):
+          --generic-oauth-display-name=                                 Name for this auth method on the web UI. [$CONCOURSE_GENERIC_OAUTH_DISPLAY_NAME]
+          --generic-oauth-client-id=                                    Application client ID for enabling generic OAuth. [$CONCOURSE_GENERIC_OAUTH_CLIENT_ID]
+          --generic-oauth-client-secret=                                Application client secret for enabling generic OAuth. [$CONCOURSE_GENERIC_OAUTH_CLIENT_SECRET]
+          --generic-oauth-auth-url=                                     Generic OAuth provider AuthURL endpoint. [$CONCOURSE_GENERIC_OAUTH_AUTH_URL]
+          --generic-oauth-auth-url-param=                               Parameter to pass to the authentication server AuthURL. Can be specified multiple times.
+                                                                        [$CONCOURSE_GENERIC_OAUTH_AUTH_URL_PARAM]
+          --generic-oauth-scope=                                        Optional scope required to authorize user [$CONCOURSE_GENERIC_OAUTH_SCOPE]
+          --generic-oauth-token-url=                                    Generic OAuth provider TokenURL endpoint. [$CONCOURSE_GENERIC_OAUTH_TOKEN_URL]
+
+    Vault Credential Management:
+          --vault-url=                                                  Vault server address used to access secrets. [$CONCOURSE_VAULT_URL]
+          --vault-path-prefix=                                          Path under which to namespace credential lookup. (default: /concourse) [$CONCOURSE_VAULT_PATH_PREFIX]
+          --vault-ca-cert=                                              Path to a PEM-encoded CA cert file to use to verify the vault server SSL cert. [$CONCOURSE_VAULT_CA_CERT]
+          --vault-ca-path=                                              Path to a directory of PEM-encoded CA cert files to verify the vault server SSL cert.
+                                                                        [$CONCOURSE_VAULT_CA_PATH]
+          --vault-client-cert=                                          Path to the client certificate for Vault authorization. [$CONCOURSE_VAULT_CLIENT_CERT]
+          --vault-client-key=                                           Path to the client private key for Vault authorization. [$CONCOURSE_VAULT_CLIENT_KEY]
+          --vault-server-name=                                          If set, is used to set the SNI host when connecting via TLS. [$CONCOURSE_VAULT_SERVER_NAME]
+          --vault-insecure-skip-verify                                  Enable insecure SSL verification. [$CONCOURSE_VAULT_INSECURE_SKIP_VERIFY]
+          --vault-client-token=                                         Client token for accessing secrets within the Vault server. [$CONCOURSE_VAULT_CLIENT_TOKEN]
+          --vault-auth-backend=                                         Auth backend to use for logging in to Vault. [$CONCOURSE_VAULT_AUTH_BACKEND]
+          --vault-auth-param=NAME=VALUE                                 Paramter to pass when logging in via the backend. Can be specified multiple times.
+                                                                        [$CONCOURSE_VAULT_AUTH_PARAM]
+
+    PostgreSQL Configuration:
+          --postgres-data-source=                                       PostgreSQL connection string. (Deprecated; set the following flags instead.)
+                                                                        [$CONCOURSE_POSTGRES_DATA_SOURCE]
+          --postgres-host=                                              The host to connect to. (default: 127.0.0.1) [$CONCOURSE_POSTGRES_HOST]
+          --postgres-port=                                              The port to connect to. (default: 5432) [$CONCOURSE_POSTGRES_PORT]
+          --postgres-socket=                                            Path to a UNIX domain socket to connect to. [$CONCOURSE_POSTGRES_SOCKET]
+          --postgres-user=                                              The user to sign in as. [$CONCOURSE_POSTGRES_USER]
+          --postgres-password=                                          The user's password. [$CONCOURSE_POSTGRES_PASSWORD]
+          --postgres-sslmode=[disable|require|verify-ca|verify-full]    Whether or not to use SSL. (default: disable) [$CONCOURSE_POSTGRES_SSLMODE]
+          --postgres-ca-cert=                                           CA cert file location, to verify when connecting with SSL. [$CONCOURSE_POSTGRES_CA_CERT]
+          --postgres-client-cert=                                       Client cert file location. [$CONCOURSE_POSTGRES_CLIENT_CERT]
+          --postgres-client-key=                                        Client key file location. [$CONCOURSE_POSTGRES_CLIENT_KEY]
+          --postgres-connect-timeout=                                   Dialing timeout. (0 means wait indefinitely) (default: 5m) [$CONCOURSE_POSTGRES_CONNECT_TIMEOUT]
+          --postgres-database=                                          The name of the database to use. (default: atc) [$CONCOURSE_POSTGRES_DATABASE]
+
+    Developer Options:
+      -n, --noop                                                        Don't actually do any automatic scheduling or checking. [$CONCOURSE_NOOP]
+
+    Static Worker (optional):
+          --worker-garden-url=                                          A Garden API endpoint to register as a worker. [$CONCOURSE_WORKER_GARDEN_URL]
+          --worker-baggageclaim-url=                                    A Baggageclaim API endpoint to register with the worker. [$CONCOURSE_WORKER_BAGGAGECLAIM_URL]
+          --worker-resource=TYPE:IMAGE                                  A resource type to advertise for the worker. Can be specified multiple times. [$CONCOURSE_WORKER_RESOURCE]
+
+    Metrics & Diagnostics:
+          --metrics-host-name=                                          Host string to attach to emitted metrics. [$CONCOURSE_METRICS_HOST_NAME]
+          --metrics-attribute=NAME:VALUE                                A key-value attribute to attach to emitted metrics. Can be specified multiple times.
+                                                                        [$CONCOURSE_METRICS_ATTRIBUTE]
+          --yeller-api-key=                                             Yeller API key. If specified, all errors logged will be emitted. [$CONCOURSE_YELLER_API_KEY]
+          --yeller-environment=                                         Environment to tag on all Yeller events emitted. [$CONCOURSE_YELLER_ENVIRONMENT]
+
+    Metric Emitter (InfluxDB):
+          --influxdb-url=                                               InfluxDB server address to emit points to. [$CONCOURSE_INFLUXDB_URL]
+          --influxdb-database=                                          InfluxDB database to write points to. [$CONCOURSE_INFLUXDB_DATABASE]
+          --influxdb-username=                                          InfluxDB server username. [$CONCOURSE_INFLUXDB_USERNAME]
+          --influxdb-password=                                          InfluxDB server password. [$CONCOURSE_INFLUXDB_PASSWORD]
+          --influxdb-insecure-skip-verify                               Skip SSL verification when emitting to InfluxDB. [$CONCOURSE_INFLUXDB_INSECURE_SKIP_VERIFY]
+
+    Metric Emitter (Lager):
+          --emit-to-logs                                                Emit metrics to logs. [$CONCOURSE_EMIT_TO_LOGS]
+
+    Metric Emitter (Riemann):
+          --riemann-host=                                               Riemann server address to emit metrics to. [$CONCOURSE_RIEMANN_HOST]
+          --riemann-port=                                               Port of the Riemann server to emit metrics to. (default: 5555) [$CONCOURSE_RIEMANN_PORT]
+          --riemann-service-prefix=                                     An optional prefix for emitted Riemann services [$CONCOURSE_RIEMANN_SERVICE_PREFIX]
+          --riemann-tag=TAG                                             Tag to attach to emitted metrics. Can be specified multiple times. [$CONCOURSE_RIEMANN_TAG]
+
+    Web Server:
+          --x-frame-options=                                            The value to set for X-Frame-Options. If omitted, the header is not set. [$CONCOURSE_X_FRAME_OPTIONS]
+
+    TSA Configuration:
+          --tsa-log-level=[debug|info|error|fatal]                      Minimum level of logs to see. (default: info) [$CONCOURSE_TSA_LOG_LEVEL]
+          --tsa-bind-ip=                                                IP address on which to listen for SSH. (default: 0.0.0.0) [$CONCOURSE_TSA_BIND_IP]
+          --tsa-bind-port=                                              Port on which to listen for SSH. (default: 2222) [$CONCOURSE_TSA_BIND_PORT]
+          --tsa-peer-ip=                                                IP address of this TSA, reachable by the ATCs. Used for forwarded worker addresses. [$CONCOURSE_TSA_PEER_IP]
+          --tsa-host-key=                                               Path to private key to use for the SSH server. [$CONCOURSE_TSA_HOST_KEY]
+          --tsa-authorized-keys=                                        Path to file containing keys to authorize, in SSH authorized_keys format (one public key per line).
+                                                                        [$CONCOURSE_TSA_AUTHORIZED_KEYS]
+          --tsa-team-authorized-keys=NAME=PATH                          Path to file containing keys to authorize, in SSH authorized_keys format (one public key per line).
+                                                                        [$CONCOURSE_TSA_TEAM_AUTHORIZED_KEYS]
+          --tsa-atc-url=                                                ATC API endpoints to which workers will be registered. [$CONCOURSE_TSA_ATC_URL]
+          --tsa-session-signing-key=                                    Path to private key to use when signing tokens in reqests to the ATC during registration.
+                                                                        [$CONCOURSE_TSA_SESSION_SIGNING_KEY]
+          --tsa-heartbeat-interval=                                     interval on which to heartbeat workers to the ATC (default: 30s) [$CONCOURSE_TSA_HEARTBEAT_INTERVAL]
+
+    Metrics & Diagnostics:
+          --tsa-yeller-api-key=                                         Yeller API key. If specified, all errors logged will be emitted. [$CONCOURSE_TSA_YELLER_API_KEY]
+          --tsa-yeller-environment=                                     Environment to tag on all Yeller events emitted. [$CONCOURSE_TSA_YELLER_ENVIRONMENT]
