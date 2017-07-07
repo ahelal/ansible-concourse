@@ -12,27 +12,7 @@
 - name: Provision Concourse
   hosts: all
   become: True
-  vars:
-    concourse_web_options             :
-      CONCOURSE_BIND_IP               : "0.0.0.0"
-      CONCOURSE_TSA_HOST              : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
-      CONCOURSE_TSA_BIND_IP           : "0.0.0.0"
-      CONCOURSE_TSA_BIND_PORT         : "2222"
-      CONCOURSE_TSA_AUTHORIZED_KEYS   : "{{ concourseci_ssh_dir }}/tsa_authorization"
-      CONCOURSE_TSA_HOST_KEY          : "{{ concourseci_ssh_dir }}/tsa"
-      CONCOURSE_SESSION_SIGNING_KEY   : "{{ concourseci_ssh_dir }}/session_signing"
-      CONCOURSE_BASIC_AUTH_USERNAME   : "myuser"
-      CONCOURSE_BASIC_AUTH_PASSWORD   : "mypass"
-      CONCOURSE_POSTGRES_DATA_SOURCE  : "postgres://{{ concourseci_postgresql_user }}:{{ concourseci_postgresql_pass }}@{{ concourseci_postgresql_host }}/{{ concourseci_postgresql_db }}?sslmode={{ concourseci_postgresql_ssl }}"
-    concourse_worker_options          :
-      CONCOURSE_WORK_DIR              : "{{ concourseci_worker_dir }}"
-      CONCOURSE_NAME                  : "{{ inventory_hostname }}"
-      CONCOURSE_TSA_HOST              : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] }}"
-      CONCOURSE_TSA_PORT              : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
-      CONCOURSE_TSA_WORKER_PRIVATE_KEY: "{{ concourseci_ssh_dir }}/worker"
-      CONCOURSE_TSA_PUBLIC_KEY        : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"
-      CONCOURSE_GARDEN_LOG_LEVEL      : "info" # [debug|info|error|fatal]
-
+  vars  :
     concourseci_reboot                : false
     concourseci_manage_credential_user          : "myuser"
     concourseci_manage_credential_password      : "mypass"

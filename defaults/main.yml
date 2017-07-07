@@ -35,7 +35,7 @@ concourse_web_options                        :
   CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
   CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
   # Set your own password and save it securely in vault
-  CONCOURSE_BASIC_AUTH_PASSWORD              : "{{ random }}"
+  CONCOURSE_BASIC_AUTH_PASSWORD              : "{{ lookup('password', 'keys/password')}}`}"
   # Set your own password and save it securely in vault
   CONCOURSE_POSTGRES_DATA_SOURCE             : "postgres://concourseci:conpass@127.0.0.1/concourse?sslmode=disable"
 
