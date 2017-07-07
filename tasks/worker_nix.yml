@@ -11,7 +11,7 @@
 - name: worker | Copy session public key
   copy:
     content="{{ concourseci_key_session_public }}"
-    dest="{{ CONCOURSE_WEB_SESSION_SIGNING_KEY }}.pub"
+    dest="{{ concourseci_web_session_signing_key }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -21,7 +21,7 @@
 - name: worker | Copy tsa public key
   copy:
     content="{{ concourseci_key_tsa_public }}"
-    dest="{{ CONCOURSE_WEB_TSA_HOST_KEY }}.pub"
+    dest="{{ concourseci_web_tsa_host_key }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -31,7 +31,7 @@
 - name: worker | Copy worker public key
   copy:
     content="{{ concourseci_key_worker_public }}"
-    dest="{{ CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY }}.pub"
+    dest="{{ concourseci_worker_tsa_worker_private_key }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -39,21 +39,13 @@
 - name: worker | Copy worker private key
   copy:
     content="{{ concourseci_key_worker_private }}"
-    dest="{{ CONCOURSE_WORKER_TSA_WORKER_PRIVATE_KEY }}"
+    dest="{{ concourseci_worker_tsa_worker_private_key }}"
     mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
   no_log: True
   notify:
     - restart concourse-worker
-
-- name: Worker | Concourse worker start script
-  template:
-    src="concourse-worker.j2"
-    dest="{{ concourseci_bin_dir }}/concourse-worker"
-    mode=0755
-  notify:
-   - restart concourse-worker
 
 - name: Worker | Concourse worker retire script
   template:
