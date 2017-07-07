@@ -14,8 +14,6 @@
   become: True
   vars  :
     concourseci_reboot                : false
-    concourseci_manage_credential_user          : "myuser"
-    concourseci_manage_credential_password      : "mypass"
     concourseci_manage_teams          : true
     concourseci_teams                 :
           - name: "x1"

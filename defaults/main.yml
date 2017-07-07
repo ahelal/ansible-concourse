@@ -17,13 +17,6 @@ concourseci_log_web                         : "{{ concourseci_log_dir }}/concour
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
 
-# ## PostgreSQL
-# concourseci_postgresql_user                 : "concourseci"
-# # YOU SHOULD set your own password and save it securely in vault
-# concourseci_postgresql_pass                 : "conpass"
-# concourseci_postgresql_host                 : "127.0.0.1"
-# concourseci_postgresql_db                   : "concourse"
-
 ## New config dictionary based
 concourse_web_options                        :
   CONCOURSE_BIND_IP                          : "0.0.0.0"
@@ -35,7 +28,7 @@ concourse_web_options                        :
   CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
   CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
   # Set your own password and save it securely in vault
-  CONCOURSE_BASIC_AUTH_PASSWORD              : "{{ lookup('password', 'keys/password')}}`}"
+  CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD"
   # Set your own password and save it securely in vault
   CONCOURSE_POSTGRES_DATA_SOURCE             : "postgres://concourseci:conpass@127.0.0.1/concourse?sslmode=disable"
 
@@ -58,11 +51,9 @@ concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
 ## Management
-concourseci_manage_url                      : "{{ CONCOURSE_WEB_EXTERNAL_URL | default('http://127.0.0.1:8080') }}"
-concourseci_manage_credential_user          : "myuser"
-# WARNING if you use manage DO NOT USE DEFAULT PASSWORD
-# YOU SHOULD set your own password and save it securely in vault
-concourseci_manage_credential_password      : "mypass"
+concourseci_manage_url                      : "{{ concourse_web_options['CONCOURSE_EXTERNAL_URL'] | default('http://127.0.0.1:8080') }}"
+concourseci_manage_credential_user          : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_USERNAME'] }}"
+concourseci_manage_credential_password      : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_PASSWORD'] }}"
 
 ### Management Teams
 concourseci_manage_teams                    : False

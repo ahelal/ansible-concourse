@@ -6,9 +6,9 @@ describe port(8080) do
   end
 end
 
-describe process('concourse') do
-  it 'concourse web process to be running with concourse user' do
-    expect(subject.user).to match('concourseci')
-    expect(subject.args).to match('web')
-  end
+
+# Concourse web process to be running with concourse user
+describe command("pgrep -u concourseci -f concourse\\ web -c") do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should match '1' }
 end
