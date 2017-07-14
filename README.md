@@ -6,16 +6,17 @@ As of version 3.0.0 of this role all options for web and worker are supported, b
 Please look at [config section](https://github.com/ahelal/ansible-concourse#config).
 
 ## Requirements
-* Platforms
-  * Ubuntu 14.04/16.04
-  * MacOS (Early support. Accepting PRs)
-  * Windows (not supported yet. Accepting PRs)
-
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
-* Optional TLS termination
-  * Use concourse web argument to configure TLS (recommended)
-  * [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
+
+Supported platforms
+* Ubuntu 14.04/16.04
+* MacOS (Early support. Accepting PRs)
+* Windows (not supported yet. Accepting PRs)
+  
+Optional TLS termination
+* Use concourse web argument to configure TLS (recommended)
+* [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
 
 ## Overview
 I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
