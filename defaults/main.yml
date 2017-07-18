@@ -52,6 +52,7 @@ default_concourse_worker_options             :
   CONCOURSE_TSA_PORT                         : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
   CONCOURSE_TSA_WORKER_PRIVATE_KEY           : "{{ concourseci_ssh_dir }}/worker"
   CONCOURSE_TSA_PUBLIC_KEY                   : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"
+  CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
 
 ## Used for easy lookup can be removed later
 concourseci_web_session_signing_key         : "{{ concourse_web_options['CONCOURSE_SESSION_SIGNING_KEY'] }}"
