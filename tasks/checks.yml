@@ -5,7 +5,7 @@
     msg=" Only 64 bit arch is supported. "
   when: ansible_userspace_bits != '64'
 
-- name: checks | Fail if not running 64bit
+- name: checks | Fail if using legacy configuration
   fail:
     msg="Configuration for this role has changed. Please read the Readme.md"
   when: CONCOURSE_WEB_BIND_IP is defined or CONCOURSE_WEB_TSA_HOST is defined
@@ -19,3 +19,14 @@
   set_fact:
     concourseci_download_url: "{{ concourseci_download_fr_url }}"
   when: "'rc' not in concourseci_version"
+
+- name: checks | Fail if SSH keys are set
+  fail:
+    msg="{{ item }} is not defined and needed."
+  when: "vars[item] is not defined"
+  with_items:
+    - concourseci_key_session_public
+    - concourseci_key_session_private
+    - concourseci_key_tsa_public
+    - concourseci_key_tsa_private
+    - concourseci_worker_keys
