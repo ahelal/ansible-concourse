@@ -17,8 +17,13 @@ concourseci_log_web                         : "{{ concourseci_log_dir }}/concour
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
 
-## New config dictionary based
-concourse_web_options                        :
+## New config dictionary based.
+## This dictionary is merged with 'concourse_web_options' dictionary, make your overrides there!
+## e.g.
+## concourse_worker_options:
+##   CONCOURSE_NAME                          : "my-worker"
+##
+default_concourse_web_options                :concourse_web_options                        :
   CONCOURSE_BIND_IP                          : "0.0.0.0"
   CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
   CONCOURSE_TSA_BIND_IP                      : "0.0.0.0"
@@ -36,7 +41,12 @@ concourse_web_options                        :
   CONCOURSE_POSTGRES_SSLMODE                 : "disable"
   CONCOURSE_POSTGRES_USER                    : "db_user"
 
-concourse_worker_options                     :
+## This dictionary is merged with 'concourse_worker_options' dictionary, make your overrides there!
+## e.g.
+## concourse_worker_options:
+##   CONCOURSE_NAME                          : "my-worker"
+##
+default_concourse_worker_options             :
   CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
   CONCOURSE_TSA_HOST                         : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] }}"
   CONCOURSE_TSA_PORT                         : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
