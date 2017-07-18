@@ -23,6 +23,8 @@ concourseci_group                           : "concourseci"
 ## concourse_web_options:
 ##   CONCOURSE_BIND_IP                       : "10.0.0.1"
 ##
+concourse_web_options                        : { }
+
 default_concourse_web_options                :
   CONCOURSE_BIND_IP                          : "0.0.0.0"
   CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
@@ -46,6 +48,8 @@ default_concourse_web_options                :
 ## concourse_worker_options:
 ##   CONCOURSE_NAME                          : "my-worker"
 ##
+concourse_worker_options                     : { }
+
 default_concourse_worker_options             :
   CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
   CONCOURSE_TSA_HOST                         : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] }}"
