@@ -46,9 +46,13 @@ concourseci_web_tsa_host_key                : "{{ concourse_web_options['CONCOUR
 concourseci_web_tsa_authorized_keys         : "{{ concourse_web_options['CONCOURSE_TSA_AUTHORIZED_KEYS'] }}"
 concourseci_worker_tsa_worker_private_key   : "{{ concourse_worker_options['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
 
-## Ansible Groups to form clusters
+## Specifying if host is web or work node
+## Option 1: let ansible groups decide
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
+## Option 2: flag explicitly set it to either
+concourse_node_web                          : False
+concourse_node_worker                       : False
 
 ## Management
 concourseci_manage_url                      : "{{ concourse_web_options['CONCOURSE_EXTERNAL_URL'] | default('http://127.0.0.1:8080') }}"

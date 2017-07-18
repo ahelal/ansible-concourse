@@ -89,6 +89,32 @@ All command line options are now supported as of ansible-concourse version 3.0.0
 
 The configuration is split between two dictionaries *concourse_web_options* and *concourse_worker_options* all key values defined will be exported as an environmental variable to concourse process.
 
+### Web or Worker node
+
+**Options 1 Groups :**
+You can use ansible groups to assign a node a role by default *concourse-web* and *concourse-worker*
+
+if you want to use different group name override default variable
+
+```yaml
+concourseci_web_group                       : "THE_WEB"
+concourseci_worker_group                    : "THE_WORKER"
+```
+
+And this is how your inventory file would look.
+
+```ìni
+[THE_WEB]
+ci.example.com
+[THE_WORKER]
+ci.example.com
+```
+
+**Options 2 flags :**
+Simply set that  `concourse_node_web: True` and/or `concourse_node_worker: True` depending on your node
+
+### default config
+
 i.e. simplest working configuration
 
 ```yaml
