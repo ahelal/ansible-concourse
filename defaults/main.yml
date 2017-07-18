@@ -30,7 +30,11 @@ concourse_web_options                        :
   # Set your own password and save it securely in vault
   CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD"
   # Set your own password and save it securely in vault
-  CONCOURSE_POSTGRES_DATA_SOURCE             : "postgres://concourseci:conpass@127.0.0.1/concourse?sslmode=disable"
+  CONCOURSE_POSTGRES_DATABASE                : "concourse"
+  CONCOURSE_POSTGRES_HOST                    : "database-host"
+  CONCOURSE_POSTGRES_PASSWORD                : "db_pass"
+  CONCOURSE_POSTGRES_SSLMODE                 : "disable"
+  CONCOURSE_POSTGRES_USER                    : "db_user"
 
 concourse_worker_options                     :
   CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
