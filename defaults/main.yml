@@ -38,7 +38,6 @@ concourse_web_options                        :
 
 concourse_worker_options                     :
   CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
-  CONCOURSE_NAME                             : "{{ inventory_hostname }}"
   CONCOURSE_TSA_HOST                         : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] }}"
   CONCOURSE_TSA_PORT                         : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
   CONCOURSE_TSA_WORKER_PRIVATE_KEY           : "{{ concourseci_ssh_dir }}/worker"
