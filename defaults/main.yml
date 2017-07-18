@@ -20,10 +20,10 @@ concourseci_group                           : "concourseci"
 ## New config dictionary based.
 ## This dictionary is merged with 'concourse_web_options' dictionary, make your overrides there!
 ## e.g.
-## concourse_worker_options:
-##   CONCOURSE_NAME                          : "my-worker"
+## concourse_web_options:
+##   CONCOURSE_BIND_IP                       : "10.0.0.1"
 ##
-default_concourse_web_options                :concourse_web_options                        :
+default_concourse_web_options                :
   CONCOURSE_BIND_IP                          : "0.0.0.0"
   CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
   CONCOURSE_TSA_BIND_IP                      : "0.0.0.0"
