@@ -1,27 +1,34 @@
 # ansible-concourse [![Build Status](https://travis-ci.org/ahelal/ansible-concourse.svg?branch=master)](https://travis-ci.org/ahelal/ansible-concourse)
+
 An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
 ## Note breaking changes as of version v3.0.0
+
 As of version 3.0.0 of this role all options for web and worker are supported, but you need to adapt to the new config style.
 Please look at [config section](https://github.com/ahelal/ansible-concourse#config).
 
 ## Requirements
+
 * Ansible 2.0 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
 
-Supported platforms
+Supported platforms:
+
 * Ubuntu 14.04/16.04
 * MacOS (Early support. Accepting PRs)
 * Windows (not supported yet. Accepting PRs)
-  
-Optional TLS termination
+
+Optional TLS termination:
+
 * Use concourse web argument to configure TLS (recommended)
 * [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
 
 ## Overview
+
 I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
 
 ## Examples
+
 ### Single node
 
 ```yaml
@@ -42,6 +49,7 @@ ci.example.com
 ```
 
 ## Clustered nodes 2x web & 4x worker
+
 ```yaml
 ---
 - name: Create web nodes
@@ -75,14 +83,18 @@ ci-worker04.example.com
 You would also need to generate keys for workers check [key section](https://github.com/ahelal/ansible-concourse#keys)
 
 ## Configuration
+
 All command line options are now supported as of ansible-concourse version 3.0.0 in *Web* and *worker* as a dictionary.
 **Note:** *if you are upgrade from a version prior to 3.0.0 you would need to accommodate for changes*
 
 The configuration is split between two dictionaries *concourse_web_options* and *concourse_worker_options* all key values defined will be exported as an environmental variable to concourse process.
 
-i.e.
+i.e. simplest working configuration
+
 ```yaml
+# Web config
 concourse_web_options                        :
+
   CONCOURSE_BIND_IP                          : "0.0.0.0"
   CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group if you have multipule web you might need to use index of the group
   CONCOURSE_TSA_BIND_IP                      : "0.0.0.0"
@@ -103,19 +115,16 @@ concourse_worker_options                     :
   CONCOURSE_TSA_PUBLIC_KEY                   : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"                  :
 ```
 
-To view all enviornmental options please check
+To view all environment options please check
 [web options](web_arguments.txt) and [worker options](worker_arguments.txt).
 
-
 ## Concourse versions
+
 This role supports installation of release candidate and final releases.
 
-Simply Overriding **concourseci_version** with https://github.com/concourse/bin/releases/
-i.e. ```concourseci_version : "vx.x.x-rc.xx"```
-that will install release candidate.
+Simply Overriding **concourseci_version** with a [release candidate](https://github.com/concourse/bin/releases/) i.e. ```concourseci_version : "vx.x.x-rc.xx"``` that will install release candidate.
 
-For final release use https://github.com/concourse/concourse/releases
-i.e. ```concourseci_version : "vx.x.x"```
+For final release use [final release](https://github.com/concourse/concourse/releases) i.e. ```concourseci_version : "vx.x.x"```
 
 By default this role will try to have the latest stable release look at [defaults/main.yml](https://github.com/ahelal/ansible-concourse/blob/master/defaults/main.yml#L2-L3)
 
@@ -134,9 +143,11 @@ The bash script will ask you for the number of workers you require. It will then
 You can than copy the content in your group vars or any other method you prefer.
 
 ## Managing teams
+
 This role supports Managing teams :
 
 *NOTE* if you use manage _DO NOT USE DEFAULT PASSWORD_ your should set your own password and save it securely in vault. or you can look it up from web options
+
 ```yaml
 concourseci_manage_credential_user          : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_USERNAME'] }}"
 concourseci_manage_credential_password      : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_PASSWORD'] }}"
@@ -181,32 +192,22 @@ The role supports all arguments passed to fly for more info  `fly set-team --hel
 *Please note if you delete a team you remove all the pipelines in that team*
 
 ## Auto scaling
+
 * Scaling out: Is simple just add a new instance :)
 * Scaling in: You would need to drain the worker first by running `/opt/concourseci/bin/concourse-worker-retire`
 
 ## vagrant demo
-You can use vagrant to spin a test machine.
 
-```
-vagrant up
-```
-
-The vagrant machine will have an IP of **192.168.50.150**
-
-You can access the web and API on port 8080 with username **myuser** and **mypass**
-
-Once your done
-
-```
-vagrant destroy
-```
-
+You can use vagrant to spin a test machine. ```vagrant up```. The vagrant machine will have an IP of **192.168.50.150**.
+You can access the web and API on port 8080 with username **myuser** and **mypass** Once your done ```vagrant destroy```
 
 ## TODO
+
 * Support pipeline upload
 * Full MacOS support
 * Add distributed cluster tests
 * Windows support
 
 ## License
+
 MIT
