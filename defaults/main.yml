@@ -57,12 +57,7 @@ default_concourse_worker_options             :
   CONCOURSE_TSA_WORKER_PRIVATE_KEY           : "{{ concourseci_ssh_dir }}/worker"
   CONCOURSE_TSA_PUBLIC_KEY                   : "{{ default_concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"
   CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
-
-## Used for easy lookup can be removed later
-concourseci_web_session_signing_key         : "{{ default_concourse_web_options['CONCOURSE_SESSION_SIGNING_KEY'] }}"
-concourseci_web_tsa_host_key                : "{{ default_concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}"
-concourseci_web_tsa_authorized_keys         : "{{ default_concourse_web_options['CONCOURSE_TSA_AUTHORIZED_KEYS'] }}"
-concourseci_worker_tsa_worker_private_key   : "{{ default_concourse_web_options['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
+  CONCOURSE_TSA_HOST_KEY                     : "{{ concourseci_ssh_dir }}/tsa"
 
 ## Ansible Groups to form clusters
 concourseci_web_group                       : "concourse-web"
