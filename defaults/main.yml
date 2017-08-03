@@ -37,11 +37,11 @@ default_concourse_web_options                :
   # Set your own password and save it securely in vault
   CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD"
   # Set your own password and save it securely in vault
-  CONCOURSE_POSTGRES_DATABASE                : ""
-  CONCOURSE_POSTGRES_HOST                    : ""
-  CONCOURSE_POSTGRES_PASSWORD                : ""
+  CONCOURSE_POSTGRES_DATABASE                : "concourse"
+  CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
+  CONCOURSE_POSTGRES_PASSWORD                : "conpass"
   CONCOURSE_POSTGRES_SSLMODE                 : "disable"
-  CONCOURSE_POSTGRES_USER                    : ""
+  CONCOURSE_POSTGRES_USER                    : "concourseci"
 
 ## This dictionary is merged with 'concourse_worker_options' dictionary, make your overrides there!
 ## e.g.
