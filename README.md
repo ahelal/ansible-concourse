@@ -1,12 +1,13 @@
 # ansible-concourse
 
 [![Build Status](https://travis-ci.org/ahelal/ansible-concourse.svg?branch=master)](https://travis-ci.org/ahelal/ansible-concourse)
+
 An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
 ## Note breaking changes as of version v3.0.0
 
 As of version 3.0.0 of this role all options for web and worker are supported, but you need to adapt to the new config style.
-Please look at [config section](https://github.com/ahelal/ansible-concourse#config).
+Please look at [configuration section](https://github.com/ahelal/ansible-concourse#configuration).
 
 ## Requirements
 
@@ -113,35 +114,31 @@ The configuration is split between two dictionaries *concourse_web_options* and 
 
 ```yaml
 concourse_web_options                        :
-  CONCOURSE_BIND_IP                          : "0.0.0.0"
-  CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group if you have multipule web you might need to use index of the group
-  CONCOURSE_TSA_BIND_IP                      : "0.0.0.0"
-  CONCOURSE_TSA_BIND_PORT                    : "2222"
-  CONCOURSE_TSA_AUTHORIZED_KEYS              : "{{ concourseci_ssh_dir }}/tsa_authorization"
-  CONCOURSE_TSA_HOST_KEY                     : "{{ concourseci_ssh_dir }}/tsa"
-  CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
-  CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
-  CONCOURSE_BASIC_AUTH_PASSWORD              : "{{ SUPER_USER_ENCRYPTED_PASS_IN_VAULT }}"
-  CONCOURSE_POSTGRES_DATA_SOURCE             : "postgres://concourseci:{{ SUPER_DB_ENCRYPTED_PASS_IN_VAULT }}@127.0.0.1/concourse?sslmode=disable"
+  CONCOURSE_BASIC_AUTH_USERNAME              : "apiuser"
+  CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD_AND_USEVAULT"
+  CONCOURSE_POSTGRES_DATABASE                : "concourse"
+  CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
+  CONCOURSE_POSTGRES_PASSWORD                : "NO_PLAIN_TEXT_USE_VAUÖT"
+  CONCOURSE_POSTGRES_SSLMODE                 : "disable"
+  CONCOURSE_POSTGRES_USER                    : "concourseci"
 
 concourse_worker_options                     :
-  CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
-  CONCOURSE_NAME                             : "{{ inventory_hostname }}"
-  CONCOURSE_TSA_HOST                         : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] }}"
-  CONCOURSE_TSA_PORT                         : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
-  CONCOURSE_TSA_WORKER_PRIVATE_KEY           : "{{ concourseci_ssh_dir }}/worker"
-  CONCOURSE_TSA_PUBLIC_KEY                   : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"                  :
+  CONCOURSE_GARDEN_NETWORK_POOL              : "10.254.0.0/22"
+  CONCOURSE_GARDEN_MAX_CONTAINERS            : 150
 ```
 
 To view all environmental options please check
 [web options](web_arguments.txt) and [worker options](worker_arguments.txt).
+
+ansible-concourse has some sane defaults defined `concourse_web_options_default` and `concourse_worker_options_default` in [default.yml](default.yml) those default will merge with `concourse_web_option` and `concourse_worker_option`. `concourse_web_option` and `concourse_worker_option`has higher precedence.
+
 
 ## Concourse versions
 
 This role supports installation of release candidate and final releases. Simply overriding **concourseci_version** with desired version.
 
 * Fpr [rc](https://github.com/concourse/bin/releases/). `concourseci_version : "vx.x.x-rc.xx"` that will install release candidate.
-* For [final release](https://github.com/concourse/concourse/releases]. ```concourseci_version : "vx.x.x"```
+* For [final release](https://github.com/concourse/concourse/releases). ```concourseci_version : "vx.x.x"```
 
 By default this role will try to have the latest stable release look at [defaults/main.yml](https://github.com/ahelal/ansible-concourse/blob/master/defaults/main.yml#L2-L3)
 
