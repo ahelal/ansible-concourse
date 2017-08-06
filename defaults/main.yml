@@ -1,6 +1,6 @@
 ---
 # Concourse version
-concourseci_version                         : "v3.3.2"
+concourseci_version                         : "v3.3.4"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
@@ -17,8 +17,15 @@ concourseci_log_web                         : "{{ concourseci_log_dir }}/concour
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
 
-## New config dictionary based
-concourse_web_options                        :
+## New config dictionary based.
+## This dictionary is merged with 'concourse_web_options' dictionary, make your overrides there!
+## e.g.
+## concourse_web_options:
+##   CONCOURSE_BIND_IP                       : "10.0.0.1"
+##
+concourse_web_options                        : { }
+
+default_concourse_web_options                :
   CONCOURSE_BIND_IP                          : "0.0.0.0"
   CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
   CONCOURSE_TSA_BIND_IP                      : "0.0.0.0"
@@ -30,21 +37,27 @@ concourse_web_options                        :
   # Set your own password and save it securely in vault
   CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD"
   # Set your own password and save it securely in vault
-  CONCOURSE_POSTGRES_DATA_SOURCE             : "postgres://concourseci:conpass@127.0.0.1/concourse?sslmode=disable"
+  CONCOURSE_POSTGRES_DATABASE                : "concourse"
+  CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
+  CONCOURSE_POSTGRES_PASSWORD                : "conpass"
+  CONCOURSE_POSTGRES_SSLMODE                 : "disable"
+  CONCOURSE_POSTGRES_USER                    : "concourseci"
 
-concourse_worker_options                     :
+## This dictionary is merged with 'concourse_worker_options' dictionary, make your overrides there!
+## e.g.
+## concourse_worker_options:
+##   CONCOURSE_NAME                          : "my-worker"
+##
+concourse_worker_options                     : { }
+
+default_concourse_worker_options             :
   CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
-  CONCOURSE_NAME                             : "{{ inventory_hostname }}"
-  CONCOURSE_TSA_HOST                         : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] }}"
-  CONCOURSE_TSA_PORT                         : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
+  CONCOURSE_TSA_HOST                         : "{{ default_concourse_web_options['CONCOURSE_TSA_HOST'] }}"
+  CONCOURSE_TSA_PORT                         : "{{ default_concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
   CONCOURSE_TSA_WORKER_PRIVATE_KEY           : "{{ concourseci_ssh_dir }}/worker"
-  CONCOURSE_TSA_PUBLIC_KEY                   : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"
-
-## Used for easy lookup can be removed later
-concourseci_web_session_signing_key         : "{{ concourse_web_options['CONCOURSE_SESSION_SIGNING_KEY'] }}"
-concourseci_web_tsa_host_key                : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}"
-concourseci_web_tsa_authorized_keys         : "{{ concourse_web_options['CONCOURSE_TSA_AUTHORIZED_KEYS'] }}"
-concourseci_worker_tsa_worker_private_key   : "{{ concourse_worker_options['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
+  CONCOURSE_TSA_PUBLIC_KEY                   : "{{ default_concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"
+  CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
+  CONCOURSE_TSA_HOST_KEY                     : "{{ concourseci_ssh_dir }}/tsa"
 
 ## Specifying if host is web or work node
 ## Option 1: let ansible groups decide
@@ -55,9 +68,9 @@ concourse_node_web                          : False
 concourse_node_worker                       : False
 
 ## Management
-concourseci_manage_url                      : "{{ concourse_web_options['CONCOURSE_EXTERNAL_URL'] | default('http://127.0.0.1:8080') }}"
-concourseci_manage_credential_user          : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_USERNAME'] }}"
-concourseci_manage_credential_password      : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_PASSWORD'] }}"
+concourseci_manage_url                      : "{{ default_concourse_web_options['CONCOURSE_EXTERNAL_URL'] | default('http://127.0.0.1:8080') }}"
+concourseci_manage_credential_user          : "{{ default_concourse_web_options['CONCOURSE_BASIC_AUTH_USERNAME'] }}"
+concourseci_manage_credential_password      : "{{ default_concourse_web_options['CONCOURSE_BASIC_AUTH_PASSWORD'] }}"
 
 ### Management Teams
 concourseci_manage_teams                    : False

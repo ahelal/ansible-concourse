@@ -2,7 +2,7 @@
 # {{ ansible_managed }}
 
 # Config
-{% for option, value in concourse_web_options.items() %}
+{% for option, value in (default_concourse_web_options|combine(concourse_web_options)).items() %}
 export {{ option }}="{{ value }}"
 {% endfor %}
 
