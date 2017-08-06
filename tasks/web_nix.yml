@@ -8,10 +8,13 @@
   notify:
     - restart concourse-web
 
+- debug:
+    var=concourse_web_options_combined['CONCOURSE_SESSION_SIGNING_KEY']
+
 - name: web | Copy session public key
   copy:
     content="{{ concourseci_key_session_public }}"
-    dest="{{ concourse_web_options['CONCOURSE_SESSION_SIGNING_KEY'] | default(default_concourse_web_options['CONCOURSE_SESSION_SIGNING_KEY']) }}.pub"
+    dest="{{ concourse_web_options_combined['CONCOURSE_SESSION_SIGNING_KEY'] }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -21,7 +24,7 @@
 - name: web | Copy session private key
   copy:
     content="{{ concourseci_key_session_private }}"
-    dest="{{ concourse_web_options['CONCOURSE_SESSION_SIGNING_KEY'] | default(default_concourse_web_options['CONCOURSE_SESSION_SIGNING_KEY']) }}"
+    dest="{{ concourse_web_options_combined['CONCOURSE_SESSION_SIGNING_KEY'] }}"
     mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -32,7 +35,7 @@
 - name: web | Copy tsa private key
   copy:
     content="{{ concourseci_key_tsa_private }}"
-    dest="{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] | default(default_concourse_web_options['CONCOURSE_TSA_HOST_KEY']) }}"
+    dest="{{ concourse_web_options_combined['CONCOURSE_TSA_HOST_KEY'] }}"
     mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -44,7 +47,7 @@
   authorized_key:
     user: "{{ concourseci_user }}"
     key: "{{ item.public }}"
-    path: "{{ concourse_web_options['CONCOURSE_TSA_AUTHORIZED_KEYS'] | default(default_concourse_web_options['CONCOURSE_TSA_AUTHORIZED_KEYS']) }}"
+    path: "{{ concourse_web_options_combined['CONCOURSE_TSA_AUTHORIZED_KEYS'] }}"
     manage_dir: no
   with_items: "{{ concourseci_worker_keys }}"
   notify:

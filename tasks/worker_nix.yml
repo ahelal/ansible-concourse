@@ -11,7 +11,7 @@
 - name: worker | Copy session public key
   copy:
     content="{{ concourseci_key_session_public }}"
-    dest="{{ concourse_worker_options['CONCOURSE_SESSION_SIGNING_KEY'] | default(default_concourse_worker_options['CONCOURSE_SESSION_SIGNING_KEY']) }}.pub"
+    dest="{{ concourse_worker_options_combined['CONCOURSE_SESSION_SIGNING_KEY'] }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -21,7 +21,7 @@
 - name: worker | Copy tsa public key
   copy:
     content="{{ concourseci_key_tsa_public }}"
-    dest="{{ concourse_worker_options['CONCOURSE_TSA_HOST_KEY'] | default(default_concourse_worker_options['CONCOURSE_TSA_HOST_KEY']) }}.pub"
+    dest="{{ concourse_worker_options_combined['CONCOURSE_TSA_HOST_KEY'] }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -31,7 +31,7 @@
 - name: worker | Copy worker public key
   copy:
     content="{{ concourseci_key_worker_public }}"
-    dest="{{ concourse_worker_options['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] | default(default_concourse_worker_options['CONCOURSE_TSA_WORKER_PRIVATE_KEY']) }}.pub"
+    dest="{{ concourse_worker_options_combined['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}.pub"
     mode="0644"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"
@@ -39,7 +39,7 @@
 - name: worker | Copy worker private key
   copy:
     content="{{ concourseci_key_worker_private }}"
-    dest="{{ concourse_worker_options['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] | default(default_concourse_worker_options['CONCOURSE_TSA_WORKER_PRIVATE_KEY']) }}"
+    dest="{{ concourse_worker_options_combined['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
     mode="0600"
     owner="{{ concourseci_user }}"
     group="{{ concourseci_group }}"

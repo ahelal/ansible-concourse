@@ -1,11 +1,13 @@
-# ansible-concourse [![Build Status](https://travis-ci.org/ahelal/ansible-concourse.svg?branch=master)](https://travis-ci.org/ahelal/ansible-concourse)
+# ansible-concourse
+
+[![Build Status](https://travis-ci.org/ahelal/ansible-concourse.svg?branch=master)](https://travis-ci.org/ahelal/ansible-concourse)
 
 An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
 
 ## Note breaking changes as of version v3.0.0
 
 As of version 3.0.0 of this role all options for web and worker are supported, but you need to adapt to the new config style.
-Please look at [config section](https://github.com/ahelal/ansible-concourse#config).
+Please look at [configuration section](https://github.com/ahelal/ansible-concourse#configuration).
 
 ## Requirements
 
@@ -18,7 +20,7 @@ Supported platforms:
 * MacOS (Early support. Accepting PRs)
 * Windows (not supported yet. Accepting PRs)
 
-Optional TLS termination:
+Optional TLS termination
 
 * Use concourse web argument to configure TLS (recommended)
 * [ansible nginx role](https://github.com/AutomationWithAnsible/ansible-nginx)
@@ -36,6 +38,44 @@ I am a big fan of concourse CI, not so much bosh. This role will install concour
 - name: Create Single node host
   hosts: ci.example.com
   become: True
+  vars:
+    concourse_web_options:
+      CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
+      # Set your own password and save it securely in vault
+      CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD"
+      # Set your own password and save it securely in vault
+      CONCOURSE_POSTGRES_DATABASE                : "concourse"
+      CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
+      CONCOURSE_POSTGRES_PASSWORD                : "conpass"
+      CONCOURSE_POSTGRES_SSLMODE                 : "disable"
+      CONCOURSE_POSTGRES_USER                    : "concourseci"
+    # ********************* Example Keys (YOU MUST OVERRIDE THEM) *********************
+    # This keys are demo keys. generate your own and store them safely i.e. ansible-vault
+    # Check the key section on how to auto generate keys.
+    # **********************************************************************************
+    concourseci_key_session_public             : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6tKH.....
+    concourseci_key_session_private            : |
+                                                  -----BEGIN RSA PRIVATE KEY-----
+                                                  MIIEowIBAAKCAQEAurSh5kbUadGuUgHqm1ct6SUrqFkH5kyJNdOjHdWxoxCzw5I9
+                                                  ................................
+                                                  N1EQdIhtxo4mgHXjF/8L32SqinAJb5ErNXQQwT5k9G22mZkHZY7Y
+                                                  -----END RSA PRIVATE KEY-----
+
+    concourseci_key_tsa_public                  : ssh-rsa AAAAB3NzaC1yc2EAAAADAQ......
+    concourseci_key_tsa_private                 : |
+                                                  -----BEGIN RSA PRIVATE KEY-----
+                                                  MIIEogIBAAKCAQEAo3XY74qhdwY1Z8a5XnTbCjNMJu28CcEYJ1KJi1a8B143wKxM
+                                                  .........
+                                                  uPTcE+vQzvMV3lJo0CHTlNMo1JgHOO5UsFZ1cBxO7MZXCzChGE8=
+                                                  -----END RSA PRIVATE KEY-----
+    concourseci_worker_keys                     :
+                                  - public      : ssh-rsa AAAAB3N.....
+                                    private     : |
+                                                    -----BEGIN RSA PRIVATE KEY-----
+                                                    MIIEpQIBAAKCAQEAylt9UCFnAkdhofItX6HQzx6r4kFeXgFu2b9+x87NUiiEr2Hi
+                                                   .......
+                                                    ZNJ69MjK2HDIBIpqFJ7jnp32Dp8wviHXQ5e1PJQxoaXNyubfOs1Cpa0=
+                                                    -----END RSA PRIVATE KEY-----
   roles:
     - { name: "postgresql",        tags: "postgresql" }
     - { name: "ansible-concourse", tags: "concourse"  }
@@ -50,25 +90,8 @@ ci.example.com
 
 ## Clustered nodes 2x web & 4x worker
 
-```yaml
----
-- name: Create web nodes
-  hosts: concourse-web
-  become: True
-  roles:
-    - { name: "ansible-concourse", tags: "concourse"  }
-```
-
-```yaml
----
-- name: Create worker nodes
-  hosts: concourse-worker
-  become: True
-  roles:
-    - { name: "ansible-concourse", tags: "concourse"  }
-```
-
 In order to make a cluster of servers you can easily add the host to groups
+
 ```ini
 [concourse-web]
 ci-web01.example.com
@@ -89,68 +112,33 @@ All command line options are now supported as of ansible-concourse version 3.0.0
 
 The configuration is split between two dictionaries *concourse_web_options* and *concourse_worker_options* all key values defined will be exported as an environmental variable to concourse process.
 
-### Web or Worker node
-
-**Options 1 Groups :**
-You can use ansible groups to assign a node a role by default *concourse-web* and *concourse-worker*
-
-if you want to use different group name override default variable
-
 ```yaml
-concourseci_web_group                       : "THE_WEB"
-concourseci_worker_group                    : "THE_WORKER"
-```
-
-And this is how your inventory file would look.
-
-```ìni
-[THE_WEB]
-ci.example.com
-[THE_WORKER]
-ci.example.com
-```
-
-**Options 2 flags :**
-Simply set that  `concourse_node_web: True` and/or `concourse_node_worker: True` depending on your node
-
-### default config
-
-i.e. simplest working configuration
-
-```yaml
-# Web config
 concourse_web_options                        :
-
-  CONCOURSE_BIND_IP                          : "0.0.0.0"
-  CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group if you have multipule web you might need to use index of the group
-  CONCOURSE_TSA_BIND_IP                      : "0.0.0.0"
-  CONCOURSE_TSA_BIND_PORT                    : "2222"
-  CONCOURSE_TSA_AUTHORIZED_KEYS              : "{{ concourseci_ssh_dir }}/tsa_authorization"
-  CONCOURSE_TSA_HOST_KEY                     : "{{ concourseci_ssh_dir }}/tsa"
-  CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
-  CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
-  CONCOURSE_BASIC_AUTH_PASSWORD              : "{{ SUPER_USER_ENCRYPTED_PASS_IN_VAULT }}"
-  CONCOURSE_POSTGRES_DATA_SOURCE             : "postgres://concourseci:{{ SUPER_DB_ENCRYPTED_PASS_IN_VAULT }}@127.0.0.1/concourse?sslmode=disable"
+  CONCOURSE_BASIC_AUTH_USERNAME              : "apiuser"
+  CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD_AND_USEVAULT"
+  CONCOURSE_POSTGRES_DATABASE                : "concourse"
+  CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
+  CONCOURSE_POSTGRES_PASSWORD                : "NO_PLAIN_TEXT_USE_VAUÖT"
+  CONCOURSE_POSTGRES_SSLMODE                 : "disable"
+  CONCOURSE_POSTGRES_USER                    : "concourseci"
 
 concourse_worker_options                     :
-  CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
-  CONCOURSE_NAME                             : "{{ inventory_hostname }}"
-  CONCOURSE_TSA_HOST                         : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] }}"
-  CONCOURSE_TSA_PORT                         : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] }}"
-  CONCOURSE_TSA_WORKER_PRIVATE_KEY           : "{{ concourseci_ssh_dir }}/worker"
-  CONCOURSE_TSA_PUBLIC_KEY                   : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] }}.pub"                  :
+  CONCOURSE_GARDEN_NETWORK_POOL              : "10.254.0.0/22"
+  CONCOURSE_GARDEN_MAX_CONTAINERS            : 150
 ```
 
-To view all environment options please check
+To view all environmental options please check
 [web options](web_arguments.txt) and [worker options](worker_arguments.txt).
+
+ansible-concourse has some sane defaults defined `concourse_web_options_default` and `concourse_worker_options_default` in [default.yml](default.yml) those default will merge with `concourse_web_option` and `concourse_worker_option`. `concourse_web_option` and `concourse_worker_option`has higher precedence.
+
 
 ## Concourse versions
 
-This role supports installation of release candidate and final releases.
+This role supports installation of release candidate and final releases. Simply overriding **concourseci_version** with desired version.
 
-Simply Overriding **concourseci_version** with a [release candidate](https://github.com/concourse/bin/releases/) i.e. ```concourseci_version : "vx.x.x-rc.xx"``` that will install release candidate.
-
-For final release use [final release](https://github.com/concourse/concourse/releases) i.e. ```concourseci_version : "vx.x.x"```
+* Fpr [rc](https://github.com/concourse/bin/releases/). `concourseci_version : "vx.x.x-rc.xx"` that will install release candidate.
+* For [final release](https://github.com/concourse/concourse/releases). ```concourseci_version : "vx.x.x"```
 
 By default this role will try to have the latest stable release look at [defaults/main.yml](https://github.com/ahelal/ansible-concourse/blob/master/defaults/main.yml#L2-L3)
 
@@ -224,8 +212,17 @@ The role supports all arguments passed to fly for more info  `fly set-team --hel
 
 ## vagrant demo
 
-You can use vagrant to spin a test machine. ```vagrant up```. The vagrant machine will have an IP of **192.168.50.150**.
-You can access the web and API on port 8080 with username **myuser** and **mypass** Once your done ```vagrant destroy```
+You can use vagrant to spin a test machine. ```vagrant up```
+
+The vagrant machine will have an IP of **192.168.50.150**
+
+You can access the web and API on port 8080 with username **myuser** and **mypass**
+
+Once your done
+
+```
+vagrant destroy
+```
 
 ## TODO
 

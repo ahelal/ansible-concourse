@@ -17,11 +17,11 @@
 
 - name: Manage web node
   include: web_nix.yml
-  when: "(groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin')) or concourse_node_web"
+  when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin')"
 
 - name: Manage worker node
   include: worker_nix.yml
-  when: "(groups[concourseci_worker_group] is defined and inventory_hostname in groups[concourseci_worker_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin')) or concourse_node_worker"
+  when: "groups[concourseci_worker_group] is defined and inventory_hostname in groups[concourseci_worker_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin')"
 
 - name: Flush handlers
   meta: flush_handlers
