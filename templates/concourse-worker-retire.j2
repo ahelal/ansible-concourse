@@ -24,9 +24,7 @@ for x in $(seq $MAX_TRIES); do
   sleep 10
 done
 
-if [[ $worker_found -ne 0 ]] ; then
-	echo "worker successfully retired" | tee -a {{ concourseci_log_worker }}
-else
+if [[ $worker_found -e 0 ]] ; then
 	echo "worker retirement timed out" | tee -a {{ concourseci_log_worker }}
 	exit 1
 fi
