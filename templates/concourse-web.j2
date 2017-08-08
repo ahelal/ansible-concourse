@@ -8,7 +8,6 @@ export {{ option }}="{{ value }}"
 
 echo "" >> {{ concourseci_log_web }}
 echo "$(date) starting " >> {{ concourseci_log_web }}
-env | grep CONCOURSE  >> {{ concourseci_log_web }}
 
 ## Exec web
 exec {{ concourseci_bin_dir }}/concourse web >> {{ concourseci_log_web }} 2>&1
