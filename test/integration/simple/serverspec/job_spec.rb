@@ -20,16 +20,16 @@ describe command('/usr/local/bin/fly -t kitchen builds | grep simple_failure') d
   end
 end
 
-# describe command('/usr/local/bin/fly -t kitchen builds | grep succeeded | wc -l') do
-#   it 'some concourse pipelines should be succeeded' do
-#     expect(subject.stdout).to match('2')
-#     expect(subject.exit_status).to eq(0)
-#   end
-# end
+describe command('/usr/local/bin/fly -t kitchen builds | grep simple_success | head -1 | awk \'{ print $4 }\'') do
+  it 'simple_success pipelines should be succeeded' do
+    expect(subject.stdout).to match('succeeded')
+    expect(subject.exit_status).to eq(0)
+  end
+end
 
-# describe command('/usr/local/bin/fly -t kitchen builds | grep failed | wc -l') do
-#   it 'some concourse pipelines should be failed' do
-#     expect(subject.stdout).to match('2')
-#     expect(subject.exit_status).to eq(0)
-#   end
-# end
+describe command('/usr/local/bin/fly -t kitchen builds | grep simple_failure | head -1 | awk \'{ print $4 }\'') do
+  it 'simple_success pipelines should be failed' do
+    expect(subject.stdout).to match('failed')
+    expect(subject.exit_status).to eq(0)
+  end
+end

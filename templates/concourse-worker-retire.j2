@@ -9,8 +9,8 @@ export CONCOURSE_TSA_WORKER_PRIVATE_KEY="{{ concourse_worker_options_combined['C
 
 echo "$(date) I AM being retired :( " | tee -a {{ concourseci_log_worker }}
 
-# Exec retire-worker
-exec {{ concourseci_bin_dir }}/concourse retire-worker >> {{ concourseci_log_worker }} 2>&1
+# Run retire-worker
+{{ concourseci_bin_dir }}/concourse retire-worker | tee -a {{ concourseci_log_worker }} 2>&1
 
 MAX_TRIES=5
 # Loop at most $MAX_TRIES untill worker is retired
