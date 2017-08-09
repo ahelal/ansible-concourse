@@ -208,7 +208,7 @@ The role supports all arguments passed to fly for more info  `fly set-team --hel
 ## Auto scaling
 
 * Scaling out: Is simple just add a new instance :)
-* Scaling in: You would need to drain the worker first by running `/opt/concourseci/bin/concourse-worker-retire`
+* Scaling in: You would need to drain the worker first by running `service concourse-worker retire`
 
 ## vagrant demo
 
