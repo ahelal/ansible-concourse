@@ -12,13 +12,21 @@ echo "$(date) I AM being retired :( " | tee -a {{ concourseci_log_worker }}
 # Exec retire-worker
 exec {{ concourseci_bin_dir }}/concourse retire-worker >> {{ concourseci_log_worker }} 2>&1
 
-# Loop till worker retire
-while true; do
-  {{ concourseci_bin_dir }}/fly -t manage workers | grep ${CONCOURSE_NAME}
-  if [ "$?" -ne 0 ]; then
+MAX_TRIES=5
+# Loop at most $MAX_TRIES untill worker is retired
+for x in $(seq $MAX_TRIES); do
+  {{ concourseci_bin_dir }}/fly -t manage workers | cut -d ' ' -f1 | grep "^${CONCOURSE_NAME}$"
+  worker_found=$?
+  if [ $worker_found -ne 0 ] ; then
     echo "$(date) officially Retired" | tee -a {{ concourseci_log_worker }}
     break
   fi
   echo "$(date) still working. I will try again in 10s" | tee -a {{ concourseci_log_worker }}
   sleep 10
 done
+
+if [ $worker_found -eq 0 ] ; then
+  echo "worker retirement timed out" | tee -a {{ concourseci_log_worker }}
+  exit 1
+fi
+

@@ -20,6 +20,7 @@ BASE_DIR="{{ concourseci_bin_dir }}"
 GREP_NAME="{{ concourseci_bin_dir }}/concourse worker"
 
 RUN_CMD="{{ concourseci_bin_dir }}/concourse-worker"
+RETIRE_CMD="{{ concourseci_bin_dir }}/concourse-worker-retire"
 DAEMON_OPTS=""
 
 STOPCMD="kill -9"
@@ -38,6 +39,8 @@ start() {
     if  [ -n "$PID" ] ; then
         echo "$NAME is already running (PID: $PID)"
     else
+        echo -n  "Retiring worker in case stale worker left over from unexpected restart..."
+        $RETIRE_CMD
         echo -n  "Starting $NAME "
         [ $IGNORE_PLAY_PID  == 1 ] && rm -f $BASE_DIR/RUNNING_PID
         #Start quite background uid and gid
@@ -82,7 +85,8 @@ stop() {
             echo "[ FAILED ]"
             exit 1
         else
-            echo "[ OK ]"
+            echo "[ OK ] retiring worker ..."
+            $RETIRE_CMD
         fi
     else
         echo "$NAME not running."
