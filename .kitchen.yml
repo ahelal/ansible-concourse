@@ -4,6 +4,7 @@ driver                      :
     socket                  : unix:///var/run/docker.sock
     use_sudo                : false
     privileged              : true
+    volume                  : /opt/concourseci/worker
 
 verifier                    :
   name                      : serverspec

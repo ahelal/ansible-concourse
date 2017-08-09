@@ -13,9 +13,6 @@
   hosts: all
   become: True
   vars  :
-    concourse_worker_options:
-      CONCOURSE_BAGGAGECLAIM_DRIVER              : "naive"
-
     concourse_web_options:
       CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
       # Set your own password and save it securely in vault
