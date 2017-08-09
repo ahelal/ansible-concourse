@@ -2,31 +2,47 @@
 # {{ ansible_managed }}
 set -e
 
-export CONCOURSE_NAME="{{ concourse_worker_options_combined['CONCOURSE_NAME'] | default('`hostname`') }}"
+## Retire config
+export CONCOURSE_NAME="{{ concourse_worker_options_combined['CONCOURSE_NAME'] | default('$(hostname)') }}"
 export CONCOURSE_TSA_HOST="{{ concourse_web_options_combined['CONCOURSE_TSA_HOST'] }}"
+export CONCOURSE_TSA_PORT="{{ concourse_web_options_combined['CONCOURSE_TSA_PORT'] | default('2222') }}"
 export CONCOURSE_TSA_PUBLIC_KEY="{{ concourse_worker_options_combined['CONCOURSE_TSA_HOST_KEY'] }}.pub"
 export CONCOURSE_TSA_WORKER_PRIVATE_KEY="{{ concourse_worker_options_combined['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
 
-echo "$(date) I AM being retired :( " | tee -a {{ concourseci_log_worker }}
+## Helper variables
+CONCOURSE_BIN_DIR="{{ concourseci_bin_dir }}"
+CONCOURSE_LOG_FILE="{{ concourseci_log_worker }}"
+SLEEP=5
+MAX_TRIES=12
+temp_file="$(mktemp -d)/retire.log"
 
-# Run retire-worker
-{{ concourseci_bin_dir }}/concourse retire-worker | tee -a {{ concourseci_log_worker }} 2>&1
+log(){
+  echo "$(date) ${1}" >> "${CONCOURSE_LOG_FILE}"
+}
 
-MAX_TRIES=5
+exit_clean_up(){
+  rm "${temp_file}"
+  exit "${1}"
+}
+
 # Loop at most $MAX_TRIES untill worker is retired
-for x in $(seq $MAX_TRIES); do
-  {{ concourseci_bin_dir }}/fly -t manage workers | cut -d ' ' -f1 | grep "^${CONCOURSE_NAME}$"
-  worker_found=$?
-  if [ $worker_found -ne 0 ] ; then
-    echo "$(date) officially Retired" | tee -a {{ concourseci_log_worker }}
-    break
+for i in $(seq $MAX_TRIES); do
+  "${CONCOURSE_BIN_DIR}"/concourse retire-worker > "${temp_file}" 2>&1
+  if grep "retire-worker.worker-not-found" "${temp_file}" > /dev/null 2>&1; then
+    log "Officially retired ${CONCOURSE_NAME} worker"
+    exit_clean_up 0
+  elif grep "error" "${temp_file}" > /dev/null 2>&1; then
+    log "Got an error while retiring ${CONCOURSE_NAME}"
+    cat "${temp_file}" >> "${CONCOURSE_LOG_FILE}"
+    exit_clean_up 1
+  else
+    echo -n "."
+    log "Still waiting #${i}. I will try again in ${SLEEP}"
+    sleep ${SLEEP}
   fi
-  echo "$(date) still working. I will try again in 10s" | tee -a {{ concourseci_log_worker }}
-  sleep 10
 done
 
-if [ $worker_found -eq 0 ] ; then
-  echo "worker retirement timed out" | tee -a {{ concourseci_log_worker }}
-  exit 1
-fi
-
+# if we reached here timeout
+log "timeout after ${CONCOURSE_NAME}"
+cat "${temp_file}" >> "${CONCOURSE_LOG_FILE}"
+exit_clean_up 124
