@@ -82,7 +82,7 @@ start() {
 
 stop() {
     if [ -n "$(PROG_PID)" ]; then
-        echo -n  "Retirirng/Stoppping ${NAME} "
+        echo -n  "Retiring/Stopping ${NAME} "
         # let us just retire work
         retire_worker "nofail"
         # at this point let us just kill it if it still alive
@@ -102,7 +102,7 @@ stop() {
 
 retire() {
     # loop infinitely till wil retire
-    echo -n  "Retirirng ${NAME} "
+    echo -n  "Retiring ${NAME} "
     while true
     do
         retire_worker "nofail"
