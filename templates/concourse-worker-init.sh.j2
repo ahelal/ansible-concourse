@@ -118,7 +118,7 @@ retire() {
 status() {
     PID=$(PROG_PID)
     if [ -n "${PID}" ]; then
-        echo "$NAME is running with PID:${PID}"
+        echo "${NAME} is running with PID:${PID}"
     else
         echo "${NAME} is not running"
     fi
