@@ -10,8 +10,8 @@
 ### END INIT INFO
 # {{ ansible_managed }}
 
-NAME="con-web"
-DESC="concourse-web"
+NAME="ConcourseWeb"
+DESC="Concourse-Web"
 
 RUN_AS_USER="{{ concourseci_user }}"
 RUN_AS_GROUP="{{ concourseci_group }}"
@@ -20,40 +20,34 @@ BASE_DIR="{{ concourseci_bin_dir }}"
 GREP_NAME="{{ concourseci_bin_dir }}/concourse web"
 
 RUN_CMD="{{ concourseci_bin_dir }}/concourse-web"
-DAEMON_OPTS=""
 
-STOPCMD="kill -9"
-#How many sec to wait before checking if proc is up
-SLEEP_FOR=2
-
-IGNORE_PLAY_PID=1
+ATTEMPTS_TO_CHECK_PID=4
 
 PROG_PID() {
-    check_prog=$(ps aux| grep -e "$GREP_NAME" | grep -v grep | awk '{ print $2 }' )
-    echo $check_prog
+    check_prog=$(ps aux | grep -e "${GREP_NAME}" | grep -v grep | awk '{ print $2 }' )
+    echo ${check_prog}
+}
+
+SLEEP_FOR_WHILE(){
+    for i in $(seq ${ATTEMPTS_TO_CHECK_PID}); do
+        sleep 1
+        echo -n "."
+    done
 }
 
 start() {
     PID=$(PROG_PID)
-    if  [ -n "$PID" ] ; then
-        echo "$NAME is already running (PID: $PID)"
+    if  [ -n "${PID}" ] ; then
+        echo "${NAME} is already running (PID: ${PID})"
     else
         echo -n  "Starting $NAME "
-        [ $IGNORE_PLAY_PID  == 1 ] && rm -f $BASE_DIR/RUNNING_PID
-        #Start quite background uid and gid
-        start-stop-daemon --start --background --name $NAME --chdir $BASE_DIR --chuid $RUN_AS_USER --group $RUN_AS_GROUP --exec $RUN_CMD
 
-        [ "$?" -ne 0 ] && echo "[ FAILED ]" && exit 1
-        let kwait=$SLEEP_FOR
-        count=0;
-        until [ $count -gt $kwait ]
-        do
-            echo -n "."
-            sleep 1
-            let count=$count+1;
-        done
-        PID=$(PROG_PID)
-        if [ -n "$PID" ]; then
+        #Start quite background uid and gid
+        start-stop-daemon --start --background --name ${NAME} --chdir ${BASE_DIR} --chuid ${RUN_AS_USER} \
+                          --group ${RUN_AS_GROUP} --exec ${RUN_CMD} || echo "[ FAILED ]" || exit 1
+
+        SLEEP_FOR_WHILE
+        if [ -n "$(PROG_PID)" ]; then
             echo "[ OK ]"
         else
             echo "[ FAILED ]"
@@ -64,37 +58,28 @@ start() {
 
 stop() {
     PID=$(PROG_PID)
-    if [ -n "$PID" ]; then
-        echo -n  "Stoping $NAME "
-        kill -9 $PID
-        [ "$?" -ne 0 ] && echo "[ FAILED ]" && exit 1
+    if [ -n "${PID}" ]; then
+        echo -n  "Stoping ${NAME} "
+        kill -9 ${PID} || /bin/true
 
-        let kwait=$SLEEP_FOR
-        count=0;
-        until [ $count -gt $kwait ]
-        do
-          echo -n ".";
-          sleep 1
-          let count=$count+1;
-        done
-        PID=$(PROG_PID)
-        if [ -n "$PID" ]; then
+        SLEEP_FOR_WHILE
+        if [ -n "$(PROG_PID)" ]; then
             echo "[ FAILED ]"
             exit 1
         else
             echo "[ OK ]"
         fi
     else
-        echo "$NAME not running."
+        echo "${NAME} not running."
     fi
 }
 
 status() {
     PID=$(PROG_PID)
-    if [ -n "$PID" ]; then
-        echo "$NAME is running with PID:$PID"
+    if [ -n "${PID}" ]; then
+        echo "${NAME} is running with PID:${PID}"
     else
-        echo "$NAME is not running"
+        echo "${NAME} is not running"
     fi
 }
 

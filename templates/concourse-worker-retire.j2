@@ -25,21 +25,28 @@ exit_clean_up(){
   exit "${1}"
 }
 
+log "Starting $0"
+
 # Loop at most $MAX_TRIES untill worker is retired
 for i in $(seq $MAX_TRIES); do
+  set +e
   "${CONCOURSE_BIN_DIR}"/concourse retire-worker > "${temp_file}" 2>&1
-  if grep "retire-worker.worker-not-found" "${temp_file}" > /dev/null 2>&1; then
-    log "Officially retired ${CONCOURSE_NAME} worker"
-    exit_clean_up 0
-  elif grep "error" "${temp_file}" > /dev/null 2>&1; then
+  rc="$?"
+  set -e
+  if [ "${rc}" -eq 0 ]; then
+    if grep "retire-worker.worker-not-found" "${temp_file}" > /dev/null 2>&1; then
+      log "Officially retired ${CONCOURSE_NAME} worker"
+      exit_clean_up 0
+    else
+      echo -n "."
+      log "Still waiting #${i}. I will try again in ${SLEEP}"
+      sleep ${SLEEP}
+    fi
+  else
     log "Got an error while retiring ${CONCOURSE_NAME}"
     cat "${temp_file}" >> "${CONCOURSE_LOG_FILE}"
     exit_clean_up 1
-  else
-    echo -n "."
-    log "Still waiting #${i}. I will try again in ${SLEEP}"
-    sleep ${SLEEP}
-  fi
+    fi
 done
 
 # if we reached here timeout

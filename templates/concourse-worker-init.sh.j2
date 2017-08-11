@@ -10,8 +10,8 @@
 ### END INIT INFO
 # {{ ansible_managed }}
 
-NAME="con-worker"
-DESC="concourse-worker"
+NAME="Worker"
+DESC="Concourse-Worker"
 
 RUN_AS_USER="root"
 RUN_AS_GROUP="root"
@@ -22,7 +22,7 @@ GREP_NAME="{{ concourseci_bin_dir }}/concourse worker"
 RUN_CMD="{{ concourseci_bin_dir }}/concourse-worker"
 RETIRE_CMD="{{ concourseci_bin_dir }}/concourse-worker-retire"
 
-ATTEMPTS_TO_CHECK_PID=3
+ATTEMPTS_TO_CHECK_PID=5
 
 PROG_PID() {
     check_prog=$(ps aux | grep -e "${GREP_NAME}" | grep -v grep | awk '{ print $2 }' )
@@ -49,7 +49,7 @@ retire_worker(){
     return 1
  elif [ "${rc}" -eq 124 ] ; then
     echo "[ ERROR ]"
-    echo " Retire failed with an error. check worker logs"
+    echo " Retire failed timedout. check worker logs"
     exit 1
  else
     echo "[ FAILED ]"
@@ -82,7 +82,7 @@ start() {
 
 stop() {
     if [ -n "$(PROG_PID)" ]; then
-        echo -n  "Retiring/Stopping ${NAME} "
+        echo -n  "Retiring/Stoping ${NAME} "
         # let us just retire work
         retire_worker "nofail"
         # at this point let us just kill it if it still alive
