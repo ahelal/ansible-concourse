@@ -1,35 +1,50 @@
 require_relative '../../helper_spec.rb'
 
-# describe command('while /usr/local/bin/fly -t kitchen builds | grep started > /dev/null; do echo "jobs still running"; sleep 2; done') do
-#   it 'No pending jobs' do
-#     expect(subject.exit_status).to eq(0)
-#   end
-# end
+fly = '/usr/local/bin/fly -t kitchen'
+builds = "#{fly} builds"
 
-describe command('/usr/local/bin/fly -t kitchen builds | grep simple_success') do
-  it 'simple_success are in the builds' do
-    expect(subject.stdout).to match('simple_success')
-    expect(subject.exit_status).to eq(0)
+describe 'simple_success job' do
+  describe command("#{builds} | grep simple_success") do
+    it 'simple_success are in the builds' do
+      expect(subject.stdout).to match('simple_success')
+      expect(subject.exit_status).to eq(0)
+    end
+  end
+
+  describe command("#{builds} | grep simple_success | head -1 | awk '{ print $4 }'") do
+    it 'simple_success pipelines should be succeeded' do
+      expect(subject.stdout).to match('succeeded')
+      expect(subject.exit_status).to eq(0)
+    end
+  end
+
+  describe command("#{fly} watch -b $(#{builds} | grep simple_success | head -1 | awk '{ print $1 }')") do
+    it 'simple_success pipelines log should have "I WILL SUCCESSED"' do
+      expect(subject.stdout).to match('I WILL SUCCESSED')
+      expect(subject.exit_status).to eq(0)
+    end
   end
 end
 
-describe command('/usr/local/bin/fly -t kitchen builds | grep simple_failure') do
-  it 'simple_failure are in the builds' do
-    expect(subject.stdout).to match('simple_failure')
-    expect(subject.exit_status).to eq(0)
+describe 'simple_failure job' do
+  describe command("#{builds} | grep simple_failure") do
+    it 'simple_failure are in the builds' do
+      expect(subject.stdout).to match('simple_failure')
+      expect(subject.exit_status).to eq(0)
+    end
   end
-end
 
-describe command('/usr/local/bin/fly -t kitchen builds | grep simple_success | head -1 | awk \'{ print $4 }\'') do
-  it 'simple_success pipelines should be succeeded' do
-    expect(subject.stdout).to match('succeeded')
-    expect(subject.exit_status).to eq(0)
+  describe command("#{builds} | grep simple_failure | head -1 | awk '{ print $4 }'") do
+    it 'simple_success pipelines should be failed' do
+      expect(subject.stdout).to match('failed')
+      expect(subject.exit_status).to eq(0)
+    end
   end
-end
 
-describe command('/usr/local/bin/fly -t kitchen builds | grep simple_failure | head -1 | awk \'{ print $4 }\'') do
-  it 'simple_success pipelines should be failed' do
-    expect(subject.stdout).to match('failed')
-    expect(subject.exit_status).to eq(0)
+  describe command("#{fly} watch -b $(#{builds} | grep simple_failure | head -1 | awk '{ print $1 }')") do
+    it 'simple_failure pipelines log should have "I WILL FAIL"' do
+      expect(subject.stdout).to match('I WILL FAIL')
+      expect(subject.exit_status).to eq(1)
+    end
   end
 end

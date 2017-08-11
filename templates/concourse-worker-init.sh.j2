@@ -10,8 +10,8 @@
 ### END INIT INFO
 # {{ ansible_managed }}
 
-NAME="con-worker"
-DESC="concourse-worker"
+NAME="Worker"
+DESC="Concourse-Worker"
 
 RUN_AS_USER="root"
 RUN_AS_GROUP="root"
@@ -21,42 +21,57 @@ GREP_NAME="{{ concourseci_bin_dir }}/concourse worker"
 
 RUN_CMD="{{ concourseci_bin_dir }}/concourse-worker"
 RETIRE_CMD="{{ concourseci_bin_dir }}/concourse-worker-retire"
-DAEMON_OPTS=""
 
-STOPCMD="kill -9"
-#How many sec to wait before checking if proc is up
-SLEEP_FOR=2
-
-IGNORE_PLAY_PID=1
+ATTEMPTS_TO_CHECK_PID=5
 
 PROG_PID() {
-    check_prog=$(ps aux| grep -e "$GREP_NAME" | grep -v grep | awk '{ print $2 }' )
-    echo $check_prog
+    check_prog=$(ps aux | grep -e "${GREP_NAME}" | grep -v grep | awk '{ print $2 }' )
+    echo "${check_prog}"
+}
+
+SLEEP_FOR_WHILE(){
+    for i in $(seq ${ATTEMPTS_TO_CHECK_PID}); do
+        sleep 1
+        echo -n "."
+    done
+}
+
+retire_worker(){
+ ${RETIRE_CMD}
+ rc="$?"
+ if [ "${rc}" -eq 0 ]; then
+    return 0
+ elif [ "${rc}" -eq 1 ]; then
+    echo "[ FAILED ]"
+    echo " Retire failed with an error. check worker logs"
+    exit 1
+ elif [ "${rc}" -eq 124 ] && [ "${1}" = "nofail" ] ; then
+    return 1
+ elif [ "${rc}" -eq 124 ] ; then
+    echo "[ ERROR ]"
+    echo " Retire failed timedout. check worker logs"
+    exit 1
+ else
+    echo "[ FAILED ]"
+    echo " Retire failed with an unexpected error. check worker logs"
+    exit 1
+ fi
 }
 
 start() {
     PID=$(PROG_PID)
-    if  [ -n "$PID" ] ; then
-        echo "$NAME is already running (PID: $PID)"
+    if  [ -n "${PID}" ] ; then
+        echo "${NAME} is already running (PID: ${PID})"
     else
-        echo -n  "Retiring worker in case stale worker left over from unexpected restart..."
-        $RETIRE_CMD
-        echo -n  "Starting $NAME "
-        [ $IGNORE_PLAY_PID  == 1 ] && rm -f $BASE_DIR/RUNNING_PID
-        #Start quite background uid and gid
-        start-stop-daemon --start --background --name $NAME --chdir $BASE_DIR --chuid $RUN_AS_USER --group $RUN_AS_GROUP --exec $RUN_CMD
+        echo -n  "Starting ${NAME} "
+        # Make sure to clean up if needed
+        retire_worker ""
 
-        [ "$?" -ne 0 ] && echo "[ FAILED ]" && exit 1
-        let kwait=$SLEEP_FOR
-        count=0;
-        until [ $count -gt $kwait ]
-        do
-            echo -n "."
-            sleep 1
-            let count=$count+1;
-        done
-        PID=$(PROG_PID)
-        if [ -n "$PID" ]; then
+        # Start quite background uid and gid
+        start-stop-daemon --start --background --name ${NAME} --chdir "${BASE_DIR}" --chuid ${RUN_AS_USER} \
+                          --group ${RUN_AS_GROUP} --exec "${RUN_CMD}" || echo "[ FAILED ]" || exit 1
+        SLEEP_FOR_WHILE
+        if [ -n "$(PROG_PID)" ]; then
             echo "[ OK ]"
         else
             echo "[ FAILED ]"
@@ -66,39 +81,46 @@ start() {
 }
 
 stop() {
-    PID=$(PROG_PID)
-    if [ -n "$PID" ]; then
-        echo -n  "Stoping $NAME "
-        kill -9 $PID
-        [ "$?" -ne 0 ] && echo "[ FAILED ]" && exit 1
+    if [ -n "$(PROG_PID)" ]; then
+        echo -n  "Retiring/Stoping ${NAME} "
+        # let us just retire work
+        retire_worker "nofail"
+        # at this point let us just kill it if it still alive
+        kill -9 "$(PROG_PID)" || /bin/true
 
-        let kwait=$SLEEP_FOR
-        count=0;
-        until [ $count -gt $kwait ]
-        do
-          echo -n ".";
-          sleep 1
-          let count=$count+1;
-        done
-        PID=$(PROG_PID)
-        if [ -n "$PID" ]; then
+        SLEEP_FOR_WHILE
+        if [ -n "$(PROG_PID)" ]; then
             echo "[ FAILED ]"
             exit 1
         else
-            echo "[ OK ] retiring worker ..."
-            $RETIRE_CMD
+            echo "[ OK ]"
         fi
     else
-        echo "$NAME not running."
+        echo "${NAME} not running."
     fi
+}
+
+retire() {
+    # loop infinitely till wil retire
+    echo -n  "Retiring ${NAME} "
+    while true
+    do
+        retire_worker "nofail"
+        rc="$?"
+        if [ "${rc}" -eq 0 ]; then
+            echo "[ Retired ]"
+            exit 0
+        fi
+        sleep 1
+    done
 }
 
 status() {
     PID=$(PROG_PID)
-    if [ -n "$PID" ]; then
-        echo "$NAME is running with PID:$PID"
+    if [ -n "${PID}" ]; then
+        echo "${NAME} is running with PID:${PID}"
     else
-        echo "$NAME is not running"
+        echo "${NAME} is not running"
     fi
 }
 
@@ -107,13 +129,15 @@ case "$1" in
         start ;;
  stop)
         stop ;;
+ retire)
+        retire ;;
  restart)
        stop
        start ;;
  status)
        status ;;
 *)
-        echo "Usage: $0 {start|stop|restart|status}"
+        echo "Usage: $0 {start|stop|retire|restart|status}"
         exit 1 ;;
 esac
 exit 0
