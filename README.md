@@ -224,6 +224,13 @@ Once your done
 vagrant destroy
 ```
 
+## Contribution
+
+Pull requests on GitHub are welcome on any issue.
+
+Thanks for all the [contrubtors](https://github.com/ahelal/ansible-concourse/graphs/contributors)
+
+
 ## TODO
 
 * Support pipeline upload
