@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ahelal/ansible-concourse.svg?branch=master)](https://travis-ci.org/ahelal/ansible-concourse)
 
-An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers vie ansible
+An easy way to deploy and manage a [Concourse CI](http://concourse.ci/) with a cluster of workers via ansible
 
 ## Note breaking changes as of version v3.0.0
 
@@ -16,9 +16,9 @@ Please look at [configuration section](https://github.com/ahelal/ansible-concour
 
 Supported platforms:
 
-* Ubuntu 14.04/16.04
-* MacOS (Early support. Accepting PRs)
-* Windows (not supported yet. Accepting PRs)
+* Ubuntu 16.04/14.04
+* MacOS (early support, accepting PRs)
+* Windows (not supported yet, accepting PRs)
 
 Optional TLS termination
 
@@ -223,13 +223,6 @@ Once your done
 ```
 vagrant destroy
 ```
-
-## Contribution
-
-Pull requests on GitHub are welcome on any issue.
-
-Thanks for all the [contrubtors](https://github.com/ahelal/ansible-concourse/graphs/contributors)
-
 
 ## TODO
 
