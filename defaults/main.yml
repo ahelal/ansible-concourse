@@ -17,6 +17,10 @@ concourseci_log_web                         : "{{ concourseci_log_dir }}/concour
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
 
+
+## Amount of tries to retire running worker when process management stops daemon
+concourseci_worker_retire_tries             : 10
+
 ## New config dictionary based.
 ## This dictionary is merged with 'concourse_web_options' dictionary, make your overrides there!
 ## e.g.

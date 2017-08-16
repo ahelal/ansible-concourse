@@ -22,7 +22,20 @@ GREP_NAME="{{ concourseci_bin_dir }}/concourse worker"
 RUN_CMD="{{ concourseci_bin_dir }}/concourse-worker"
 RETIRE_CMD="{{ concourseci_bin_dir }}/concourse-worker-retire"
 
-ATTEMPTS_TO_CHECK_PID=5
+## Retire config
+export CONCOURSE_NAME="{{ concourse_worker_options_combined['CONCOURSE_NAME'] | default('$(hostname)') }}"
+export CONCOURSE_TSA_HOST="{{ concourse_web_options_combined['CONCOURSE_TSA_HOST'] }}"
+export CONCOURSE_TSA_PORT="{{ concourse_web_options_combined['CONCOURSE_TSA_PORT'] | default('2222') }}"
+export CONCOURSE_TSA_PUBLIC_KEY="{{ concourse_worker_options_combined['CONCOURSE_TSA_HOST_KEY'] }}.pub"
+export CONCOURSE_TSA_WORKER_PRIVATE_KEY="{{ concourse_worker_options_combined['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
+
+## Helper variables
+CONCOURSE_BIN_DIR="{{ concourseci_bin_dir }}"
+CONCOURSE_LOG_FILE="{{ concourseci_log_worker }}"
+SLEEP=5
+#
+MAX_TRIES="{{ concourseci_worker_retire_tries }}"
+temp_file="$(mktemp -d)/retire.log"
 
 PROG_PID() {
     check_prog=$(ps aux | grep -e "${GREP_NAME}" | grep -v grep | awk '{ print $2 }' )
@@ -30,32 +43,73 @@ PROG_PID() {
 }
 
 SLEEP_FOR_WHILE(){
-    for i in $(seq ${ATTEMPTS_TO_CHECK_PID}); do
+    for i in $(seq 5); do
         sleep 1
         echo -n "."
     done
 }
 
+## Log to concourse log file
+#
+log(){
+  echo "$(date) ${1}" >> "${CONCOURSE_LOG_FILE}"
+}
+
 retire_worker(){
- ${RETIRE_CMD}
- rc="$?"
- if [ "${rc}" -eq 0 ]; then
-    return 0
- elif [ "${rc}" -eq 1 ]; then
-    echo "[ FAILED ]"
-    echo " Retire failed with an error. check worker logs"
-    exit 1
- elif [ "${rc}" -eq 124 ] && [ "${1}" = "nofail" ] ; then
-    return 1
- elif [ "${rc}" -eq 124 ] ; then
+    log "Starting retire function ..."
+    # Loop at most $MAX_TRIES until worker is retired
+    for i in $(seq 3); do
+        "${CONCOURSE_BIN_DIR}"/concourse retire-worker > "${temp_file}" 2>&1
+        rc="$?"
+        if [ "${rc}" -eq 0 ]; then
+            if grep "retire-worker.worker-not-found" "${temp_file}" > /dev/null 2>&1; then
+                log "Officially retired ${CONCOURSE_NAME} worker"
+                rm "${temp_file}"
+                return 0
+            else
+                echo -n "."
+                log "Still waiting #${i}. I will try again in ${SLEEP}"
+                sleep ${SLEEP}
+            fi
+        else
+            log "Got an error while retiring ${CONCOURSE_NAME}"
+            cat "${temp_file}" >> "${CONCOURSE_LOG_FILE}"
+            rm "${temp_file}"
+            return 1
+        fi
+    done
+
+    # if we reached here timeout
+    log "timeout after ${CONCOURSE_NAME}"
+    cat "${temp_file}" >> "${CONCOURSE_LOG_FILE}"
+    rm "${temp_file}"
+    return 124
+}
+
+retire_initd_interface(){
+    for i in $(seq ${MAX_TRIES}); do
+        set +e
+        retire_worker
+        rc="$?"
+        set -e
+        if [ "${rc}" -eq 0 ]; then
+            return 0
+        elif [ "${rc}" -eq 1 ]; then
+            echo "[ FAILED ]"
+            echo " Retire failed with an error. Check worker logs"
+            exit 1
+        elif [ "${rc}" -eq 124 ]; then
+            continue
+        else
+            echo "[ FAILED ]"
+            echo " Retire failed with an unexpected error. Check worker logs"
+            exit 1
+        fi
+    done
+
     echo "[ ERROR ]"
-    echo " Retire failed timedout. check worker logs"
+    echo " Retire failed timed out. Check worker logs"
     exit 1
- else
-    echo "[ FAILED ]"
-    echo " Retire failed with an unexpected error. check worker logs"
-    exit 1
- fi
 }
 
 start() {
@@ -65,7 +119,7 @@ start() {
     else
         echo -n  "Starting ${NAME} "
         # Make sure to clean up if needed
-        retire_worker ""
+        retire_initd_interface
 
         # Start quite background uid and gid
         start-stop-daemon --start --background --name ${NAME} --chdir "${BASE_DIR}" --chuid ${RUN_AS_USER} \
@@ -82,9 +136,9 @@ start() {
 
 stop() {
     if [ -n "$(PROG_PID)" ]; then
-        echo -n  "Retiring/Stoping ${NAME} "
+        echo -n "Retiring/Stopping ${NAME} "
         # let us just retire work
-        retire_worker "nofail"
+        retire_initd_interface
         # at this point let us just kill it if it still alive
         kill -9 "$(PROG_PID)" || /bin/true
 
@@ -98,21 +152,6 @@ stop() {
     else
         echo "${NAME} not running."
     fi
-}
-
-retire() {
-    # loop infinitely till wil retire
-    echo -n  "Retiring ${NAME} "
-    while true
-    do
-        retire_worker "nofail"
-        rc="$?"
-        if [ "${rc}" -eq 0 ]; then
-            echo "[ Retired ]"
-            exit 0
-        fi
-        sleep 1
-    done
 }
 
 status() {
@@ -129,15 +168,13 @@ case "$1" in
         start ;;
  stop)
         stop ;;
- retire)
-        retire ;;
  restart)
        stop
        start ;;
  status)
        status ;;
 *)
-        echo "Usage: $0 {start|stop|retire|restart|status}"
+        echo "Usage: $0 {start|stop|restart|status}"
         exit 1 ;;
 esac
 exit 0
