@@ -68,7 +68,7 @@ retire_worker(){
                 return 0
             else
                 echo -n "."
-                log "Still waiting #${i}. I will try again in ${SLEEP}"
+                log "Still waiting. I will try again in ${SLEEP} seconds."
                 sleep ${SLEEP}
             fi
         else
@@ -80,7 +80,7 @@ retire_worker(){
     done
 
     # if we reached here timeout
-    log "timeout after ${CONCOURSE_NAME}"
+    log "Retire timeout for ${CONCOURSE_NAME} pid $(PROG_PID)"
     cat "${temp_file}" >> "${CONCOURSE_LOG_FILE}"
     rm "${temp_file}"
     return 124
@@ -88,6 +88,7 @@ retire_worker(){
 
 retire_initd_interface(){
     for i in $(seq ${MAX_TRIES}); do
+        log "Attempt #$i / $MAX_TRIES to retire worker."
         set +e
         retire_worker
         rc="$?"
@@ -169,10 +170,10 @@ case "$1" in
  stop)
         stop ;;
  restart)
-       stop
-       start ;;
+        stop
+        start ;;
  status)
-       status ;;
+        status ;;
 *)
         echo "Usage: $0 {start|stop|restart|status}"
         exit 1 ;;
