@@ -31,7 +31,7 @@ concourse_web_options                        : { }
 
 concourse_web_options_default                :
   CONCOURSE_BIND_IP                          : "0.0.0.0"
-  CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] }}" # By default we pick the first host in web group
+  CONCOURSE_TSA_HOST                         : "{{ groups[concourseci_web_group][0] | default('') }}" # By default we pick the first host in web group
   CONCOURSE_TSA_BIND_IP                      : "0.0.0.0"
   CONCOURSE_TSA_BIND_PORT                    : "2222"
   CONCOURSE_TSA_AUTHORIZED_KEYS              : "{{ concourseci_ssh_dir }}/tsa_authorization"
