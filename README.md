@@ -27,7 +27,7 @@ Optional TLS termination
 
 ## Overview
 
-I am a big fan of concourse CI, not so much bosh. This role will install concourse CI binaries.
+I am a big fan of concourse. This role will install and manage concourse.
 
 ## Examples
 
