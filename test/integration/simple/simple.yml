@@ -16,7 +16,7 @@
     concourse_web_options:
       CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
       # Set your own password and save it securely in vault
-      CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD"
+      CONCOURSE_BASIC_AUTH_PASSWORD              : "mypass"
       # Set your own password and save it securely in vault
       CONCOURSE_POSTGRES_DATABASE                : "concourse"
       CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
