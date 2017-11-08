@@ -56,6 +56,33 @@ platforms                   :
                               - 'simple-ubuntu1404-24'
                               - 'worker-ubuntu1404-24'
 
+ - name                     : "ubuntu1604_20"
+   driver_config            :
+     image                  : ubuntu:16.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.0`ansible-playbook"
+      # Hash of other groups
+      groups                :
+         concourse-web      :
+                              - 'simple-ubuntu1604-20'
+         concourse-worker   :
+                              - 'simple-ubuntu1604-20'
+                              - 'worker-ubuntu1604-20'
+
+ - name                     : "ubuntu1604_21"
+   driver_config            :
+     image                  : ubuntu:16.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.1`ansible-playbook"
+      # Hash of other groups
+      groups                :
+         concourse-web      :
+                              - 'simple-ubuntu1604-21'
+         concourse-worker   :
+                              - 'simple-ubuntu1604-21'
+                              - 'worker-ubuntu1604-21'
 
  - name                     : "ubuntu1604_22"
    driver_config            :
