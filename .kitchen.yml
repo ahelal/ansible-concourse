@@ -22,7 +22,6 @@ provisioner                 :
     idempotency_test        : True
     diff                    : True
     sudo                    : True
-    #extra_vars                : "@kitchen_vars.yml"
     #verbose                 : "vvvv"
 
 platforms                   :
@@ -56,7 +55,6 @@ platforms                   :
          concourse-worker   :
                               - 'simple-ubuntu1404-24'
                               - 'worker-ubuntu1404-24'
-
 
 
  - name                     : "ubuntu1604_22"
