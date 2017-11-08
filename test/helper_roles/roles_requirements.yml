@@ -1,0 +1,5 @@
+---
+
+- name: postgresql
+  src: git+https://github.com/ANXS/postgresql.git
+  version: v1.9.0 

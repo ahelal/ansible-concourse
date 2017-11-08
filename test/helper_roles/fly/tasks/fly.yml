@@ -16,24 +16,24 @@
     dest: "/usr/local/bin/fly"
     mode: 0755
 
-- name: login with fly
+- name: fly | login with fly
   command: /usr/local/bin/fly -t kitchen login -c http://127.0.0.1:8080  -u {{ concourseci_manage_credential_user }} -p {{ concourseci_manage_credential_password }}
   become: False
   changed_when: false
 
-- name: upload pipelines
+- name: fly |  upload pipelines
   command: /usr/local/bin/fly -t kitchen sp -p {{ item }} -c {{ pipeline_dest }}/{{ item }} -n
   changed_when: false
   become: False
   with_items: "{{ pipelines }}"
 
-- name: unpause pipelines
+- name: fly | unpause pipelines
   command: /usr/local/bin/fly -t kitchen unpause-pipeline -p {{ item }}
   changed_when: false
   become: False
   with_items: "{{ pipelines }}"
 
-- name: trigger pipelines
+- name: fly | trigger pipelines
   command: /usr/local/bin/fly -t kitchen trigger-job -j "{{ item }}/job"
   changed_when: false
   become: False

@@ -5,3 +5,4 @@ keys/vars
 *.log
 *.pyc
 password
+test/helper_roles/postgresql

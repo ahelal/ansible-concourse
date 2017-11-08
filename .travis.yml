@@ -4,11 +4,14 @@ python: "2.7"
 services:
   - docker
 
-
 env:
   - TEST_COMMAND="bundle exec kitchen test ubuntu1404-20"
+  - TEST_COMMAND="bundle exec kitchen test ubuntu1404-24"
+  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-20"
+  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-21"
   - TEST_COMMAND="bundle exec kitchen test ubuntu1604-22"
   - TEST_COMMAND="bundle exec kitchen test ubuntu1604-23"
+  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-24"
 
 before_install:
   # Make sure everything's up to date.
@@ -20,6 +23,7 @@ install:
   - sudo locale-gen en_US.UTF-8
   - sudo dpkg-reconfigure locales
   - bash ./test/ansible-setup.sh
+  - bash ./test/setup_roles.sh
   - bundle install
 
 script:
