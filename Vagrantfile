@@ -14,5 +14,9 @@ Vagrant.configure('2') do |config|
       "concourse-web" => ["vagrantci"],
       "concourse-worker" => ["vagrantci"],
       }
+
+    ansible.extra_vars = {
+        CONCOURSE_EXTERNAL_URL_VAGRANT: "http://192.168.50.150:8080/"
+    }
   end
 end

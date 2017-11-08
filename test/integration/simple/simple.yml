@@ -21,6 +21,7 @@
       - name        : "concourseci"
         pass        : "conpass"
     concourse_web_options:
+      CONCOURSE_EXTERNAL_URL                     : "{{ CONCOURSE_EXTERNAL_URL_VAGRANT | default('http://127.0.0.1:8080') }}"
       CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
       # Set your own password and save it securely in vault
       CONCOURSE_BASIC_AUTH_PASSWORD              : "mypass"

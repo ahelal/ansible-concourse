@@ -210,11 +210,17 @@ The role supports all arguments passed to fly for more info  `fly set-team --hel
 * Scaling out: Is simple just add a new instance :)
 * Scaling in: You would need to drain the worker first by running `service concourse-worker stop`
 
-## vagrant demo
+## Vagrant demo
 
-You can use vagrant to spin a test machine. ```vagrant up```
+You can use vagrant to spin a test machine. 
 
-The vagrant machine will have an IP of **192.168.50.150**
+```bash
+# Install postgresql role in test/helper_roles
+./test/setup_roles.sh
+vagrant up
+```
+
+The vagrant machine will have an IP of **192.168.50.150** you can access the web `http://192.168.50.150:8080`
 
 You can access the web and API on port 8080 with username **myuser** and **mypass**
 
