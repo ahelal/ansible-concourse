@@ -8,9 +8,6 @@
   notify:
     - restart concourse-web
 
-- debug:
-    var=concourse_web_options_combined['CONCOURSE_SESSION_SIGNING_KEY']
-
 - name: web | Copy session public key
   copy:
     content="{{ concourseci_key_session_public }}"

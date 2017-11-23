@@ -2,12 +2,12 @@
 
 - name: checks | Fail if not running 64bit
   fail:
-    msg=" Only 64 bit arch is supported. "
+    msg: " Only 64 bit arch is supported."
   when: ansible_userspace_bits != '64'
 
-- name: checks | Fail if not running 64bit
+- name: checks | Fail if using old style config < 3.0.0
   fail:
-    msg="Configuration for this role has changed. Please read the Readme.md"
+    msg: "Configuration for this role has changed. Please read the Readme.md"
   when: CONCOURSE_WEB_BIND_IP is defined or CONCOURSE_WEB_TSA_HOST is defined
 
 - name: checks | Set downloaded url to rc (if release candidate)
