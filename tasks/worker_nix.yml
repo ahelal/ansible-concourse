@@ -2,56 +2,56 @@
 
 - name: worker | Concourse worker start script
   template:
-    src="concourse-worker.j2"
-    dest="{{ concourseci_bin_dir }}/concourse-worker"
-    mode=0755
+    src: "concourse-worker.j2"
+    dest: "{{ concourseci_bin_dir }}/concourse-worker"
+    mode: 0755
   notify:
    - restart concourse-worker
 
 - name: worker | Copy session public key
   copy:
-    content="{{ concourseci_key_session_public }}"
-    dest="{{ concourse_worker_options_combined['CONCOURSE_SESSION_SIGNING_KEY'] }}.pub"
-    mode="0644"
-    owner="{{ concourseci_user }}"
-    group="{{ concourseci_group }}"
+    content: "{{ concourseci_key_session_public }}"
+    dest: "{{ concourse_worker_options_combined['CONCOURSE_SESSION_SIGNING_KEY'] }}.pub"
+    mode: "0644"
+    owner: "{{ concourseci_user }}"
+    group: "{{ concourseci_group }}"
   notify:
    - restart concourse-worker
 
 - name: worker | Copy tsa public key
   copy:
-    content="{{ concourseci_key_tsa_public }}"
-    dest="{{ concourse_worker_options_combined['CONCOURSE_TSA_HOST_KEY'] }}.pub"
-    mode="0644"
-    owner="{{ concourseci_user }}"
-    group="{{ concourseci_group }}"
+    content: "{{ concourseci_key_tsa_public }}"
+    dest: "{{ concourse_worker_options_combined['CONCOURSE_TSA_HOST_KEY'] }}.pub"
+    mode: "0644"
+    owner: "{{ concourseci_user }}"
+    group: "{{ concourseci_group }}"
   notify:
    - restart concourse-worker
 
 - name: worker | Copy worker public key
   copy:
-    content="{{ concourseci_key_worker_public }}"
-    dest="{{ concourse_worker_options_combined['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}.pub"
-    mode="0644"
-    owner="{{ concourseci_user }}"
-    group="{{ concourseci_group }}"
+    content: "{{ concourseci_key_worker_public }}"
+    dest: "{{ concourse_worker_options_combined['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}.pub"
+    mode: "0644"
+    owner: "{{ concourseci_user }}"
+    group: "{{ concourseci_group }}"
 
 - name: worker | Copy worker private key
   copy:
-    content="{{ concourseci_key_worker_private }}"
-    dest="{{ concourse_worker_options_combined['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
-    mode="0600"
-    owner="{{ concourseci_user }}"
-    group="{{ concourseci_group }}"
+    content: "{{ concourseci_key_worker_private }}"
+    dest: "{{ concourse_worker_options_combined['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
+    mode: "0600"
+    owner: "{{ concourseci_user }}"
+    group: "{{ concourseci_group }}"
   no_log: True
   notify:
     - restart concourse-worker
 
 - name: Worker | Concourse worker start init script (linux)
   template:
-    src="concourse-worker-init.sh.j2"
-    dest="/etc/init.d/concourse-worker"
-    mode=0755
+    src: "concourse-worker-init.sh.j2"
+    dest: "/etc/init.d/concourse-worker"
+    mode: 0755
   notify:
    - reload systemd
    - restart concourse-worker
@@ -59,20 +59,20 @@
 
 - name: Worker | Ensure Concourse worker is running and Starts on boot (linux)
   service:
-    name="concourse-worker"
-    state="started"
-    enabled=True
+    name: "concourse-worker"
+    state: "started"
+    enabled: True
   ignore_errors: "{{ concourse_ignore_errors }}"
   when: "ansible_system == 'Linux'"
 
 - name: worker | Templating concourse worker start launchd plist (macOSx)
   template:
-    src="{{ concourseci_launchd_worker }}.plist.j2"
-    dest="{{ concourseci_launchd_path }}/{{ concourseci_launchd_worker }}.plist"
-    mode=0750
-    owner="root"
-    group="wheel"
-    validate='plutil %s'
+    src: "{{ concourseci_launchd_worker }}.plist.j2"
+    dest: "{{ concourseci_launchd_path }}/{{ concourseci_launchd_worker }}.plist"
+    mode: 0750
+    owner: "root"
+    group: "wheel"
+    validate: 'plutil %s'
   notify:
    - restart concourse-worker
   register: launchd_template

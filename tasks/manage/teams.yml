@@ -21,7 +21,7 @@
 
 - name: manage | team | Print teams that will be added
   debug:
-    var=teams_to_add
+    var: teams_to_add
   when: teams_to_add | length > 0
 
 - name: manage | team | Ensure teams that are present exists
@@ -29,13 +29,12 @@
   with_items: "{{ teams_to_add }}"
   when: teams_to_add | length > 0
 
-
 - name: manage | team | Print teams that will be removed
   debug:
     var=teams_to_remove
   when: teams_to_remove | length > 0
 
 - name: manage | team | Ensure teams that are absent does not exists
-  shell : "echo {{ item }} | {{ concourse_fly }} destroy-team -n {{ item }}"
+  shell: "echo {{ item }} | {{ concourse_fly }} destroy-team -n {{ item }}"
   with_items: "{{ teams_to_remove }}"
   when: teams_to_remove | length > 0
