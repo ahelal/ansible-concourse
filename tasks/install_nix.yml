@@ -25,3 +25,9 @@
   notify:
    - restart concourse-worker
    - restart concourse-web
+
+- name: Install | Allow Concourse to bind to privileged ports
+  capabilities:
+    path: "{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
+    capability: cap_net_bind_service+ep
+    state: present
