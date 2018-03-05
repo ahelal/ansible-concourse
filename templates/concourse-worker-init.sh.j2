@@ -29,6 +29,17 @@ export CONCOURSE_TSA_PORT="{{ concourse_web_options_combined['CONCOURSE_TSA_PORT
 export CONCOURSE_TSA_PUBLIC_KEY="{{ concourse_worker_options_combined['CONCOURSE_TSA_HOST_KEY'] }}.pub"
 export CONCOURSE_TSA_WORKER_PRIVATE_KEY="{{ concourse_worker_options_combined['CONCOURSE_TSA_WORKER_PRIVATE_KEY'] }}"
 
+## Proxy variables
+{% if concourse_worker_options_combined['http_proxy'] is defined %}
+export http_proxy="{{ concourse_worker_options_combined['http_proxy'] }}"
+{% endif %}
+{% if concourse_worker_options_combined['https_proxy'] is defined %}
+export https_proxy="{{ concourse_worker_options_combined['https_proxy'] }}"
+{% endif %}
+{% if concourse_worker_options_combined['no_proxy'] is defined %}
+export no_proxy="{{ concourse_worker_options_combined['no_proxy'] }}"
+{% endif %}
+
 ## Helper variables
 CONCOURSE_BIN_DIR="{{ concourseci_bin_dir }}"
 CONCOURSE_LOG_FILE="{{ concourseci_log_worker }}"
