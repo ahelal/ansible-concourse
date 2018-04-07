@@ -20,7 +20,6 @@ BASE_DIR="{{ concourseci_bin_dir }}"
 GREP_NAME="{{ concourseci_bin_dir }}/concourse worker"
 
 RUN_CMD="{{ concourseci_bin_dir }}/concourse-worker"
-RETIRE_CMD="{{ concourseci_bin_dir }}/concourse-worker-retire"
 
 ## Retire config
 export CONCOURSE_NAME="{{ concourse_worker_options_combined['CONCOURSE_NAME'] | default('$(hostname)') }}"
