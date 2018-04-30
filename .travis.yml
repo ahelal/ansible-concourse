@@ -5,13 +5,11 @@ services:
   - docker
 
 env:
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1404-20"
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1404-24"
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-20"
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-21"
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-22"
+  - TEST_COMMAND="bundle exec kitchen test ubuntu1404-23"
+  - TEST_COMMAND="bundle exec kitchen test ubuntu1404-25"
   - TEST_COMMAND="bundle exec kitchen test ubuntu1604-23"
   - TEST_COMMAND="bundle exec kitchen test ubuntu1604-24"
+  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-25"
 
 before_install:
   # Make sure everything's up to date.

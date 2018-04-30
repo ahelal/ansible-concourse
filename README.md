@@ -11,7 +11,7 @@ Please look at [configuration section](https://github.com/ahelal/ansible-concour
 
 ## Requirements
 
-* Ansible 2.0 or higher
+* Ansible 2.3 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
 
 Supported platforms:
