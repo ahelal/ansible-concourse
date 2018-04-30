@@ -22,7 +22,7 @@ provisioner                 :
     idempotency_test        : True
     diff                    : True
     sudo                    : True
-    #verbose                 : "vvvv"
+    verbose                 : "vvvv"
 
 platforms                   :
 
@@ -32,7 +32,7 @@ platforms                   :
      platform               : ubuntu
 
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.3`ansible-playbook"
+      ansible_playbook_bin  : "`  `ansible-playbook"
       # Hash of other groups
       groups                :
          concourse-web      :
