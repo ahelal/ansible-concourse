@@ -1,9 +1,15 @@
 ---
 
-- name: manage | main | Download fly
+- name: manage | main | Download fly binary
   get_url:
      url: "{{ concourseci_manage_url }}/api/v1/cli?arch=amd64&platform={{ ansible_system | lower }}"
-     dest: "{{ concourseci_bin_dir }}/fly"
+     dest: "{{ concourseci_bin_dir }}/fly-{{ concourseci_version }}"
      mode: 0755
+
+- name: manage | main | Link fly binary
+  file:
+    src: "{{ concourseci_bin_dir }}/fly-{{ concourseci_version }}"
+    dest: "{{ concourseci_bin_dir }}/fly"
+    state: link
 
 - include: teams.yml
