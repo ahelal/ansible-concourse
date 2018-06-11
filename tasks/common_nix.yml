@@ -30,6 +30,6 @@
   file:
     path: '{{ concourseci_ssh_dir }}'
     state: directory
-    mode: 488
+    mode: '0750'
     owner: '{{ concourseci_user }}'
     group: '{{ concourseci_group }}'
