@@ -75,10 +75,10 @@ retire_worker(){
                 sleep ${SLEEP}
             fi
         else
-            log "Got an error while retiring ${CONCOURSE_NAME}"
+            log "Got an error while retiring ${CONCOURSE_NAME}. Logged it and trying again."
             cat "${temp_file}" >> "${CONCOURSE_LOG_FILE}"
             rm "${temp_file}"
-            return 1
+            return 124
         fi
     done
 
