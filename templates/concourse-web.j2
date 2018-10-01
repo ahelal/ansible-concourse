@@ -3,7 +3,7 @@
 
 # Config
 {% for option, value in concourse_web_options_combined.items() %}
-export {{ option }}="{{ value }}"
+export {{ option }}='{{ value }}'
 {% endfor %}
 
 echo "" >> {{ concourseci_log_web }}

@@ -1,10 +1,12 @@
 ---
+
 driver                      :
     name                    : docker
     socket                  : unix:///var/run/docker.sock
     use_sudo                : false
     privileged              : true
     volume                  : /opt/concourseci/worker
+    provision_command       : mkdir -p /run/sshd
 
 verifier                    :
   name                      : serverspec
@@ -22,48 +24,35 @@ provisioner                 :
     idempotency_test        : True
     diff                    : True
     sudo                    : True
-    verbose                 : "vvvv"
+    verbose                 : "vvvvv"
 
 platforms                   :
 
- - name                     : "ubuntu1404_23"
+ - name                     : "ubuntu1404_24"
    driver_config            :
      image                  : ubuntu:14.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.3`ansible-playbook"
+      ansible_playbook_bin  : "`avm path v2.4`ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1404-23'
+                              - 'simple-ubuntu1404-24'
          concourse-worker   :
-                              - 'simple-ubuntu1404-23'
-                              - 'worker-ubuntu1404-23'
+                              - 'simple-ubuntu1404-24'
+                              - 'worker-ubuntu1404-24'
 
- - name                     : "ubuntu1404_25"
+ - name                     : "ubuntu1404_26"
    driver_config            :
      image                  : ubuntu:14.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.5`ansible-playbook"
+      ansible_playbook_bin  : "`avm path v2.6`ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1404-25'
+                              - 'simple-ubuntu1404-26'
          concourse-worker   :
-                              - 'simple-ubuntu1404-25'
-                              - 'worker-ubuntu1404-25'
-
- - name                     : "ubuntu1604_23"
-   driver_config            :
-     image                  : ubuntu:16.04
-     platform               : ubuntu
-   provisioner              :
-      ansible_playbook_bin  : "`avm path v2.3`ansible-playbook"
-      groups                :
-         concourse-web      :
-                              - 'simple-ubuntu1604-23'
-         concourse-worker   :
-                              - 'simple-ubuntu1604-23'
-                              - 'worker-ubuntu1604-23'
+                              - 'simple-ubuntu1404-26'
+                              - 'worker-ubuntu1404-26'
 
  - name                     : "ubuntu1604_24"
    driver_config            :
@@ -90,6 +79,47 @@ platforms                   :
          concourse-worker   :
                               - 'simple-ubuntu1604-25'
                               - 'worker-ubuntu1604-25'
+
+ - name                     : "ubuntu1604_26"
+   driver_config            :
+     image                  : ubuntu:16.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.6`ansible-playbook"
+      groups                :
+         concourse-web      :
+                              - 'simple-ubuntu1604-26'
+         concourse-worker   :
+                              - 'simple-ubuntu1604-26'
+                              - 'worker-ubuntu1604-26'
+
+ - name                     : "ubuntu1804_25"
+   driver_config            :
+     image                  : ubuntu:18.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.5`ansible-playbook"
+      groups                :
+         concourse-web      :
+                              - 'simple-ubuntu1804-25'
+         concourse-worker   :
+                              - 'simple-ubuntu1804-25'
+                              - 'worker-ubuntu1804-25'
+
+ - name                     : "ubuntu1804_26"
+   driver_config            :
+     image                  : ubuntu:18.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.6`ansible-playbook"
+      groups                :
+         concourse-web      :
+                              - 'simple-ubuntu1804-26'
+         concourse-worker   :
+                              - 'simple-ubuntu1804-26'
+                              - 'worker-ubuntu1804-26'
+
+
 
 suites:
   - name                    : simple
