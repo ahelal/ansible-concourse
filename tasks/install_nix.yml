@@ -31,3 +31,4 @@
     path: "{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
     capability: cap_net_bind_service+ep
     state: present
+  ignore_errors: true

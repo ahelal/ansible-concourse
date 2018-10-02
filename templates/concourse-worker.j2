@@ -3,9 +3,9 @@
 
 # Config
 {% for option, value in concourse_worker_options_combined.items() %}
-{% if (concourseci_version | version_compare('v3.10.0', '>=')) and option == 'CONCOURSE_TSA_HOST' %}
+{% if (concourseci_version is version_compare('v3.10.0', '>=')) and option == 'CONCOURSE_TSA_HOST' %}
 export {{ option }}="{{ value }}:{{ concourse_worker_options_combined['CONCOURSE_TSA_PORT'] }}"
-{% elif (concourseci_version | version_compare('v3.10.0', '>=')) and option == 'CONCOURSE_TSA_PORT' %}
+{% elif (concourseci_version is version_compare('v3.10.0', '>=')) and option == 'CONCOURSE_TSA_PORT' %}
 {% else %}
 export {{ option }}='{{ value }}'
 {% endif %}

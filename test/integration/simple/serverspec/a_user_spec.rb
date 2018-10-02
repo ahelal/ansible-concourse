@@ -7,4 +7,3 @@ end
 describe group('concourseci') do
   it { should exist }
 end
-

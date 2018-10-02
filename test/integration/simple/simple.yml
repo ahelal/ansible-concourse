@@ -9,6 +9,15 @@
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
       changed_when: False
 
+- name: Install iproute2 
+  hosts: all
+  gather_facts: False
+  become: True
+  tasks:
+    - name: install iproute 2
+      apt: 
+        name: iproute2
+
 - name: Provision Concourse
   hosts: all
   become: True
@@ -27,7 +36,8 @@
       - name        : "concourseci"
         pass        : "conpass"
     concourse_worker_options    :
-      CONCOURSE_BAGGAGECLAIM_DRIVER              : naive 
+      CONCOURSE_BAGGAGECLAIM_DRIVER                  : "naive"
+      CONCOURSE_GARDEN_DESTROY_CONTAINERS_ON_STARTUP : true
     concourse_web_options:
       CONCOURSE_EXTERNAL_URL                     : "{{ CONCOURSE_EXTERNAL_URL_VAGRANT | default('http://127.0.0.1:8080') }}"
       CONCOURSE_POSTGRES_DATABASE                : "concourse"
