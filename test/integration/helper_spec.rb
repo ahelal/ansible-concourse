@@ -25,7 +25,6 @@ RSpec.configure do |config|
         verbose: :error
     set :backend, :ssh
     set :request_pty, true
-    puts "serverspec config ssh '#{ENV['KITCHEN_USERNAME']}@#{ENV['KITCHEN_HOSTNAME']} -p #{ENV['KITCHEN_PORT']} -i #{ENV['KITCHEN_SSH_KEY']}'"
   elsif verify_conn == 'exec'
     puts 'serverspec :backend, :exec'
     set :backend, :exec
