@@ -9,7 +9,7 @@ jobs:
       image_resource:
         type: docker-image
         source: 
-          repository: busyboxregistry.hub.docker.com/library/busybox 
+          repository: registry.hub.docker.com/library/busybox
       run:
         path: sh
         args:
