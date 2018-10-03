@@ -39,5 +39,6 @@
   become: False
   with_items: "{{ pipelines }}"
 
-- pause:
+- name: pause to make sure pipeline ran
+  pause:
     seconds: 10

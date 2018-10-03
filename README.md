@@ -4,19 +4,31 @@
 
 An easy way to deploy and manage a [Concourse CI](https://concourse-ci.org/) with a cluster of workers using ansible
 
-## Note breaking changes as of version v3.0.0
+## Breaking changes as of version v4.0.0
 
-As of version 3.0.0 of this role all options for web and worker are supported, but you need to adapt to the new config style.
-Please look at [configuration section](https://github.com/ahelal/ansible-concourse#configuration).
+As of version 4.x of this role the user management has changed to reflect changes in Concourse 4.x the new team auth https://concourse-ci.org/authentication.html.
+
+I would recommend reading the new authentication before proceeding. A new top level list can be used `CONCOURSE_ADD_LOCAL_USER` to add local user. 
+ example 
+
+ ```yaml
+concourse_local_users:
+    - user: "user1"
+      pass: "pass1"
+    - user: "user2"
+      pass: "pass2"
+ ```
+
+more changes will come with new release.
 
 ## Requirements
 
-* Ansible 2.3 or higher
+* Ansible 2.4 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
 
 Supported platforms:
 
-* Ubuntu 14.04/16.04
+* Ubuntu 14.04, 16.04 and 18.04
 * MacOS (Early support. Accepting PRs)
 * Windows (not supported yet. Accepting PRs)
 
@@ -27,7 +39,7 @@ Optional TLS termination
 
 ## Overview
 
-I am a big fan of concourse. This role will install and manage concourse.
+I am a big fan of concourse. This role will install and manage concourse using Ansible. A more robust solution is to use Bosh
 
 ## Examples
 
@@ -39,11 +51,10 @@ I am a big fan of concourse. This role will install and manage concourse.
   hosts: ci.example.com
   become: True
   vars:
+    # Set your own password and save it securely in vault
+    concourse_local_users:
+                          - {user: "user1", pass: "pass1"}
     concourse_web_options:
-      CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
-      # Set your own password and save it securely in vault
-      CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD"
-      # Set your own password and save it securely in vault
       CONCOURSE_POSTGRES_DATABASE                : "concourse"
       CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
       CONCOURSE_POSTGRES_PASSWORD                : "conpass"
@@ -107,18 +118,19 @@ You would also need to generate keys for workers check [key section](https://git
 
 ## Configuration
 
-All command line options are now supported as of ansible-concourse version 3.0.0 in *Web* and *worker* as a dictionary.
+All command line options are now supported as of ansible-concourse version 4.x in *Web* and *worker* as a dictionary.
 **Note:** *if you are upgrade from a version prior to 3.0.0 you would need to accommodate for changes*
 
-The configuration is split between two dictionaries *concourse_web_options* and *concourse_worker_options* all key values defined will be exported as an environmental variable to concourse process.
+The configuration is split between two dictionaries *concourse_web_options* and *concourse_worker_options* all key values defined will be exported as an environmental variable to concourse process. There are some ansible-concourse flags that can be defined outside `concourse_web_options` and `concourse_worker_options` fpr more info check defaults.yml
 
 ```yaml
+concourse_local_users:
+                          - {user: "user1", pass: "pass1"}
+                          - {user: "user2", pass: "pass2"}
 concourse_web_options                        :
-  CONCOURSE_BASIC_AUTH_USERNAME              : "apiuser"
-  CONCOURSE_BASIC_AUTH_PASSWORD              : "CHANGEME_DONT_USE_DEFAULT_PASSWORD_AND_USEVAULT"
   CONCOURSE_POSTGRES_DATABASE                : "concourse"
   CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
-  CONCOURSE_POSTGRES_PASSWORD                : "NO_PLAIN_TEXT_USE_VAUÖT"
+  CONCOURSE_POSTGRES_PASSWORD                : "NO_PLAIN_TEXT_USE_VAULT"
   CONCOURSE_POSTGRES_SSLMODE                 : "disable"
   CONCOURSE_POSTGRES_USER                    : "concourseci"
 
@@ -160,24 +172,21 @@ You can than copy the content in your group vars or any other method you prefer.
 
 This role supports Managing teams :
 
-*NOTE* if you use manage _DO NOT USE DEFAULT PASSWORD_ your should set your own password and save it securely in vault. or you can look it up from web options
+*NOTE* if you use manage _DO NOT USE DEFAULT PASSWORD_ you should set your own password and save it securely in vault. or you can look it up from web options
 
-```yaml
-concourseci_manage_credential_user          : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_USERNAME'] }}"
-concourseci_manage_credential_password      : "{{ concourse_web_options['CONCOURSE_BASIC_AUTH_PASSWORD'] }}"
-```
 
 ```yaml
     concourseci_manage_teams                : True
-    concourseci_manage_credential_user      : "USER_TO_USE"
-    concourseci_manage_credential_password  : "{{ ENCRYPTED_VARIABLE }}"
+    ## User must be added first concourse_local_users 
+    concourseci_manage_credential_user          : "api"
+    concourseci_manage_credential_password      : "apiPassword"
+
 
     concourseci_teams                 :
           - name: "team_1"
             state: "present"
             flags:
-              basic-auth-username: user1
-              basic-auth-password: pass1
+              local-user : user1
           - name: "team_2"
             state: "absent"
           - name: "team_3"
@@ -198,8 +207,7 @@ concourseci_manage_credential_password      : "{{ concourse_web_options['CONCOUR
           - name: "x5"
             state: "absent"
             flags:
-                basic-auth-username: user5
-                basic-auth-password: pass5
+                local-user : user5
 ```
 
 The role supports all arguments passed to fly for more info  `fly set-team --help`.
@@ -207,7 +215,7 @@ The role supports all arguments passed to fly for more info  `fly set-team --hel
 
 ## Auto scaling
 
-* Scaling out: Is simple just add a new instance :)
+* Scaling out: Simply just add a new instance :)
 * Scaling in: You would need to drain the worker first by running `service concourse-worker stop`
 
 ## Vagrant demo
