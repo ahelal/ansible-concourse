@@ -24,7 +24,7 @@ provisioner                 :
     idempotency_test        : True
     diff                    : True
     sudo                    : True
-    verbose                 : "vvvvv"
+    #verbose                 : "vvvvv"
 
 platforms                   :
 
