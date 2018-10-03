@@ -12,4 +12,4 @@
     dest: "{{ concourseci_bin_dir }}/fly"
     state: link
 
-- include: teams.yml
+- import_tasks: teams.yml

@@ -1,32 +1,36 @@
 ---
 
 - name: Do some checks
-  include: checks.yml
+  import_tasks: checks.yml
 
 - name: Kernel upgrade
-  include: kernel_update.yml
-  when: "ansible_os_family == 'Debian'"
+  import_tasks: kernel_update.yml
+  when: "ansible_os_family == 'Debian' and ( ansible_distribution_release == 'precise' or ansible_distribution_release == 'trusty')"
+
+- name: Manage user auth web node
+  import_tasks: auth.yml
+  when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin')"
 
 - name: Common tasks
-  include: common_nix.yml
+  import_tasks: common_nix.yml
   when: "ansible_system == 'Linux' or  ansible_system == 'Darwin'"
 
 - name: Install tasks
-  include: install_nix.yml
+  import_tasks: install_nix.yml
   when: "ansible_system == 'Linux' or  ansible_system == 'Darwin'"
 
 - name: Manage web node
-  include: web_nix.yml
+  import_tasks: web_nix.yml
   when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin')"
 
 - name: Manage worker node
-  include: worker_nix.yml
+  import_tasks: worker_nix.yml
   when: "groups[concourseci_worker_group] is defined and inventory_hostname in groups[concourseci_worker_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin')"
 
 - name: Flush handlers
   meta: flush_handlers
 
 - name: Manage Teams & Pipelines
-  include: manage/main.yml
+  import_tasks: manage/main.yml
   when: (concourseci_manage_pipelines or concourseci_manage_teams) and groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and (ansible_system == 'Linux' or ansible_system == 'Darwin')
   tags: ["manage"]

@@ -1,5 +1,5 @@
 ---
 
-- include: packages.yml
+- import_tasks: packages.yml
 
-- include: fly.yml
+- import_tasks: fly.yml

@@ -23,7 +23,7 @@ RUN_CMD="{{ concourseci_bin_dir }}/concourse-worker"
 
 ## Retire config
 export CONCOURSE_NAME="{{ concourse_worker_options_combined['CONCOURSE_NAME'] | default('$(hostname)') }}"
-{% if concourseci_version | version_compare('v3.10.0', '<') %}
+{% if concourseci_version is version_compare('v3.10.0', '<') %}
 export CONCOURSE_TSA_HOST="{{ concourse_worker_options_combined['CONCOURSE_TSA_HOST'] }}"
 export CONCOURSE_TSA_PORT="{{ concourse_worker_options_combined['CONCOURSE_TSA_PORT'] }}"
 {% else %}

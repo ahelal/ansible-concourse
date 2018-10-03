@@ -9,10 +9,25 @@
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
       changed_when: False
 
+- name: Install iproute2 
+  hosts: all
+  gather_facts: False
+  become: True
+  tasks:
+    - name: install iproute 2
+      apt: 
+        name: iproute2
+
 - name: Provision Concourse
   hosts: all
   become: True
   vars  :
+    concourse_local_users:
+                          - {user: "user1", pass: "pass1"}
+                          - {user: "user2", pass: "pass2"}
+                          - {user: "user3", pass: "pass3"}
+                          - {user: "user4", pass: "pass4"}
+                          - {user: "user5", pass: "pass5"}
     postgresql_version: 9.5
     postgresql_databases:
       - name: "concourse"
@@ -20,12 +35,13 @@
     postgresql_users: 
       - name        : "concourseci"
         pass        : "conpass"
+    concourse_worker_options    :
+      CONCOURSE_BAGGAGECLAIM_DRIVER                  : "naive"
+      CONCOURSE_GARDEN_DESTROY_CONTAINERS_ON_STARTUP : true
+      CONCOURSE_GARDEN_DNS_PROXY_ENABLE              : true
+      CONCOURSE_GARDEN_DNS_SERVER                    : 8.8.8.8
     concourse_web_options:
       CONCOURSE_EXTERNAL_URL                     : "{{ CONCOURSE_EXTERNAL_URL_VAGRANT | default('http://127.0.0.1:8080') }}"
-      CONCOURSE_BASIC_AUTH_USERNAME              : "myuser"
-      # Set your own password and save it securely in vault
-      CONCOURSE_BASIC_AUTH_PASSWORD              : "mypass"
-      # Set your own password and save it securely in vault
       CONCOURSE_POSTGRES_DATABASE                : "concourse"
       CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
       CONCOURSE_POSTGRES_PASSWORD                : "conpass"
@@ -164,28 +180,23 @@
           - name: "x1"
             state: "present"
             flags:
-              basic-auth-username: user1
-              basic-auth-password: pass1
+              local-user: user1
           - name: "x2"
             state: "absent"
             flags:
-                basic-auth-username: user2
-                basic-auth-password: pass2
+                local-user: user2
           - name: "x3"
             state: "present"
             flags:
-                basic-auth-username: user2
-                basic-auth-password: pass2
+                local-user: user2
           - name: "x4"
             state: "present"
             flags:
-                basic-auth-username: user4
-                basic-auth-password: pass4
+                local-user: user4
           - name: "x5"
             state: "absent"
             flags:
-                basic-auth-username: user5
-                basic-auth-password: pass5
+                local-user: user5
   roles:
     - { name: "hosts",             tags: "hosts"      }
     - { name: "postgresql",        tags: "postgresql" }

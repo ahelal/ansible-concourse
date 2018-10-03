@@ -1,6 +1,9 @@
+---
+
+
 - name: common | Combine dictionary options
   set_fact:
-    concourse_web_options_combined: '{{ concourse_web_options_default | combine(concourse_web_options) }}'
+    concourse_web_options_combined: '{{ concourse_web_options_default | combine(concourse_web_options) | combine(concourse_facts_local_users) | combine(concourse_facts_main_users) }}'
     concourse_worker_options_combined: '{{ concourse_worker_options_default | combine(concourse_worker_options) }}'
 
 - name: common | Ensure Concourse group exists

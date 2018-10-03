@@ -1,15 +1,18 @@
 ---
 language: python
 python: "2.7"
+dist: trusty
+sudo: required
 services:
   - docker
 
 env:
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1404-23"
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1404-25"
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-23"
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-24"
-  - TEST_COMMAND="bundle exec kitchen test ubuntu1604-25"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1404-26"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-24"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-25"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-26"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1804-25"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1804-26"
 
 before_install:
   # Make sure everything's up to date.

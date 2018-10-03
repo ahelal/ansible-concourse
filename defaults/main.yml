@@ -1,6 +1,6 @@
 ---
 # Concourse version
-concourseci_version                         : "v3.13.0"
+concourseci_version                         : "v4.2.1"
 
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
@@ -16,7 +16,6 @@ concourseci_log_web                         : "{{ concourseci_log_dir }}/concour
 ## Concourse User
 concourseci_user                            : "concourseci"
 concourseci_group                           : "concourseci"
-
 
 ## Amount of tries to retire running worker when process management stops daemon
 concourseci_worker_retire_tries             : 10
@@ -37,6 +36,14 @@ concourse_web_options_default                :
   CONCOURSE_TSA_AUTHORIZED_KEYS              : "{{ concourseci_ssh_dir }}/tsa_authorization"
   CONCOURSE_TSA_HOST_KEY                     : "{{ concourseci_ssh_dir }}/tsa"
   CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
+
+## 
+## local users that will be added on ATC startup, i.e. 
+## concourse_local_users:
+##                       - user: "user1", pass: "pass1" 
+##                       - user: "user2", pass: "pass2"
+##
+concourse_local_users                        : []
 
 ## This dictionary is merged with 'concourse_worker_options' dictionary, make your overrides there!
 ## e.g.
@@ -61,9 +68,10 @@ concourseci_worker_group                    : "concourse-worker"
 
 ## Management
 concourseci_manage_url                      : "{{ concourse_web_options_combined['CONCOURSE_EXTERNAL_URL'] | default('http://127.0.0.1:8080') }}"
-## Write some comments
-concourseci_manage_credential_user          : "{{ concourse_web_options_combined['CONCOURSE_BASIC_AUTH_USERNAME'] }}"
-concourseci_manage_credential_password      : "{{ concourse_web_options_combined['CONCOURSE_BASIC_AUTH_PASSWORD'] }}"
+
+# ## Manage creds
+concourseci_manage_credential_user          : "{{ concourse_local_users[0].user }}"
+concourseci_manage_credential_password      : "{{ concourse_local_users[0].pass }}"
 
 ### Management Teams
 concourseci_manage_teams                    : False

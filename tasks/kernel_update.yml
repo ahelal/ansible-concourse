@@ -11,7 +11,7 @@
   shell: sleep 2 && shutdown -r now "Ansible updates triggered"
   async: 1
   poll: 0
-  when: kernel_update | changed and concourseci_reboot
+  when: kernel_update is changed and concourseci_reboot
 
 - name: kernel update | Wait for ssh port to open again
   wait_for:
@@ -22,9 +22,9 @@
     search_regex: "OpenSSH"
   connection: local
   become: False
-  when: kernel_update | changed and concourseci_reboot
+  when: kernel_update is changed and concourseci_reboot
 
 - name: kernel update | pause a little to ensure everything is running
   pause:
     seconds: "5"
-  when: kernel_update | changed and concourseci_reboot
+  when: kernel_update is changed and concourseci_reboot
