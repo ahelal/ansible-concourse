@@ -38,6 +38,7 @@
     concourse_worker_options    :
       CONCOURSE_BAGGAGECLAIM_DRIVER                  : "naive"
       CONCOURSE_GARDEN_DESTROY_CONTAINERS_ON_STARTUP : true
+      CONCOURSE_GARDEN_DNS_PROXY_ENABLE              : true
       CONCOURSE_GARDEN_DNS_SERVER                    : 8.8.8.8
       CONCOURSE_BAGGAGECLAIM_LOG_LEVEL               : debug
       CONCOURSE_LOG_LEVEL                            : debug
