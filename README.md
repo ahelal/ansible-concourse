@@ -8,7 +8,7 @@ An easy way to deploy and manage a [Concourse CI](https://concourse-ci.org/) wit
 
 As of version 4.x of this role the user management has changed to reflect changes in Concourse 4.x the new team auth https://concourse-ci.org/authentication.html.
 
-I would recommend reading the new authentication before proceeding. A new top level list can be used `CONCOURSE_ADD_LOCAL_USER` to add local user. 
+I would recommend reading the new authentication before proceeding. A new top level list can be used `concourse_local_users` to add local user. 
  example 
 
  ```yaml
