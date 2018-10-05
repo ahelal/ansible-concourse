@@ -1,59 +1,56 @@
 require_relative '../../helper_spec.rb'
 
 fly = '/usr/local/bin/fly -t kitchen'
-builds = "#{fly} builds"
 
-describe 'simple_success job' do
-  describe command("#{builds} | grep simple_success") do
-    it 'simple_success are in the builds' do
-      puts '#################################'
-      puts subject.stdout.to_s
-      puts '#################################'
-      expect(subject.stdout).to match('simple_success')
-      expect(subject.exit_status).to eq(0)
+describe 'teams' do
+  describe command("#{fly} teams | grep main | grep -v grep") do
+    it 'main should exist' do
+      expect(subject.stdout).to match('main')
     end
   end
 
-  describe command("#{builds} | grep simple_success | head -1 | awk '{ print $4 }'") do
-    it 'simple_success pipeline should succeed' do
-      puts '#################################'
-      puts subject.stdout.to_s
-      puts '#################################'
-      expect(subject.stdout).to match('succeeded')
-      expect(subject.exit_status).to eq(0)
+  describe command("#{fly} teams | grep x1 | grep -v grep") do
+    it 'main should exist' do
+      expect(subject.stdout).to match('x1')
     end
   end
 
-  describe command("#{fly} watch -b $(#{builds} | grep simple_success | head -1 | awk '{ print $1 }')") do
-    it 'simple_success pipeline log should have "I WILL SUCCESSED"' do
-      puts '#################################'
-      puts subject.stdout.to_s
-      puts '#################################'
-      expect(subject.stdout).to match('I WILL SUCCESSED')
-      expect(subject.exit_status).to eq(0)
+  describe command("#{fly} teams | grep x3 | grep -v grep") do
+    it 'main should exist' do
+      expect(subject.stdout).to match('x3')
+    end
+  end
+
+  describe command("#{fly} teams | grep x4 | grep -v grep") do
+    it 'main should exist' do
+      expect(subject.stdout).to match('x4')
     end
   end
 end
 
-describe 'simple_failure job' do
-  describe command("#{builds} | grep simple_failure") do
-    it 'simple_failure are in the builds' do
-      expect(subject.stdout).to match('simple_failure')
+describe 'users login' do
+  describe command("#{fly} login -n x1 -u user1 -p pass1") do
+    it 'user1 should be part of x1' do
+      expect(subject.stdout).to match('target saved')
       expect(subject.exit_status).to eq(0)
     end
   end
-
-  describe command("#{builds} | grep simple_failure | head -1 | awk '{ print $4 }'") do
-    it 'simple_success pipelines should be failed' do
-      expect(subject.stdout).to match('failed')
+  describe command("#{fly} login -n x3 -u user2 -p pass2") do
+    it 'user2 should be part of x3' do
+      expect(subject.stdout).to match('target saved')
       expect(subject.exit_status).to eq(0)
     end
   end
-
-  describe command("#{fly} watch -b $(#{builds} | grep simple_failure | head -1 | awk '{ print $1 }')") do
-    it 'simple_failure pipelines log should have "I WILL FAIL"' do
-      expect(subject.stdout).to match('I WILL FAIL')
-      expect(subject.exit_status).to eq(1)
+  describe command("#{fly} login -n x4 -u user4 -p pass4") do
+    it 'user4 should be part of x4' do
+      expect(subject.stdout).to match('target saved')
+      expect(subject.exit_status).to eq(0)
+    end
+  end
+  describe command("#{fly} login -n main -u user1 -p pass1") do
+    it 'user1 should be part of main' do
+      expect(subject.stdout).to match('target saved')
+      expect(subject.exit_status).to eq(0)
     end
   end
 end

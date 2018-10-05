@@ -7,7 +7,7 @@ describe port(8080) do
 end
 
 # Concourse web process to be running with concourse user
-describe command("pgrep -u concourseci -f concourse\\ web -c") do
+describe command('pgrep -u concourseci -f concourse\\ web -c') do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should match '1' }
 end

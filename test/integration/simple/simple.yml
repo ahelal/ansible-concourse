@@ -28,6 +28,7 @@
                           - {user: "user3", pass: "pass3"}
                           - {user: "user4", pass: "pass4"}
                           - {user: "user5", pass: "pass5"}
+                          - {user: "user6", pass: "pass6"}
     postgresql_version: 9.5
     postgresql_databases:
       - name: "concourse"
@@ -41,6 +42,7 @@
       CONCOURSE_GARDEN_DNS_PROXY_ENABLE              : true
       CONCOURSE_GARDEN_DNS_SERVER                    : 8.8.8.8
     concourse_web_options:
+      CONCOURSE_MAIN_TEAM_LOCAL_USER             : "user1,user6"
       CONCOURSE_EXTERNAL_URL                     : "{{ CONCOURSE_EXTERNAL_URL_VAGRANT | default('http://127.0.0.1:8080') }}"
       CONCOURSE_POSTGRES_DATABASE                : "concourse"
       CONCOURSE_POSTGRES_HOST                    : "127.0.0.1"
