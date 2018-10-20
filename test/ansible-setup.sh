@@ -11,7 +11,7 @@ export ANSIBLE_VERSIONS_2="2.5.10"
 export INSTALL_TYPE_2="pip"
 export ANSIBLE_LABEL_2="v2.5"
 
-export ANSIBLE_VERSIONS_3="2.6.5"
+export ANSIBLE_VERSIONS_3="2.6.6"
 export INSTALL_TYPE_3="pip"
 export ANSIBLE_LABEL_3="v2.6"
 
