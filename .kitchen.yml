@@ -93,6 +93,19 @@ platforms                   :
                               - 'simple-ubuntu1604-26'
                               - 'worker-ubuntu1604-26'
 
+ - name                     : "ubuntu1604_27"
+   driver_config            :
+     image                  : ubuntu:16.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.7`ansible-playbook"
+      groups                :
+         concourse-web      :
+                              - 'simple-ubuntu1604-27'
+         concourse-worker   :
+                              - 'simple-ubuntu1604-27'
+                              - 'worker-ubuntu1604-27'
+
  - name                     : "ubuntu1804_25"
    driver_config            :
      image                  : ubuntu:18.04
@@ -118,6 +131,19 @@ platforms                   :
          concourse-worker   :
                               - 'simple-ubuntu1804-26'
                               - 'worker-ubuntu1804-26'
+
+ - name                     : "ubuntu1804_27"
+   driver_config            :
+     image                  : ubuntu:18.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.7`ansible-playbook"
+      groups                :
+         concourse-web      :
+                              - 'simple-ubuntu1804-27'
+         concourse-worker   :
+                              - 'simple-ubuntu1804-27'
+                              - 'worker-ubuntu1804-27'
 
 
 
