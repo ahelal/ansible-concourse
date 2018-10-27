@@ -8,7 +8,6 @@ services:
 
 env:
   - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1404-26"
-  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-24"
   - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-25"
   - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-26"
   - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-27"
