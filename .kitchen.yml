@@ -60,7 +60,7 @@ platforms                   :
      image                  : ubuntu:16.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.4`ansible-playbook"
+      ansible_playbook_bin  : "`avm path v2.5`ansible-playbook"
       groups                :
          concourse-web      :
                               - 'simple-ubuntu1604-25'
@@ -94,18 +94,18 @@ platforms                   :
                               - 'simple-ubuntu1604-27'
                               - 'worker-ubuntu1604-27'
 ### Ubuntu 1804
- - name                     : "ubuntu1804_26"
+ - name                     : "ubuntu1804_25"
    driver_config            :
      image                  : ubuntu:18.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.6`ansible-playbook"
+      ansible_playbook_bin  : "`avm path v2.5`ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1804-26'
+                              - 'simple-ubuntu1804-25'
          concourse-worker   :
-                              - 'simple-ubuntu1804-26'
-                              - 'worker-ubuntu1804-26'
+                              - 'simple-ubuntu1804-25'
+                              - 'worker-ubuntu1804-25'
 
  - name                     : "ubuntu1804_27"
    driver_config            :

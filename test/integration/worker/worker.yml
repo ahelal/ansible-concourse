@@ -1,22 +1,22 @@
 ---
 
-- name: Check for python2.7
+- name: Check for python 3
   hosts: concourse-worker
   gather_facts: False
   become: True
   tasks:
-    - name: install python 2
-      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    - name: install python 3
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python3-minimal)
       changed_when: False
 
-- name: Install iproute2
-  hosts: concourse-worker
+- name: Install some needed packages
+  hosts: concourse-web
   gather_facts: False
   become: True
   tasks:
-    - name: install iproute 2
+    - name: install packages
       apt:
-        name: iproute2
+        name: iproute2,gpg,python3-psycopg2,python3-passlib,python3-bcrypt
 
 - name: Provision Concourse
   hosts: concourse-worker

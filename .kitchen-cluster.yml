@@ -21,6 +21,8 @@ provisioner                 :
     ansible_config          : "tests/ansible.cfg"
     ansible_playbook_bin    : "`avm path v2.7`ansible-playbook"
     extra_vars              : "@./test/integration/simple/concourse-vars.yml"
+    raw_arguments           : "--extra-vars='ansible_python_interpreter=/usr/bin/python3'"
+
     groups                  :
         concourse-web       : ['web-ubuntu1804']
         concourse-worker    : ['worker-ubuntu1804']
@@ -29,7 +31,7 @@ provisioner                 :
     idempotency_test        : false
     diff                    : True
     sudo                    : True
-    # verbose                 : "vvvvvvvvvv"
+    verbose                 : "vvvvvvvvvv"
 
 platforms                   :
  - name                     : "ubuntu1804"
