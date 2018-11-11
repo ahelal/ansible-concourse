@@ -16,7 +16,14 @@
   tasks:
     - name: install packages
       apt:
-        name: iproute2,gpg,python3-psycopg2,python3-passlib,python3-bcrypt
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - iproute2
+        - gpg
+        - python3-psycopg2
+        - python3-passlib
+        - python3-bcrypt
 
 - name: Provision Concourse
   hosts: concourse-web
