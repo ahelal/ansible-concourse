@@ -1,7 +1,7 @@
 ---
 
 - name: Check for python2.7
-  hosts: all
+  hosts: concourse-web
   gather_facts: False
   become: True
   tasks:
@@ -10,7 +10,7 @@
       changed_when: False
 
 - name: Install iproute2
-  hosts: all
+  hosts: concourse-web
   gather_facts: False
   become: True
   tasks:
@@ -19,7 +19,7 @@
         name: iproute2
 
 - name: Provision Concourse
-  hosts: all
+  hosts: concourse-web
   become: True
   roles:
     - { name: "hosts",             tags: "hosts"      }
