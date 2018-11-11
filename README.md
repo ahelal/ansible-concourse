@@ -192,14 +192,10 @@ This role supports Managing teams :
           - name: "team_3"
             state: "present"
             flags:
-              github-auth-client-id=XXX
-              github-auth-client-secret=XXX
-              github-auth-organization=ORG
-              github-auth-team=ORG/TEAM
-              github-auth-user=LOGIN
-              github-auth-auth-url=SOMETHING
-              github-auth-token-url=XX
-              github-auth-api-url=XX
+              # See [web options](web_arguments.txt) for how to integrate Concourse Web with GitHub for auth
+              github-organization: ORG
+              github-team: ORG:TEAM
+              github-user: LOGIN
           - name: "team_4"
             state: "present"
             flags:

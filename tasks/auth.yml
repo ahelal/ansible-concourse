@@ -20,6 +20,8 @@
     owner: root
     mode: 0640
   with_items: "{{ concourse_local_users }}"
+  loop_control:
+    label: "{{ item.user }}"
 
 - name: auth | Get bcrypt passwords
   shell: "cat {{ concourseci_base_dir }}/concourse_users"
