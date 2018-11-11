@@ -24,49 +24,37 @@ provisioner                 :
     idempotency_test        : True
     diff                    : True
     sudo                    : True
+    extra_vars               : "@./test/integration/simple/concourse-vars.yml"
     #verbose                 : "vvvvv"
 
 platforms                   :
-
- - name                     : "ubuntu1404_24"
+### Ubuntu 1404
+ - name                     : "ubuntu1404_25"
    driver_config            :
      image                  : ubuntu:14.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.4`ansible-playbook"
+      ansible_playbook_bin  : "`avm path v2.5`ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1404-24'
+                              - 'simple-ubuntu1404-25'
          concourse-worker   :
-                              - 'simple-ubuntu1404-24'
-                              - 'worker-ubuntu1404-24'
+                              - 'simple-ubuntu1404-25'
+                              - 'worker-ubuntu1404-25'
 
- - name                     : "ubuntu1404_26"
+ - name                     : "ubuntu1404_27"
    driver_config            :
      image                  : ubuntu:14.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.6`ansible-playbook"
+      ansible_playbook_bin  : "`avm path v2.7`ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1404-26'
+                              - 'simple-ubuntu1404-27'
          concourse-worker   :
-                              - 'simple-ubuntu1404-26'
-                              - 'worker-ubuntu1404-26'
-
- - name                     : "ubuntu1604_24"
-   driver_config            :
-     image                  : ubuntu:16.04
-     platform               : ubuntu
-   provisioner              :
-      ansible_playbook_bin  : "`avm path v2.4`ansible-playbook"
-      groups                :
-         concourse-web      :
-                              - 'simple-ubuntu1604-24'
-         concourse-worker   :
-                              - 'simple-ubuntu1604-24'
-                              - 'worker-ubuntu1604-24'
-
+                              - 'simple-ubuntu1404-27'
+                              - 'worker-ubuntu1404-27'
+### Ubuntu 1604
  - name                     : "ubuntu1604_25"
    driver_config            :
      image                  : ubuntu:16.04
@@ -93,6 +81,19 @@ platforms                   :
                               - 'simple-ubuntu1604-26'
                               - 'worker-ubuntu1604-26'
 
+ - name                     : "ubuntu1604_27"
+   driver_config            :
+     image                  : ubuntu:16.04
+     platform               : ubuntu
+   provisioner              :
+      ansible_playbook_bin  : "`avm path v2.7`ansible-playbook"
+      groups                :
+         concourse-web      :
+                              - 'simple-ubuntu1604-27'
+         concourse-worker   :
+                              - 'simple-ubuntu1604-27'
+                              - 'worker-ubuntu1604-27'
+### Ubuntu 1804
  - name                     : "ubuntu1804_25"
    driver_config            :
      image                  : ubuntu:18.04
@@ -106,20 +107,18 @@ platforms                   :
                               - 'simple-ubuntu1804-25'
                               - 'worker-ubuntu1804-25'
 
- - name                     : "ubuntu1804_26"
+ - name                     : "ubuntu1804_27"
    driver_config            :
      image                  : ubuntu:18.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.6`ansible-playbook"
+      ansible_playbook_bin  : "`avm path v2.7`ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1804-26'
+                              - 'simple-ubuntu1804-27'
          concourse-worker   :
-                              - 'simple-ubuntu1804-26'
-                              - 'worker-ubuntu1804-26'
-
-
+                              - 'simple-ubuntu1804-27'
+                              - 'worker-ubuntu1804-27'
 
 suites:
   - name                    : simple
@@ -127,9 +126,3 @@ suites:
       playbook              : "test/integration/simple/simple.yml"
     driver_config           :
       hostname              : "simple"
-
-  # - name                    : manage
-  #   provisioner             :
-  #     playbook              : "test/integration/manage/manage.yml"
-  #   driver_config           :
-  #     hostname              : "manage"

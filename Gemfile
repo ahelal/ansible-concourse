@@ -5,7 +5,7 @@ group :development do
   gem 'kitchen-ansiblepush'
   gem 'kitchen-docker'
   gem 'kitchen-verifier-serverspec'
-  gem 'thor', '0.19.1' # temp fix for issue http://stackoverflow.com/questions/40823526/validate-default-type-an-options-default-must-match-its-type-argumenterror
+  gem 'thor'
   gem 'net-ssh'
   gem 'serverspec'
 end

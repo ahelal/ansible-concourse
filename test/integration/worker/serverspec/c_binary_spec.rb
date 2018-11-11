@@ -1,0 +1,1 @@
+../../simple/serverspec/c_binary_spec.rb

@@ -1,0 +1,56 @@
+---
+
+driver                      :
+    name                    : docker
+    socket                  : unix:///var/run/docker.sock
+    use_sudo                : false
+    privileged              : true
+    volume                  : /opt/concourseci/worker
+    provision_command       : mkdir -p /run/sshd
+
+verifier                    :
+  name                      : serverspec
+  remote_exec               : false
+  default_pattern           : true
+  bundler_path              : <%= '/opt/hellofresh/kitchen/embedded/bin' if File.exist?('/opt/hellofresh/kitchen/embedded/bin/bundler') %>
+  rspec_path                : <%= '/opt/hellofresh/kitchen/embedded/bin' if File.exist?('/opt/hellofresh/kitchen/embedded/bin/rspec') %>
+  gemfile                   : ./test/integration/Gemfile
+
+provisioner                 :
+    name                    : ansible_push
+    ansible_config          : "tests/ansible.cfg"
+    ansible_playbook_bin    : "`avm path v2.7`ansible-playbook"
+    extra_vars              : "@./test/integration/simple/concourse-vars.yml"
+    raw_arguments           : "--extra-vars='ansible_python_interpreter=/usr/bin/python3'"
+
+    groups                  :
+        concourse-web       : ['web-ubuntu1804']
+        concourse-worker    : ['worker-ubuntu1804']
+    chef_bootstrap_url      : nil
+    use_instance_name       : True
+    idempotency_test        : false
+    diff                    : True
+    sudo                    : True
+    verbose                 : "v"
+
+platforms                   :
+ - name                     : "ubuntu1804"
+   driver_config            :
+     image                  : ubuntu:18.04
+     platform               : ubuntu
+
+suites:
+  - name                    : web
+    provisioner             :
+      playbook              : "test/integration/web/web.yml"
+    driver_config           :
+     instance_name          : "web-ubuntu1804"
+     hostname               : "web-ubuntu1804"
+
+  - name                    : worker
+    provisioner             :
+      playbook              : "test/integration/worker/worker.yml"
+    driver_config           :
+     hostname               : "worker-ubuntu1804"
+     instance_name          : "worker-ubuntu1804"
+     links                  : "web-ubuntu1804"

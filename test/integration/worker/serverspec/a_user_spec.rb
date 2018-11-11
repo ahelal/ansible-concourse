@@ -1,0 +1,1 @@
+../../simple/serverspec/a_user_spec.rb

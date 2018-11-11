@@ -1,0 +1,1 @@
+../../simple/serverspec/cb_binary_worker_spec.rb

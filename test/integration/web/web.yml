@@ -1,0 +1,35 @@
+---
+
+- name: Check for python3
+  hosts: concourse-web
+  gather_facts: False
+  become: True
+  tasks:
+    - name: install python 3
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python3-minimal)
+      changed_when: False
+
+- name: Install some needed packages
+  hosts: concourse-web
+  gather_facts: False
+  become: True
+  tasks:
+    - name: install packages
+      apt:
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - iproute2
+        - gpg
+        - python3-psycopg2
+        - python3-passlib
+        - python3-bcrypt
+
+- name: Provision Concourse
+  hosts: concourse-web
+  become: True
+  roles:
+    - { name: "hosts",             tags: "hosts"      }
+    - { name: "postgresql",        tags: "postgresql" }
+    - { name: "ansible-concourse", tags: "concourse"  }
+    - { name: "fly",               tags: "fly"        }
