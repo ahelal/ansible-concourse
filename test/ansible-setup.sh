@@ -7,11 +7,11 @@ export ANSIBLE_VERSIONS_1="2.5.11"
 export INSTALL_TYPE_1="pip"
 export ANSIBLE_LABEL_1="v2.5"
 
-export ANSIBLE_VERSIONS_2="2.6.7"
+export ANSIBLE_VERSIONS_2="2.6.8"
 export INSTALL_TYPE_2="pip"
 export ANSIBLE_LABEL_2="v2.6"
 
-export ANSIBLE_VERSIONS_3="2.7.1"
+export ANSIBLE_VERSIONS_3="2.7.2"
 export INSTALL_TYPE_3="pip"
 export ANSIBLE_LABEL_3="v2.7"
 
