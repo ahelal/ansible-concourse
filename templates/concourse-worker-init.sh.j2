@@ -38,6 +38,7 @@ CONCOURSE_LOG_FILE="{{ concourseci_log_worker }}"
 SLEEP=5
 #
 MAX_TRIES="{{ concourseci_worker_retire_tries }}"
+PROCESS_EXIT_TIMEOUT="{{ concourseci_worker_process_exit_timeout }}"
 temp_file="$(mktemp -d)/retire.log"
 
 PROG_PID() {
@@ -60,27 +61,28 @@ log(){
 
 retire_worker(){
     log "Starting retire function ..."
-    # Loop at most $MAX_TRIES until worker is retired
-    for i in $(seq 3); do
-        "${CONCOURSE_BIN_DIR}"/concourse retire-worker > "${temp_file}" 2>&1
-        rc="$?"
-        if [ "${rc}" -eq 0 ]; then
-            if grep "retire-worker.worker-not-found" "${temp_file}" > /dev/null 2>&1; then
-                log "Officially retired ${CONCOURSE_NAME} worker"
+    "${CONCOURSE_BIN_DIR}"/concourse retire-worker > "${temp_file}" 2>&1
+    rc="$?"
+    if [ "${rc}" -eq 0 ]; then
+        log "Concourse retire-worker command executed successfully"
+        log "Waiting for up to ${PROCESS_EXIT_TIMEOUT} seconds for process exit"
+        for i in $(seq ${PROCESS_EXIT_TIMEOUT}); do
+            if [ -z "$(PROG_PID)" ]; then
+                log "Worker process exited gracefully. Assuming successful retire of ${CONCOURSE_NAME}."
                 rm "${temp_file}"
                 return 0
             else
                 echo -n "."
-                log "Still waiting. I will try again in ${SLEEP} seconds."
-                sleep ${SLEEP}
+                log "Waiting for worker process exit..."
+                sleep 1
             fi
-        else
-            log "Got an error while retiring ${CONCOURSE_NAME}. Logged it and trying again."
-            cat "${temp_file}" >> "${CONCOURSE_LOG_FILE}"
-            rm "${temp_file}"
-            return 124
-        fi
-    done
+        done
+    else
+        log "Got an error while retiring ${CONCOURSE_NAME}. Logged it and trying again."
+        cat "${temp_file}" >> "${CONCOURSE_LOG_FILE}"
+        rm "${temp_file}"
+        return 124
+    fi
 
     # if we reached here timeout
     log "Retire timeout for ${CONCOURSE_NAME} pid $(PROG_PID)"
