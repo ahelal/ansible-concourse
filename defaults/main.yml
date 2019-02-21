@@ -20,6 +20,9 @@ concourseci_group                           : "concourseci"
 ## Amount of tries to retire running worker when process management stops daemon
 concourseci_worker_retire_tries             : 10
 
+## Timeout in seconds defining how long do we wait for worker process exit after retire attempt
+concourseci_worker_process_exit_timeout     : 150
+
 ## New config dictionary based.
 ## This dictionary is merged with 'concourse_web_options' dictionary, make your overrides there!
 ## e.g.
