@@ -9,7 +9,10 @@
   get_url:
     url: "{{ concourseci_download_url }}"
     dest: "{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
+    timeout: 200
     mode: 0755
+    tmp_dest: "{{ concourseci_bin_dir }}"
+    validate_certs: false
   become_user: "{{ concourseci_user }}"
   register: concourseci_get
   when: concourseci_binary_file_stat.stat.exists == False
