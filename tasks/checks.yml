@@ -13,9 +13,9 @@
 - name: checks | Set downloaded url for concourse version 4.x or lower
   set_fact:
     concourseci_download_url: "{{ concourseci_download_fr_url }}/{{ version_4_filename }}"
-  when: concourseci_version  is version('v4.2.1', '<=')
+  when: concourseci_version is version('v4.2.1', '<=')
 
 - name: checks | Set downloaded url for concourse version 5.x and above
   set_fact:
     concourseci_download_url: "{{ concourseci_download_fr_url }}/{{ version_5_filename }}"
-  when: concourseci_version  is  version('v5.0.0', '>=')
+  when: concourseci_version is version('v5.0.0', '>=')
