@@ -4,31 +4,19 @@
 
 An easy way to deploy and manage a [Concourse CI](https://concourse-ci.org/) with a cluster of workers using ansible
 
-## Breaking changes as of version v4.0.0
-
-As of version 4.x of this role the user management has changed to reflect changes in Concourse 4.x the new team auth https://concourse-ci.org/authentication.html.
-
-I would recommend reading the new authentication before proceeding. A new top level list can be used `concourse_local_users` to add local user. 
- example 
-
- ```yaml
-concourse_local_users:
-    - user: "user1"
-      pass: "pass1"
-    - user: "user2"
-      pass: "pass2"
- ```
-
-more changes will come with new release.
-
 ## Requirements
 
 * Ansible 2.4 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
 
+Supported concourse:
+
+* v4.x
+* v5.x
+
 Supported platforms:
 
-* Ubuntu 14.04, 16.04 and 18.04
+* Ubuntu 16.04 and 18.04
 * MacOS (Early support. Accepting PRs)
 * Windows (not supported yet. Accepting PRs)
 
@@ -98,6 +86,21 @@ ci.example.com
 [concourse-worker]
 ci.example.com
 ```
+
+## Breaking changes as of version v4.0.0
+
+As of version 4.x of this role the user management has changed to reflect changes in Concourse 4.x the new team auth https://concourse-ci.org/authentication.html.
+
+I would recommend reading the new authentication before proceeding. A new top level list can be used `concourse_local_users` to add local user.
+ example
+
+ ```yaml
+concourse_local_users:
+    - user: "user1"
+      pass: "pass1"
+    - user: "user2"
+      pass: "pass2"
+ ```
 
 ## Clustered nodes 2x web & 4x worker
 
@@ -177,7 +180,7 @@ This role supports Managing teams :
 
 ```yaml
     concourseci_manage_teams                : True
-    ## User must be added first concourse_local_users 
+    ## User must be added first concourse_local_users
     concourseci_manage_credential_user          : "api"
     concourseci_manage_credential_password      : "apiPassword"
 
@@ -216,7 +219,7 @@ The role supports all arguments passed to fly for more info  `fly set-team --hel
 
 ## Vagrant demo
 
-You can use vagrant to spin a test machine. 
+You can use vagrant to spin a test machine.
 
 ```bash
 # Install postgresql role in test/helper_roles
