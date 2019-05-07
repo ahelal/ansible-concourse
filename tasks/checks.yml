@@ -10,12 +10,12 @@
     msg: "Configuration for this role has changed. Please read the Readme.md"
   when: CONCOURSE_WEB_BIND_IP is defined or CONCOURSE_WEB_TSA_HOST is defined
 
-- name: checks | Set downloaded url to rc (if release candidate)
+- name: checks | Set downloaded url for concourse version 4.x or lower
   set_fact:
-    concourseci_download_url: "{{ concourseci_download_rc_url }}"
-  when: "'rc' in concourseci_version"
+    concourseci_download_url: "{{ concourseci_download_fr_url }}/{{ version_4_filename }}"
+  when: concourseci_version is version('v4.2.1', '<=')
 
-- name: checks | Set downloaded url to final release (if final release)
+- name: checks | Set downloaded url for concourse version 5.x and above
   set_fact:
-    concourseci_download_url: "{{ concourseci_download_fr_url }}"
-  when: "'rc' not in concourseci_version"
+    concourseci_download_url: "{{ concourseci_download_fr_url }}/{{ version_5_filename }}"
+  when: concourseci_version is version('v5.0.0', '>=')

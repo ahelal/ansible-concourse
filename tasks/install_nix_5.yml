@@ -1,0 +1,53 @@
+---
+
+- name: Install | Check Concourse archive stat
+  stat:
+    path: "{{ concourseci_archive_dir }}/{{ concourseci_binary_file }}.tar.gz"
+  register: concourseci_binary_file_stat
+
+- name: common | Ensure Concourse user exists
+  user:
+    home: '{{ concourseci_base_dir }}'
+    name: '{{ concourseci_user }}'
+    group: '{{ concourseci_group }}'
+    system: yes
+
+- name: Install | Download Concourse CI
+  get_url:
+    url: "{{ concourseci_download_url }}"
+    dest: "{{ concourseci_archive_dir }}/{{ concourseci_binary_file }}.tar.gz"
+    timeout: 200
+    mode: 0755
+    tmp_dest: "{{ concourseci_archive_dir }}"
+    validate_certs: false
+  become_user: "{{ concourseci_user }}"
+  register: concourseci_get
+  when: concourseci_binary_file_stat.stat.exists == False
+  notify:
+   - restart concourse-worker
+   - restart concourse-web
+
+- name: Install | untar the archive
+  unarchive:
+    src: "{{ concourseci_archive_dir }}/{{ concourseci_binary_file }}.tar.gz"
+    dest: "{{ concourseci_archive_dir }}/{{ concourseci_binary_file }}"
+    creates: "{{ concourseci_archive_dir }}/{{ concourseci_binary_file }}/bin/concourse"
+    remote_src: yes
+    extra_opts:
+      -  --strip-components=1
+
+- name: Install | Concourse link binary
+  file:
+    src: "{{ concourseci_archive_dir }}/{{ concourseci_binary_file }}/bin/concourse"
+    dest: "{{ concourseci_bin_dir }}/concourse"
+    state: "link"
+  notify:
+   - restart concourse-worker
+   - restart concourse-web
+
+- name: Install | Allow Concourse to bind to privileged ports
+  capabilities:
+    path: "{{ concourseci_bin_dir }}/{{ concourseci_binary_file }}"
+    capability: cap_net_bind_service+ep
+    state: present
+  ignore_errors: true

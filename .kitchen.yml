@@ -24,8 +24,8 @@ provisioner                 :
     idempotency_test        : True
     diff                    : True
     sudo                    : True
-    extra_vars               : "@./test/integration/simple/concourse-vars.yml"
-    #verbose                 : "vvvvv"
+    extra_vars              : "@./test/integration/simple/concourse-vars.yml"
+    # verbose                 : "vvvvv"
 
 platforms                   :
 ### Ubuntu 1404

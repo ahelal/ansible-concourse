@@ -25,13 +25,13 @@
   when: teams_to_add | length > 0
 
 - name: manage | team | Ensure teams that are present exists
-  shell : "yes | {{ concourse_fly }} set-team -n {{ item }}{% set attr=concourseci_teams | selectattr('name', 'equalto', item) | list | map(attribute='flags') | list | first%} {% for key, value in attr.iteritems() %} --{{key}}={{value}}{% endfor %}"
+  shell : "yes | {{ concourse_fly }} set-team -n {{ item }}{% set attr=concourseci_teams | selectattr('name', 'equalto', item) | list | map(attribute='flags') | list | first%} {% for key, value in attr.items() %} --{{key}}={{value}}{% endfor %}"
   with_items: "{{ teams_to_add }}"
   when: teams_to_add | length > 0
 
 - name: manage | team | Print teams that will be removed
   debug:
-    var=teams_to_remove
+    var: teams_to_remove
   when: teams_to_remove | length > 0
 
 - name: manage | team | Ensure teams that are absent does not exists

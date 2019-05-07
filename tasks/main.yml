@@ -15,9 +15,13 @@
   import_tasks: common_nix.yml
   when: "ansible_system == 'Linux' or  ansible_system == 'Darwin'"
 
-- name: Install tasks
-  import_tasks: install_nix.yml
-  when: "ansible_system == 'Linux' or  ansible_system == 'Darwin'"
+- name: Install tasks for concourse version <= 4
+  import_tasks: install_nix_4.yml
+  when: ("ansible_system == 'Linux' or  ansible_system == 'Darwin'") and concourseci_version is version('v4.2.1', '<=')
+
+- name: Install tasks for concourse version >= 5
+  import_tasks: install_nix_5.yml
+  when: ("ansible_system == 'Linux' or  ansible_system == 'Darwin'") and concourseci_version is version('v5.0.0', '>=')
 
 - name: Manage web node
   import_tasks: web_nix.yml
