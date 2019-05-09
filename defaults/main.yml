@@ -1,12 +1,12 @@
 ---
 # Concourse version
-concourseci_version                         : "v4.2.2"
-
+concourseci_version                         : "v5.1.0"
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
 concourseci_bin_dir                         : "{{ concourseci_base_dir }}/bin"
 concourseci_worker_dir                      : "{{ concourseci_base_dir }}/worker"
 concourseci_ssh_dir                         : "{{ concourseci_base_dir }}/.ssh"
+concourseci_archive_dir                     : "{{ concourseci_base_dir }}/archive"
 
 ## Concourse log
 concourseci_log_dir                         : "/var/log/concourse"
@@ -40,10 +40,10 @@ concourse_web_options_default                :
   CONCOURSE_TSA_HOST_KEY                     : "{{ concourseci_ssh_dir }}/tsa"
   CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
 
-## 
-## local users that will be added on ATC startup, i.e. 
+##
+## local users that will be added on ATC startup, i.e.
 ## concourse_local_users:
-##                       - user: "user1", pass: "pass1" 
+##                       - user: "user1", pass: "pass1"
 ##                       - user: "user2", pass: "pass2"
 ##
 concourse_local_users                        : []

@@ -32,6 +32,8 @@
   with_items:
     - '{{ concourseci_bin_dir }}'
     - '{{ concourseci_log_dir }}'
+    - '{{ concourseci_archive_dir }}'
+    - '{{ concourseci_archive_dir }}/{{ concourseci_binary_file }}'
 
 - name: common | Ensure Concourse .ssh dir
   file:
