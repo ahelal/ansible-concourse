@@ -16,7 +16,7 @@ export INSTALL_TYPE_3="pip"
 export ANSIBLE_LABEL_3="vThree"
 
 # Whats the default version
-export ANSIBLE_DEFAULT_VERSION="v2.5"
+export ANSIBLE_DEFAULT_VERSION="vOne"
 
 echo "* Setting up ansible "
 echo "* ANSIBLE_LABEL_1=${ANSIBLE_LABEL_1} ANSIBLE_VERSIONS_1=${ANSIBLE_VERSIONS_1}"
