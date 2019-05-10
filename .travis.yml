@@ -7,15 +7,16 @@ services:
   - docker
 
 env:
-  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1404-25"
-  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1404-27"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1404-one"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1404-three"
 
-  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-25"
-  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-26"
-  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-27"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-one"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-two"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1604-three"
 
-  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1804-25"
-  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1804-27"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1804-one"
+  - TEST_COMMAND="bundle exec kitchen test simple-ubuntu1804-three"
+
   - TEST_COMMAND="./test/test-cluster.sh"
 
 before_install:
