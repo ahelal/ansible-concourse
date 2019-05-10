@@ -19,7 +19,7 @@ verifier                    :
 provisioner                 :
     name                    : ansible_push
     ansible_config          : "tests/ansible.cfg"
-    ansible_playbook_bin    : "`avm path v2.7`ansible-playbook"
+    ansible_playbook_bin    : "`avm path vThree `ansible-playbook"
     extra_vars              : "@./test/integration/simple/concourse-vars.yml"
     raw_arguments           : "--extra-vars='ansible_python_interpreter=/usr/bin/python3'"
 

@@ -29,96 +29,96 @@ provisioner                 :
 
 platforms                   :
 ### Ubuntu 1404
- - name                     : "ubuntu1404_25"
+ - name                     : "ubuntu1404_one"
    driver_config            :
      image                  : ubuntu:14.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.5`ansible-playbook"
+      ansible_playbook_bin  : "`avm path vOne `ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1404-25'
+                              - 'simple-ubuntu1404-one'
          concourse-worker   :
-                              - 'simple-ubuntu1404-25'
-                              - 'worker-ubuntu1404-25'
+                              - 'simple-ubuntu1404-one'
+                              - 'worker-ubuntu1404-one'
 
- - name                     : "ubuntu1404_27"
+ - name                     : "ubuntu1404_three"
    driver_config            :
      image                  : ubuntu:14.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.7`ansible-playbook"
+      ansible_playbook_bin  : "`avm path vThree `ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1404-27'
+                              - 'simple-ubuntu1404-three'
          concourse-worker   :
-                              - 'simple-ubuntu1404-27'
-                              - 'worker-ubuntu1404-27'
+                              - 'simple-ubuntu1404-three'
+                              - 'worker-ubuntu1404-three'
 ### Ubuntu 1604
- - name                     : "ubuntu1604_25"
+ - name                     : "ubuntu1604_one"
    driver_config            :
      image                  : ubuntu:16.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.5`ansible-playbook"
+      ansible_playbook_bin  : "`avm path vOne `ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1604-25'
+                              - 'simple-ubuntu1604-one'
          concourse-worker   :
-                              - 'simple-ubuntu1604-25'
-                              - 'worker-ubuntu1604-25'
+                              - 'simple-ubuntu1604-one'
+                              - 'worker-ubuntu1604-one'
 
- - name                     : "ubuntu1604_26"
+ - name                     : "ubuntu1604_two"
    driver_config            :
      image                  : ubuntu:16.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.6`ansible-playbook"
+      ansible_playbook_bin  : "`avm path vTwo `ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1604-26'
+                              - 'simple-ubuntu1604-two'
          concourse-worker   :
-                              - 'simple-ubuntu1604-26'
-                              - 'worker-ubuntu1604-26'
+                              - 'simple-ubuntu1604-two'
+                              - 'worker-ubuntu1604-two'
 
- - name                     : "ubuntu1604_27"
+ - name                     : "ubuntu1604_three"
    driver_config            :
      image                  : ubuntu:16.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.7`ansible-playbook"
+      ansible_playbook_bin  : "`avm path vThree `ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1604-27'
+                              - 'simple-ubuntu1604-three'
          concourse-worker   :
-                              - 'simple-ubuntu1604-27'
-                              - 'worker-ubuntu1604-27'
+                              - 'simple-ubuntu1604-three'
+                              - 'worker-ubuntu1604-three'
 ### Ubuntu 1804
- - name                     : "ubuntu1804_25"
+ - name                     : "ubuntu1804_one"
    driver_config            :
      image                  : ubuntu:18.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.5`ansible-playbook"
+      ansible_playbook_bin  : "`avm path vOne `ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1804-25'
+                              - 'simple-ubuntu1804-one'
          concourse-worker   :
-                              - 'simple-ubuntu1804-25'
-                              - 'worker-ubuntu1804-25'
+                              - 'simple-ubuntu1804-one'
+                              - 'worker-ubuntu1804-one'
 
- - name                     : "ubuntu1804_27"
+ - name                     : "ubuntu1804_three"
    driver_config            :
      image                  : ubuntu:18.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path v2.7`ansible-playbook"
+      ansible_playbook_bin  : "`avm path vThree `ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1804-27'
+                              - 'simple-ubuntu1804-three'
          concourse-worker   :
-                              - 'simple-ubuntu1804-27'
-                              - 'worker-ubuntu1804-27'
+                              - 'simple-ubuntu1804-three'
+                              - 'worker-ubuntu1804-three'
 
 suites:
   - name                    : simple
