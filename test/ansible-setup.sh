@@ -3,15 +3,15 @@ set -e
 
 AVM_VERSION="v1.0.0"
 
-export ANSIBLE_VERSIONS_1="2.5.15"
+export ANSIBLE_VERSIONS_1="2.6.17"
 export INSTALL_TYPE_1="pip"
 export ANSIBLE_LABEL_1="vOne"
 
-export ANSIBLE_VERSIONS_2="2.6.16"
+export ANSIBLE_VERSIONS_2="2.7.11"
 export INSTALL_TYPE_2="pip"
 export ANSIBLE_LABEL_2="vTwo"
 
-export ANSIBLE_VERSIONS_3="2.7.10"
+export ANSIBLE_VERSIONS_3="2.8.1"
 export INSTALL_TYPE_3="pip"
 export ANSIBLE_LABEL_3="vThree"
 
