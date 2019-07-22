@@ -1,6 +1,6 @@
 require_relative '../../helper_spec.rb'
 
-fly = '/usr/local/bin/fly -t kitchen'
+fly = 'sleep 1 && /usr/local/bin/fly -t kitchen'
 builds = "#{fly} builds"
 
 describe 'simple_success job' do
