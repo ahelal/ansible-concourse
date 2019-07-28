@@ -6,7 +6,7 @@ An easy way to deploy and manage a [Concourse CI](https://concourse-ci.org/) wit
 
 ## Requirements
 
-* Ansible 2.4 or higher
+* Ansible 2.6 or higher
 * PostgreSQL I recommend [ansible postgresql role](https://github.com/ANXS/postgresql)
 
 Supported concourse:
