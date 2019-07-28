@@ -14,7 +14,7 @@ describe 'simple_success job' do
     end
   end
 
-  describe command("#{builds} | grep simple_success | head -1 | awk '{ print $4 }'") do
+  describe command("sleep 5 && #{builds} | grep simple_success | head -1 | awk '{ print $4 }'") do
     it 'simple_success pipeline should succeed' do
       puts '#################################'
       puts subject.stdout.to_s
