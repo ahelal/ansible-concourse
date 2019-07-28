@@ -1,10 +1,10 @@
 require_relative '../../helper_spec.rb'
 
-fly = 'sleep 1 && /usr/local/bin/fly -t kitchen'
+fly = '/usr/local/bin/fly -t kitchen'
 builds = "#{fly} builds"
 
 describe 'simple_success job' do
-  describe command("#{builds} | grep simple_success") do
+  describe command("sleep 5 && #{builds} | grep simple_success") do
     it 'simple_success are in the builds' do
       puts '#################################'
       puts subject.stdout.to_s
