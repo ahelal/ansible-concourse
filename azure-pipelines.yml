@@ -7,6 +7,7 @@ trigger:
   - pr
 variables:
     XSECRET: $(TEST_SECRET)
+    YSECRET: ${TEST_SECRET}
 
 jobs:
 - job: main
@@ -46,14 +47,16 @@ jobs:
       versionSpec: '>= 2.5'
   - script: | 
             set -x
-            echo $(XSECRET) > /tmp/x.file
-            ls -l /tmp/x.file
-            cat /tmp/x.file
-            cat /tmp/x.file | wc -l 
-            md5sum /tmp/x.file
-            echo "() $(XSECRET)"
-            echo "{} ${XSECRET}"
-
+            # echo $(XSECRET) > /tmp/x.file
+            # ls -l /tmp/x.file
+            # cat /tmp/x.file
+            # cat /tmp/x.file | wc -l 
+            # md5sum /tmp/x.file
+            echo "x() $(XSECRET)"
+            echo "x{} ${XSECRET}"
+            echo "y() $(YSECRET)"
+            echo "y{} ${YSECRET}"
+            exit 1
     displayName: list
 
      
