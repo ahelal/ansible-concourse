@@ -42,8 +42,6 @@ steps:
           set -e
           pwd
           echo "X"
-          ls
-          echo "X"
           LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 bundle exec kitchen test simple-ubuntu1404-one
           #  LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $TEST_COMMAND
   displayName: 'Run kitchen for XXX'
