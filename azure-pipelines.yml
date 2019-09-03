@@ -29,6 +29,7 @@ steps:
           set -e
           bash ./test/ansible-setup.sh
           bash ./test/setup_roles.sh
+          ls -lR
   displayName: 'Ansible & helper role setup'
 
 - script: |
