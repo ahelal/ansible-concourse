@@ -49,6 +49,7 @@ jobs:
             cat /tmp/x.file
             cat /tmp/x.file | wc -l 
             md5sum /tmp/x.file
+            echo X=$env:TEST_SECRET
     displayName: list
     env:
         XSECRET: $(TEST_SECRET)
