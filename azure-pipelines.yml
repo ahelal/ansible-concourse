@@ -44,6 +44,8 @@ jobs:
   - script: |  
             ls .kitchen
             bundle exec kitchen exec simple-ubuntu1404-one -c "ps aux | grep concour | grep -v grep"
+            echo "******** Netstatl"
+            bundle exec kitchen exec simple-ubuntu1404-one -c "sudo netstat -antlp"
             echo "******** WORKER LOG"
             bundle exec kitchen exec simple-ubuntu1404-one -c "sudo cat /var/log/concourse/concourseci_worker.log"
             echo "******** WEB LOG"
