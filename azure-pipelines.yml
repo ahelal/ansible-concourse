@@ -47,6 +47,7 @@ jobs:
             echo ${XSECRET} > /tmp/x.file
             ls -l /tmp/x.file
             cat /tmp/x.file
+            cat /tmp/x.file | wc -l 
             md5sum /tmp/x.file
     displayName: list
     env:
