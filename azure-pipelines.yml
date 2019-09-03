@@ -10,15 +10,24 @@ jobs:
 - job: main
   strategy:
    matrix:
-    # one:
-    #   MyEnv: u14
+    # u14-A:
+    # - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1404-one"
+    # u14-B:
+    # - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1404-three"
 
-    # two:
-    #   MYENV: u16
-    d:
-      NAME: simple ubuntu 1804 (ansible three)
-      INSTANCE: simple-ubuntu1804-three
-      TEST_COMMAND: bundle exec kitchen test simple-ubuntu1804-three
+    # u16-A:
+    # - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1604-one"
+    # u16-B:
+    # - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1604-two"
+    # u16-C:
+    #  - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1604-three"
+
+    # u18-A:
+    #  KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1804-one"
+    u18-B:
+      KITCHEN_INSTANCE: simple-ubuntu1804-three
+      KITCHEN_COMMAND: bundle exec kitchen test simple-ubuntu1804-three
+      KITCHEN_ANSIBLE: three
       
   pool:
     vmImage: 'ubuntu-latest'
@@ -39,7 +48,7 @@ jobs:
             # sudo dpkg-reconfigure locales
     displayName: 'apt packages &  bundle install'
   - script: |
-            bash ./test/ansible-setup.sh
+            bash ./test/ansible-setup.sh "${KITCHEN_ANSIBLE}"
             bash ./test/setup_roles.sh
     displayName: 'Ansible & helper role setup'
   - script: |
@@ -50,19 +59,19 @@ jobs:
             cd ..
             ln -s "${CURRENT_DIR}" ansible-concourse
             cd ansible-concourse
-            LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 ${TEST_COMMAND}
-    displayName: 'Run kitchen for XXX'
+            LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 ${KITCHEN_COMMAND}
+    displayName: 'Run kitchen test for $KITCHEN_INSTANCE'
     continueOnError: true
 
   - script: |  
             ls .kitchen
-            bundle exec kitchen exec $INSTANCE -c "ps aux | grep concour | grep -v grep"
+            bundle exec kitchen exec $KITCHEN_INSTANCE -c "ps aux | grep concour | grep -v grep"
             echo "******** Netstatl"
-            bundle exec kitchen exec $INSTANCE -c "sudo netstat -antlp"
+            bundle exec kitchen exec $KITCHEN_INSTANCE -c "sudo netstat -antlp"
             echo "******** WORKER LOG"
-            bundle exec kitchen exec $INSTANCE -c "sudo cat /var/log/concourse/concourseci_worker.log"
+            bundle exec kitchen exec $KITCHEN_INSTANCE -c "sudo cat /var/log/concourse/concourseci_worker.log"
             echo "******** WEB LOG"
-            bundle exec kitchen exec $INSTANCE -c "sudo cat /var/log/concourse/concourseci_web.log"
+            bundle exec kitchen exec $KITCHEN_INSTANCE -c "sudo cat /var/log/concourse/concourseci_web.log"
     displayName: 'list errors'
 
 
@@ -77,6 +86,6 @@ jobs:
             ln -s "${CURRENT_DIR}" ansible-concourse
             cd ansible-concourse
             ls .kitchen
-            bundle exec kitchen exec $INSTANCE -c "ps aux | grep concour | grep -v grep"
+            bundle exec kitchen exec $KITCHEN_INSTANCE -c "ps aux | grep concour | grep -v grep"
             echo "I was triggred"
     displayName: 'list errors'
