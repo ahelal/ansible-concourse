@@ -5,6 +5,8 @@
 trigger:
   - master
   - pr
+variables:
+    XSECRET: $(TEST_SECRET)
 
 jobs:
 - job: main
@@ -44,17 +46,16 @@ jobs:
       versionSpec: '>= 2.5'
   - script: | 
             set -x
-            echo $(TEST_SECRET) > /tmp/x.file
+            echo $(XSECRET) > /tmp/x.file
             ls -l /tmp/x.file
             cat /tmp/x.file
             cat /tmp/x.file | wc -l 
             md5sum /tmp/x.file
-            echo "() $(TEST_SECRET)"
-            echo "{} ${TEST_SECRET}"
+            echo "() $(XSECRET)"
+            echo "{} ${XSECRET}"
 
     displayName: list
-    env:
-        XSECRET: $(TEST_SECRET)
+
      
   - script: |
             # Make sure everything's up to date.
