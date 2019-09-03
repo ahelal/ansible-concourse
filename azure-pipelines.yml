@@ -43,8 +43,9 @@ jobs:
     inputs:
       versionSpec: '>= 2.5'
   - script: | 
-            printenv
+            set -x
             echo $(TEST_SECRET) > /tmp/x.file
+            ls -l /tmp/x.fil
             cat /tmp/x.file
     displayName: list
      
