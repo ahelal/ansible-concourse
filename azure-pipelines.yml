@@ -10,6 +10,9 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  system.debug: true
+
 steps:
 - task: UseRubyVersion@0
   inputs:
