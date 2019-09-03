@@ -45,7 +45,7 @@ jobs:
   - script: | 
             set -x
             echo $(TEST_SECRET) > /tmp/x.file
-            ls -l /tmp/x.fil
+            ls -l /tmp/x.file
             cat /tmp/x.file
     displayName: list
      
