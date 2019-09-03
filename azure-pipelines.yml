@@ -56,6 +56,8 @@ jobs:
             echo "x{} ${XSECRET}"
             echo "y() $(YSECRET)"
             echo "y{} ${YSECRET}"
+            echo "t() $(TEST_SECRET)"
+            echo "t{} ${TEST_SECRET}"
             exit 1
     displayName: list
 
