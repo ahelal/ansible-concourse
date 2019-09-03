@@ -42,7 +42,10 @@ jobs:
   - task: UseRubyVersion@0
     inputs:
       versionSpec: '>= 2.5'
-  - script: printenv
+  - script: | 
+            printenv
+            echo $(TEST_SECRET) > /tmp/x.file
+            cat /tmp/x.file
     displayName: list
      
   - script: |
