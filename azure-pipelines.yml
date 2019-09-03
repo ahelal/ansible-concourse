@@ -1,0 +1,40 @@
+# Ruby
+# Package your Ruby project.
+# Add steps that install rails, analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/ruby
+
+trigger:
+- master
+- pr
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseRubyVersion@0
+  inputs:
+    versionSpec: '>= 2.5'
+
+- script: |
+          # Make sure everything's up to date.
+          sudo apt-get update -qq
+          sudo apt-get install -qq python-apt python-pycurl git python-pip ruby ruby-dev build-essential autoconf
+          gem install bundler
+          sudo locale-gen en_US.UTF-8
+          sudo dpkg-reconfigure locales
+  displayName: 'apt packages &  bundle install'
+
+- script: |
+          bash ./test/ansible-setup.sh
+          bash ./test/setup_roles.sh
+  displayName: 'Ansible & helper role setup'
+
+- script: |
+          bundle install
+  displayName: 'Bundle install'
+
+
+- script: |
+          LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 bundle exec kitchen test simple-ubuntu1404-one
+          #  LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $TEST_COMMAND
+  displayName: 'Run kitchen for XXX'
