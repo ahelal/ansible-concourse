@@ -22,12 +22,14 @@ jobs:
       
   pool:
     vmImage: 'ubuntu-latest'
-  variables:
-    system.debug: true
+
   steps:
   - task: UseRubyVersion@0
     inputs:
       versionSpec: '>= 2.5'
+  - script: printenv
+    displayName: list
+     
   - script: |
             # Make sure everything's up to date.
             sudo apt-get update -qq
