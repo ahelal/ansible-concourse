@@ -39,6 +39,18 @@ jobs:
             LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 bundle exec kitchen test simple-ubuntu1404-one
             #  LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $TEST_COMMAND
     displayName: 'Run kitchen for XXX'
+    continueOnError: true
+
+  - script: |  
+            ls .kitchen
+            bundle exec kitchen exec simple-ubuntu1404-one -c "ps aux | grep concour | grep -v grep"
+            echo "******** WORKER LOG"
+            bundle exec kitchen exec simple-ubuntu1404-one -c "sudo cat /var/log/concourse/concourseci_worker.log"
+            echo "******** WEB LOG"
+            bundle exec kitchen exec simple-ubuntu1404-one -c "sudo cat /var/log/concourse/concourseci_web.log"
+    displayName: 'list errors'
+
+
 
 - job: test
   dependsOn: main
@@ -50,5 +62,6 @@ jobs:
             ln -s "${CURRENT_DIR}" ansible-concourse
             cd ansible-concourse
             ls .kitchen
+            bundle exec kitchen exec simple-ubuntu1404-one -c "ps aux | grep concour | grep -v grep"
             echo "I was triggred"
     displayName: 'list errors'
