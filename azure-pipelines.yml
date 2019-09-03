@@ -8,6 +8,18 @@ trigger:
 
 jobs:
 - job: main
+  strategy:
+   matrix:
+    # one:
+    #   MyEnv: u14
+
+    # two:
+    #   MYENV: u16
+    d:
+      NAME: simple ubuntu 1804 (ansible three)
+      INSTANCE: simple-ubuntu1804-three
+      COMMAND: bundle exec kitchen test $INSTANCE
+      
   pool:
     vmImage: 'ubuntu-latest'
   variables:
@@ -36,20 +48,19 @@ jobs:
             cd ..
             ln -s "${CURRENT_DIR}" ansible-concourse
             cd ansible-concourse
-            LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 bundle exec kitchen test simple-ubuntu1404-one
-            #  LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $TEST_COMMAND
+            LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 ${TEST_COMMAND}
     displayName: 'Run kitchen for XXX'
     continueOnError: true
 
   - script: |  
             ls .kitchen
-            bundle exec kitchen exec simple-ubuntu1404-one -c "ps aux | grep concour | grep -v grep"
+            bundle exec kitchen exec $INSTANCE -c "ps aux | grep concour | grep -v grep"
             echo "******** Netstatl"
-            bundle exec kitchen exec simple-ubuntu1404-one -c "sudo netstat -antlp"
+            bundle exec kitchen exec $INSTANCE -c "sudo netstat -antlp"
             echo "******** WORKER LOG"
-            bundle exec kitchen exec simple-ubuntu1404-one -c "sudo cat /var/log/concourse/concourseci_worker.log"
+            bundle exec kitchen exec $INSTANCE -c "sudo cat /var/log/concourse/concourseci_worker.log"
             echo "******** WEB LOG"
-            bundle exec kitchen exec simple-ubuntu1404-one -c "sudo cat /var/log/concourse/concourseci_web.log"
+            bundle exec kitchen exec $INSTANCE -c "sudo cat /var/log/concourse/concourseci_web.log"
     displayName: 'list errors'
 
 
@@ -64,6 +75,6 @@ jobs:
             ln -s "${CURRENT_DIR}" ansible-concourse
             cd ansible-concourse
             ls .kitchen
-            bundle exec kitchen exec simple-ubuntu1404-one -c "ps aux | grep concour | grep -v grep"
+            bundle exec kitchen exec $INSTANCE -c "ps aux | grep concour | grep -v grep"
             echo "I was triggred"
     displayName: 'list errors'
