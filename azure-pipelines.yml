@@ -29,17 +29,21 @@ steps:
           set -e
           bash ./test/ansible-setup.sh
           bash ./test/setup_roles.sh
-          ls -lR
+          ls -lR /home/vsts/work/1/s/test/helper_roles/
   displayName: 'Ansible & helper role setup'
 
 - script: |
           set -e
           bundle install
+          ls -lR /home/vsts/work/1/s/test/helper_roles/
   displayName: 'Bundle install'
 
 
 - script: |
           set -e
+          ls 
+          echo "X"
+          ls -lR /home/vsts/work/1/s/test/helper_roles/
           LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 bundle exec kitchen test simple-ubuntu1404-one
           #  LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $TEST_COMMAND
   displayName: 'Run kitchen for XXX'
