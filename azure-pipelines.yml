@@ -28,6 +28,12 @@ jobs:
       KITCHEN_INSTANCE: simple-ubuntu1804-three
       KITCHEN_COMMAND: bundle exec kitchen test simple-ubuntu1804-three
       KITCHEN_ANSIBLE: three
+    
+    # cluster:
+    #     KITCHEN_INSTANCE: simple-ubuntu1804-three
+    #     KITCHEN_COMMAND: ./test/test-cluster.sh
+    #     KITCHEN_ANSIBLE: three
+
       
   pool:
     vmImage: 'ubuntu-latest'
@@ -67,6 +73,7 @@ jobs:
             ls .kitchen
             bundle exec kitchen exec $KITCHEN_INSTANCE -c "ps aux | grep concour | grep -v grep"
             echo "******** Netstatl"
+            bundle exec kitchen exec $KITCHEN_INSTANCE -c "apt-get update && apt-get install net-tools"
             bundle exec kitchen exec $KITCHEN_INSTANCE -c "sudo netstat -antlp"
             echo "******** WORKER LOG"
             bundle exec kitchen exec $KITCHEN_INSTANCE -c "sudo cat /var/log/concourse/concourseci_worker.log"
@@ -76,16 +83,16 @@ jobs:
 
 
 
-- job: test
-  dependsOn: main
-  condition: failed() # this job will only run if Foo fails
-  steps:
-  - script: |  
-            CURRENT_DIR="$(pwd)"
-            cd ..
-            ln -s "${CURRENT_DIR}" ansible-concourse
-            cd ansible-concourse
-            ls .kitchen
-            bundle exec kitchen exec $KITCHEN_INSTANCE -c "ps aux | grep concour | grep -v grep"
-            echo "I was triggred"
-    displayName: 'list errors'
+# - job: test
+#   dependsOn: main
+#   condition: failed() # this job will only run if Foo fails
+#   steps:
+#   - script: |  
+#             CURRENT_DIR="$(pwd)"
+#             cd ..
+#             ln -s "${CURRENT_DIR}" ansible-concourse
+#             cd ansible-concourse
+#             ls .kitchen
+#             bundle exec kitchen exec $KITCHEN_INSTANCE -c "ps aux | grep concour | grep -v grep"
+#             echo "I was triggred"
+#     displayName: 'list errors'
