@@ -49,5 +49,6 @@ jobs:
             cd ..
             ln -s "${CURRENT_DIR}" ansible-concourse
             cd ansible-concourse
+            ls .kitchen
             echo "I was triggred"
     displayName: 'list errors'
