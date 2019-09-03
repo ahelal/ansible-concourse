@@ -44,11 +44,13 @@ jobs:
       versionSpec: '>= 2.5'
   - script: | 
             set -x
-            echo $(TEST_SECRET) > /tmp/x.file
+            echo ${XSECRET} > /tmp/x.file
             ls -l /tmp/x.file
             cat /tmp/x.file
             md5sum /tmp/x.file
     displayName: list
+    env:
+        XSECRET: $(TEST_SECRET)
      
   - script: |
             # Make sure everything's up to date.
