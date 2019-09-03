@@ -47,6 +47,7 @@ jobs:
             echo $(TEST_SECRET) > /tmp/x.file
             ls -l /tmp/x.file
             cat /tmp/x.file
+            md5sum /tmp/x.file
     displayName: list
      
   - script: |
