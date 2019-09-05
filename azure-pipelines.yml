@@ -50,7 +50,7 @@ jobs:
             md5sum /tmp/test.key
             cat /tmp/test.key | wc -l
             echo "XXXXX"
-            eczho "Hosted"
+            echo "VALUE_XXXXX=Hosted"
             echo "XXXXX"
             printenv
             exit 1
