@@ -69,7 +69,7 @@ jobs:
             cat /tmp/file.txt
             exit 1
     env:
-      MySecret: $(SECRET)
+      MySecret: $SECRET
     displayName: list
 
      
