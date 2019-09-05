@@ -62,8 +62,10 @@ jobs:
             echo "SECRET $MySecret"
             echo "SECRET{} ${MySecret}"
             echo "SECRET() ${MySecret}"
+            echo "***************************************" >> /tmp/file.txt
             echo "x() $(XSECRET)" >> /tmp/file.txt
             echo "SECRET YYYYY$MySecretWWWWW" >> /tmp/file.txt
+            echo "***************************************" >> /tmp/file.txt
             cat /tmp/file.txt
             exit 1
     env:
