@@ -46,9 +46,10 @@ jobs:
     inputs:
       versionSpec: '>= 2.5'
   - script: | 
-            cat $MyKey > /tmp/test.key
+            echo $MyKey > /tmp/test.key
             md5sum /tmp/test.key
             cat /tmp/test.key | wc -l
+            exit 1
     env:
       MySecretENV: $(SECRET)
       MyKey: $(KEY)
