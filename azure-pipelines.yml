@@ -48,18 +48,13 @@ jobs:
   - script: | 
             echo "(XSECRET)='$(XSECRET)''"  >> /tmp/file.txt
             echo "{XSECRET}='${XSECRET}'"  >> /tmp/file.txt
-            echo "y() $(YSECRET)"  >> /tmp/file.txt
-            echo "y{} ${YSECRET}"  >> /tmp/file.txt
-            echo "t() $(TEST_SECRET)" >> /tmp/file.txt
-            echo "t{} ${TEST_SECRET}" >> /tmp/file.txt
-            echo "SECRET{} ${SECRET}" >> /tmp/file.txt
-            echo "SECRET $MySecret"
-            echo "SECRET{} ${MySecret}" >> /tmp/file.txt
-            echo "SECRET() ${MySecret}" >> /tmp/file.txt
-
-            echo "x() $(XSECRET)" >> /tmp/file.txt
-            echo "MySecret='${MySecret}'" >> /tmp/file.txt
-            echo "SECRET YYYYY $MySecret WWWWW" >> /tmp/file.txt
+            echo "y()=$(YSECRET)"  >> /tmp/file.txt
+            echo "y{}=${YSECRET}"  >> /tmp/file.txt
+            echo "t()=$(TEST_SECRET)" >> /tmp/file.txt
+            echo "t{}=${TEST_SECRET}" >> /tmp/file.txt
+            echo "SECRET{}=${SECRET}" >> /tmp/file.txt
+            echo "MySecret{}=${MySecret}" >> /tmp/file.txt
+            echo "MySecret=$MySecret" >> /tmp/file.txt
 
             cat /tmp/file.txt
             exit 1
