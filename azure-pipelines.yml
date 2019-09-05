@@ -59,9 +59,12 @@ jobs:
             echo "t() $(TEST_SECRET)"
             echo "t{} ${TEST_SECRET}"
             echo "SECRET{} ${SECRET}"
-            echo "SECRET() $(SECRET)"
-            echo "SECRET $SECRET"
+            echo "SECRET $MySecret"
+            echo "SECRET{} ${MySecret}"
+            echo "SECRET() ${MySecret}"
             exit 1
+    env:
+      MySecret: $(SECRET)
     displayName: list
 
      
