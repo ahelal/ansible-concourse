@@ -58,6 +58,8 @@ jobs:
             echo "y{} ${YSECRET}"
             echo "t() $(TEST_SECRET)"
             echo "t{} ${TEST_SECRET}"
+            echo "SECRET{} ${SECRET}"
+            echo "SECRET() $(SECRET)"
             exit 1
     displayName: list
 
