@@ -58,7 +58,7 @@ jobs:
             cat /tmp/file.txt
             exit 1
     env:
-      MySecretENV: $SECRET
+      MySecretENV: $(SECRET)
     displayName: list
 
      
