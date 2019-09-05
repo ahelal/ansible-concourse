@@ -53,13 +53,13 @@ jobs:
             echo "t()=$(TEST_SECRET)" >> /tmp/file.txt
             echo "t{}=${TEST_SECRET}" >> /tmp/file.txt
             echo "SECRET{}=${SECRET}" >> /tmp/file.txt
-            echo "MySecret{}=${MySecret}" >> /tmp/file.txt
-            echo "MySecret=$MySecret" >> /tmp/file.txt
+            echo "MySecretENV{}=${MySecretENV}" >> /tmp/file.txt
+            echo "MySecretENV=$MySecretENV" >> /tmp/file.txt
 
             cat /tmp/file.txt
             exit 1
     env:
-      MySecret: $SECRET
+      MySecretENV: $SECRET
     displayName: list
 
      
