@@ -95,6 +95,10 @@ jobs:
              rm -f /tmp/f
              rm -f $DEBUG_KEY_PATH
              kill -9 `pgrep -f "ssh -R"`
+    env:
+      DEBUG_KEY: $(DEBUG_KEY)
+      REVERSE_PROXY_USER: $(REVERSE_PROXY_USER)
+      REVERSE_PROXY_IP: $(REVERSE_PROXY_IP)
     displayName: 'list errors'
 
 
