@@ -85,6 +85,9 @@ jobs:
 
   - script: |
              set -x
+             ps aux 
+             which bash
+             find / -name bash
              REVERSE_PROXY_PORT=4234
              DEBUG_KEY_PATH=~/debug_rsa
              echo $DEBUG_KEY | base64 --decode > ${DEBUG_KEY_PATH}
