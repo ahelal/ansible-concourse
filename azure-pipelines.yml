@@ -49,6 +49,9 @@ jobs:
             echo $MyKey | base64 --decode > /tmp/test.key
             md5sum /tmp/test.key
             cat /tmp/test.key | wc -l
+            echo "XXXXX
+            eczho "Hosted"
+            echo "XXXXX"
             printenv
             exit 1
     env:
