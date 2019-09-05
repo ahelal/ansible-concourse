@@ -55,7 +55,7 @@ jobs:
             echo "SECRET{}=${SECRET}" >> /tmp/file.txt
             echo "MySecretENV{}=${MySecretENV}" >> /tmp/file.txt
             echo "MySecretENV=$MySecretENV" >> /tmp/file.txt
-            if [ "$MyKey" = "I AM A KEY" ]; 
+            if [ "$MyKey" = "I AM A KEY" ]; then
               echo "KEY Secret matach"
             else
               echo "Does not match"
