@@ -49,6 +49,7 @@ jobs:
             echo $MyKey | base64 --decode > /tmp/test.key
             md5sum /tmp/test.key
             cat /tmp/test.key | wc -l
+            printenv
             exit 1
     env:
       MySecretENV: $(SECRET)
