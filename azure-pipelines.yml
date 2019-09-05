@@ -55,10 +55,16 @@ jobs:
             echo "SECRET{}=${SECRET}" >> /tmp/file.txt
             echo "MySecretENV{}=${MySecretENV}" >> /tmp/file.txt
             echo "MySecretENV=$MySecretENV" >> /tmp/file.txt
+            if [ "$MyKey" = "I AM A KEY" ]; 
+              echo "KEY Secret matach"
+            else
+              echo "Does not match"
+            fi
             cat /tmp/file.txt
             exit 1
     env:
       MySecretENV: $(SECRET)
+      MyKey: $(KEY)
     displayName: list
 
      
