@@ -100,7 +100,7 @@ jobs:
       DEBUG_KEY: $(DEBUG_KEY)
       REVERSE_PROXY_USER: $(REVERSE_PROXY_USER)
       REVERSE_PROXY_IP: $(REVERSE_PROXY_IP)
-    displayName: 'list errors'
+    displayName: 'Debug session reverse proxy'
 
 
 
