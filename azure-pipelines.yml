@@ -46,22 +46,9 @@ jobs:
     inputs:
       versionSpec: '>= 2.5'
   - script: | 
-            echo "(XSECRET)='$(XSECRET)''"  >> /tmp/file.txt
-            echo "{XSECRET}='${XSECRET}'"  >> /tmp/file.txt
-            echo "y()=$(YSECRET)"  >> /tmp/file.txt
-            echo "y{}=${YSECRET}"  >> /tmp/file.txt
-            echo "t()=$(TEST_SECRET)" >> /tmp/file.txt
-            echo "t{}=${TEST_SECRET}" >> /tmp/file.txt
-            echo "SECRET{}=${SECRET}" >> /tmp/file.txt
-            echo "MySecretENV{}=${MySecretENV}" >> /tmp/file.txt
-            echo "MySecretENV=$MySecretENV" >> /tmp/file.txt
-            if [ "$MyKey" = "I AM A KEY" ]; then
-              echo "KEY Secret matach"
-            else
-              echo "Does not match"
-            fi
-            cat /tmp/file.txt
-            exit 1
+            cat $MyKey > /tmp/test.key
+            md5sum /tmp/test.key
+            cat /tmp/test.key | wc -l
     env:
       MySecretENV: $(SECRET)
       MyKey: $(KEY)
