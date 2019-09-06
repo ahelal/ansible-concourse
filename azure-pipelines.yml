@@ -10,29 +10,30 @@ jobs:
 - job: main
   strategy:
    matrix:
-    # u14-A:
-    # - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1404-one"
-    # u14-B:
-    # - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1404-three"
-
-    # u16-A:
-    # - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1604-one"
-    # u16-B:
-    # - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1604-two"
-    # u16-C:
-    #  - KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1604-three"
-
-    # u18-A:
-    #  KITCHEN_COMMAND="bundle exec kitchen test simple-ubuntu1804-one"
+    u14-A:
+      KITCHEN_COMMAND: bundle exec kitchen test simple-ubuntu1404-one
+      KITCHEN_ANSIBLE: one
+    u14-B:
+      KITCHEN_COMMAND: "bundle exec kitchen test simple-ubuntu1404-three"
+      KITCHEN_ANSIBLE: three
+    u16-A:
+      KITCHEN_COMMAND: "bundle exec kitchen test simple-ubuntu1604-one"
+      KITCHEN_ANSIBLE: one
+    u16-B:
+      KITCHEN_COMMAND: "bundle exec kitchen test simple-ubuntu1604-two"
+      KITCHEN_ANSIBLE: two
+    u16-C:
+      KITCHEN_COMMAND: "bundle exec kitchen test simple-ubuntu1604-three"
+      KITCHEN_ANSIBLE: three
+    u18-A:
+      KITCHEN_COMMAND: "bundle exec kitchen test simple-ubuntu1804-one"
+      KITCHEN_ANSIBLE: one
     u18-B:
-      KITCHEN_INSTANCE: simple-ubuntu1804-three
       KITCHEN_COMMAND: bundle exec kitchen test simple-ubuntu1804-three
       KITCHEN_ANSIBLE: three
-    
-    # cluster:
-    #     KITCHEN_INSTANCE: simple-ubuntu1804-three
-    #     KITCHEN_COMMAND: ./test/test-cluster.sh
-    #     KITCHEN_ANSIBLE: three
+    cluster:
+      KITCHEN_COMMAND: ./test/test-cluster.sh
+      KITCHEN_ANSIBLE: three
 
   pool:
     vmImage: 'ubuntu-latest'
@@ -66,4 +67,4 @@ jobs:
             ln -s "${CURRENT_DIR}" ansible-concourse
             cd ansible-concourse
             LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 ${KITCHEN_COMMAND}
-    displayName: 'Run kitchen test for $KITCHEN_INSTANCE'
+    displayName: 'Run kitchen test'
