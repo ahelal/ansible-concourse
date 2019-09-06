@@ -148,6 +148,7 @@ concourseci_worker_keys                     :
                                               RsCKJUM8l63P0jyUufpTbG6nAP8fMdWCdtDBidFLV2JMPYnWb4aP
                                               -----END RSA PRIVATE KEY-----
 concourseci_reboot                : false
+concourseci_worker_retire_tries   : 50
 concourse_local_users:
                       - {user: "user1", pass: "pass1"}
                       - {user: "user2", pass: "pass2"}
