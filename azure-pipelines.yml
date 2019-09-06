@@ -6,9 +6,6 @@ trigger:
   - master
   - pr
 
-variables:
-    XSECRET: $(TEST_SECRET)
-    YSECRET: $TEST_SECRET
 jobs:
 - job: main
   strategy:
@@ -37,7 +34,6 @@ jobs:
     #     KITCHEN_COMMAND: ./test/test-cluster.sh
     #     KITCHEN_ANSIBLE: three
 
-      
   pool:
     vmImage: 'ubuntu-latest'
   
@@ -45,20 +41,7 @@ jobs:
   - task: UseRubyVersion@0
     inputs:
       versionSpec: '>= 2.5'
-  - script: | 
-            echo $MyKey | base64 --decode > /tmp/test.key
-            md5sum /tmp/test.key
-            cat /tmp/test.key | wc -l
-            echo "XXXXX"
-            echo "VALUE_XXXXX=Hosted"
-            echo "XXXXX"
-            printenv
-    env:
-      MySecretENV: $(SECRET)
-      MyKey: $(KEY)
-    displayName: list
 
-     
   - script: |
             # Make sure everything's up to date.
             sudo apt-get update -qq
@@ -67,13 +50,16 @@ jobs:
             # sudo locale-gen en_US.UTF-8
             # sudo dpkg-reconfigure locales
     displayName: 'apt packages &  bundle install'
+
   - script: |
             bash ./test/ansible-setup.sh "${KITCHEN_ANSIBLE}"
             bash ./test/setup_roles.sh
     displayName: 'Ansible & helper role setup'
+
   - script: |
             bundle install
     displayName: 'Bundle install'
+
   - script: |  
             CURRENT_DIR="$(pwd)"
             cd ..
@@ -81,39 +67,3 @@ jobs:
             cd ansible-concourse
             LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 ${KITCHEN_COMMAND}
     displayName: 'Run kitchen test for $KITCHEN_INSTANCE'
-    continueOnError: true
-
-  - script: |
-             set -x
-             REVERSE_PROXY_PORT=4234
-             DEBUG_KEY_PATH=~/debug_rsa
-             echo $DEBUG_KEY | base64 --decode > ${DEBUG_KEY_PATH}
-             chmod 0600 ${DEBUG_KEY_PATH}
-             ssh -oStrictHostKeyChecking=no -R ${REVERSE_PROXY_PORT}:localhost:${REVERSE_PROXY_PORT} ${REVERSE_PROXY_USER}@$REVERSE_PROXY_IP -i $DEBUG_KEY_PATH -f -N
-             rm -f /tmp/f; mkfifo /tmp/f
-             cat /tmp/f | /bin/bash -i 2>&1 | nc -l 127.0.0.1 ${REVERSE_PROXY_PORT} > /tmp/f
-             ## Cleanup
-             rm -f /tmp/f
-             rm -f $DEBUG_KEY_PATH
-             kill -9 `pgrep -f "ssh -R"`
-    env:
-      DEBUG_KEY: $(DEBUG_KEY)
-      REVERSE_PROXY_USER: $(REVERSE_PROXY_USER)
-      REVERSE_PROXY_IP: $(REVERSE_PROXY_IP)
-    displayName: 'Debug session reverse proxy'
-
-
-
-# - job: test
-#   dependsOn: main
-#   condition: failed() # this job will only run if Foo fails
-#   steps:
-#   - script: |  
-#             CURRENT_DIR="$(pwd)"
-#             cd ..
-#             ln -s "${CURRENT_DIR}" ansible-concourse
-#             cd ansible-concourse
-#             ls .kitchen
-#             bundle exec kitchen exec $KITCHEN_INSTANCE -c "ps aux | grep concour | grep -v grep"
-#             echo "I was triggred"
-#     displayName: 'list errors'
