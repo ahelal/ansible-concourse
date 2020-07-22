@@ -58,8 +58,6 @@ concourse_worker_options                     : { }
 concourse_worker_options_default             :
   CONCOURSE_WORK_DIR                         : "{{ concourseci_worker_dir }}"
   CONCOURSE_TSA_WORKER_PRIVATE_KEY           : "{{ concourseci_ssh_dir }}/worker"
-  CONCOURSE_SESSION_SIGNING_KEY              : "{{ concourseci_ssh_dir }}/session_signing"
-  CONCOURSE_TSA_HOST_KEY                     : "{{ concourseci_ssh_dir }}/tsa"
   CONCOURSE_TSA_HOST                         : "{{ concourse_web_options['CONCOURSE_TSA_HOST'] | default(concourse_web_options_default['CONCOURSE_TSA_HOST']) }}"
   CONCOURSE_TSA_PORT                         : "{{ concourse_web_options['CONCOURSE_TSA_BIND_PORT'] | default(concourse_web_options_default['CONCOURSE_TSA_BIND_PORT']) }}"
   CONCOURSE_TSA_PUBLIC_KEY                   : "{{ concourse_web_options['CONCOURSE_TSA_HOST_KEY'] | default(concourse_web_options_default['CONCOURSE_TSA_HOST_KEY']) }}.pub"
