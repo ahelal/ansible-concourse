@@ -6,6 +6,7 @@
 {% if (concourseci_version is version_compare('v3.10.0', '>=')) and option == 'CONCOURSE_TSA_HOST' %}
 export {{ option }}="{{ value }}:{{ concourse_worker_options_combined['CONCOURSE_TSA_PORT'] }}"
 {% elif (concourseci_version is version_compare('v3.10.0', '>=')) and option == 'CONCOURSE_TSA_PORT' %}
+{% elif (concourseci_version is version_compare('v6.2.0', '>=')) and option in ['CONCOURSE_SESSION_SIGNING_KEY', 'CONCOURSE_TSA_HOST_KEY'] %}
 {% else %}
 export {{ option }}='{{ value }}'
 {% endif %}
