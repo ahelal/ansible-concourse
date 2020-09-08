@@ -93,3 +93,6 @@ concourseci_key_worker_private              : "{{ concourseci_worker_keys[concou
 
 # temp solution to systemV issue and ansible :(
 concourse_ignore_errors                       : "{{ ansible_lsb['codename'] == 'xenial' | default(False)}}"
+
+concourse_web_rbac_config:
+  CONCOURSE_CONFIG_RBAC: "{{concourseci_base_dir}}/bin/rbac_config.yml"

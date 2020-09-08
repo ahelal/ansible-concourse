@@ -5,6 +5,11 @@
     concourse_web_options_combined: '{{ concourse_web_options_default | combine(concourse_web_options) | combine(concourse_facts_local_users) | combine(concourse_facts_main_users) }}'
   when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group]"
 
+- name: common | Combine option for concourse_rbac
+  set_fact:
+    concourse_web_options_combined: '{{ concourse_web_options_combined | combine(concourse_web_rbac_config) }}'
+  when: "groups[concourseci_web_group] is defined and inventory_hostname in groups[concourseci_web_group] and concourse_rbac is defined"
+
 - name: common | Combine dictionary options (worker)
   set_fact:
     concourse_worker_options_combined: '{{ concourse_worker_options_default | combine(concourse_worker_options) }}'

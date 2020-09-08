@@ -50,6 +50,17 @@
   notify:
    - restart concourse-web
 
+- name: web | Write RBAC_CONFIG
+  copy:
+    content: "{{ concourse_rbac | to_yaml }}"
+    dest: "{{ concourse_web_options_combined['CONCOURSE_CONFIG_RBAC'] }}"
+    mode: 0755
+    owner: "{{ concourseci_user }}"
+    group: "{{ concourseci_group }}"
+  when: "concourse_web_options_combined['CONCOURSE_CONFIG_RBAC'] is defined"
+  notify:
+   - restart concourse-web
+
 - name: web | Templating concourse web start init script (linux)
   template:
     src="concourse-web-init.sh.j2"
