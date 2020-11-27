@@ -85,3 +85,14 @@
   shell: launchctl load -w {{ concourseci_launchd_path }}/{{ concourseci_launchd_web }}.plist && launchctl start {{ concourseci_launchd_web }}
   changed_when: False # since no way to detect if it started or not
   when: "ansible_system == 'Darwin'"
+
+- name: web | Create base resource type defaults configuration file
+  copy:
+    owner: "{{ concourseci_user }}"
+    group: "{{ concourseci_group }}"
+    dest: "{{ concourse_web_options_combined['CONCOURSE_BASE_RESOURCE_TYPE_DEFAULTS'] }}"
+    content: "{{ concourseci_web_resource_type_defaults | to_nice_yaml(indent=2) }}"
+    mode: '644'
+  when: "{{ concourseci_web_resource_type_defaults | dict2items | length > 0 }}"
+  notify:
+   - restart concourse-web
