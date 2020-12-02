@@ -69,6 +69,17 @@ concourse_worker_options_default             :
 concourseci_web_group                       : "concourse-web"
 concourseci_worker_group                    : "concourse-worker"
 
+## See docs https://concourse-ci.org/concourse-web.html#resource-defaults
+## The value will land into the YAML file as is - after the usual string
+## interpolation is done.
+## The location of the file can be overridden by setting the appropriate
+## environment variable for the Concourse web node(s), e.g.:
+##
+##   concourse_web_options:
+##     CONCOURSE_BASE_RESOURCE_TYPE_DEFAULTS: '/some/path/to/defaults.yml'
+##
+concourseci_web_resource_type_defaults      : { }
+
 ## Management
 concourseci_manage_url                      : "{{ concourse_web_options_combined['CONCOURSE_EXTERNAL_URL'] | default('http://127.0.0.1:8080') }}"
 
