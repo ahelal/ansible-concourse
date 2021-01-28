@@ -33,7 +33,7 @@ jobs:
             pip3 install ansible==${{matrix.ansible-version}}
             export PATH=/home/runner/.local/bin:$PATH
 
-    - name: integration tests
+    - name: simple integration tests
       run:  |
         echo "${{ matrix.ruby-version }} ${{matrix.ansible-version}}"        
         bundle check
@@ -41,12 +41,14 @@ jobs:
         echo "**** ANSIBLE VERSION ****"
         ansible-playbook --version
         echo "****                 ****"
-        bundle exec kitchen test simpleNoChef
-        bundle exec kitchen test simpleWithChef
-        bundle exec kitchen test notidempotent | tee /tmp/notidempotent
-        number_of_servers_in_idempotent="$(bundle exec kitchen list notidempotent | grep Ssh | wc -l |  tr -d '[[:space:]]')"
-        failed_nonotidempotent=$(cat /tmp/notidempotent | grep "Warning idempotency test \[failed\]" | wc -l |  tr -d '[[:space:]]')
-        if [ ! "${failed_nonotidempotent}" = "${number_of_servers_in_idempotent}" ] ; then
-             echo "Non idempotent tasks '$failed_nonotidempotent' should match '${number_of_servers_in_idempotent}'. :( failed"
-             exit 1
-        fi
+        bundle exec kitchen test
+
+    # - name: cluster integration tests
+    #   run:  |
+    #     echo "${{ matrix.ruby-version }} ${{matrix.ansible-version}}"        
+    #     bundle check
+    #     which ansible-playbook
+    #     echo "**** ANSIBLE VERSION ****"
+    #     ansible-playbook --version
+    #     echo "****                 ****"
+    #     bundle exec kitchen test
