@@ -32,7 +32,9 @@ jobs:
             sudo apt-get install -y python3-setuptools
             pip3 install ansible==${{matrix.ansible-version}}
             export PATH=/home/runner/.local/bin:$PATH
-
+    - name: Setup ansible roles
+      run: |
+            sudo ./test/setup_roles.sh
     - name: simple integration tests
       run:  |
         echo "${{ matrix.ruby-version }} ${{matrix.ansible-version}}"        
