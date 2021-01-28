@@ -1,0 +1,52 @@
+name: Concourse
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.0']
+        ansible-version: ['2.8.17', '2.9.17', '2.10.3']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+    # change this to (see https://github.com/ruby/setup-ruby#versioning):
+    # uses: ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Bundle install
+      run: bundle install
+    - name: Setup ansible
+      run: |
+            sudo apt-get install -y python3-setuptools
+            pip3 install ansible==${{matrix.ansible-version}}
+            export PATH=/home/runner/.local/bin:$PATH
+
+    - name: integration tests
+      run:  |
+        echo "${{ matrix.ruby-version }} ${{matrix.ansible-version}}"        
+        bundle check
+        which ansible-playbook
+        echo "**** ANSIBLE VERSION ****"
+        ansible-playbook --version
+        echo "****                 ****"
+        bundle exec kitchen test simpleNoChef
+        bundle exec kitchen test simpleWithChef
+        bundle exec kitchen test notidempotent | tee /tmp/notidempotent
+        number_of_servers_in_idempotent="$(bundle exec kitchen list notidempotent | grep Ssh | wc -l |  tr -d '[[:space:]]')"
+        failed_nonotidempotent=$(cat /tmp/notidempotent | grep "Warning idempotency test \[failed\]" | wc -l |  tr -d '[[:space:]]')
+        if [ ! "${failed_nonotidempotent}" = "${number_of_servers_in_idempotent}" ] ; then
+             echo "Non idempotent tasks '$failed_nonotidempotent' should match '${number_of_servers_in_idempotent}'. :( failed"
+             exit 1
+        fi
