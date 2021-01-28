@@ -32,9 +32,9 @@ jobs:
             sudo apt-get install -y python3-setuptools
             pip3 install ansible==${{matrix.ansible-version}}
             export PATH=/home/runner/.local/bin:$PATH
-            mkdir -p /home/runner/ansible-tmp
-            sudo mkdir -p /home/runner/.ansible
-            sudo chown -R runner /home/runner/.ansible
+            # mkdir -p /home/runner/ansible-tmp
+            # sudo mkdir -p /home/runner/.ansible
+            # sudo chown -R runner /home/runner/.ansible
     - name: Setup ansible roles
       run: |
             export DEFAULT_LOCAL_TMP=/home/runner/ansible-tmp
@@ -48,7 +48,7 @@ jobs:
             echo "**** ANSIBLE VERSION ****"
             ansible-playbook --version
             echo "****                 ****"
-            bundle exec kitchen test
+            sudo bundle exec kitchen test
 
     # - name: cluster integration tests
     #   run:  |
