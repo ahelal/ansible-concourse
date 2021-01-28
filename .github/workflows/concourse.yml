@@ -34,7 +34,7 @@ jobs:
             export PATH=/home/runner/.local/bin:$PATH
             mkdir -p /home/runner/ansible-tmp
             sudo mkdir -p /home/runner/.ansible
-            sudo chown -r runner /home/runner/.ansible
+            sudo chown -R runner /home/runner/.ansible
     - name: Setup ansible roles
       run: |
             export DEFAULT_LOCAL_TMP=/home/runner/ansible-tmp
