@@ -53,17 +53,17 @@ platforms                   :
                               - 'simple-ubuntu1804'
                               - 'worker-ubuntu1804'
 ### Ubuntu 2004
- - name                     : "ubuntu2004"
-   driver_config            :
-     image                  : ubuntu:20.04
-     platform               : ubuntu
-   provisioner              :
-      groups                :
-         concourse-web      :
-                              - 'simple-ubuntu2004'
-         concourse-worker   :
-                              - 'simple-ubuntu2004'
-                              - 'worker-ubuntu2004'
+#  - name                     : "ubuntu2004"
+#    driver_config            :
+#      image                  : ubuntu:20.04
+#      platform               : ubuntu
+#    provisioner              :
+#       groups                :
+#          concourse-web      :
+#                               - 'simple-ubuntu2004'
+#          concourse-worker   :
+#                               - 'simple-ubuntu2004'
+                              # - 'worker-ubuntu2004'
 suites:
   - name                    : simple
     provisioner             :
