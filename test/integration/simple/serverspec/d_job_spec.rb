@@ -4,7 +4,7 @@ fly = '/usr/local/bin/fly -t kitchen'
 builds = "#{fly} builds"
 
 describe 'simple_success job' do
-  describe command("sleep 20 && #{builds} | grep simple_success") do
+  describe commandw("sleep 20 && #{builds} | grep simple_success") do
     it 'simple_success are in the builds' do
       puts '#################################'
       puts subject.stdout.to_s

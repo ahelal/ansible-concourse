@@ -47,13 +47,5 @@ jobs:
             ansible-playbook --version
             echo "****                 ****"
             bundle exec kitchen test
-
-    # - name: cluster integration tests
-    #   run:  |
-    #     echo "${{ matrix.ruby-version }} ${{matrix.ansible-version}}"        
-    #     bundle check
-    #     which ansible-playbook
-    #     echo "**** ANSIBLE VERSION ****"
-    #     ansible-playbook --version
-    #     echo "****                 ****"
-    #     bundle exec kitchen test
+    - name: cluster integration tests
+      run: ./test/test-cluster.sh
