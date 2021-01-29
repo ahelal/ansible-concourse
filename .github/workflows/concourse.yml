@@ -1,0 +1,51 @@
+name: Concourse
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.0']
+        ansible-version: ['2.8.17', '2.9.17', '2.10.3']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+    # change this to (see https://github.com/ruby/setup-ruby#versioning):
+    # uses: ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Bundle install
+      run: bundle install
+    - name: Setup ansible
+      run: |
+            sudo apt-get install -y python3-setuptools
+            pip3 install ansible==${{matrix.ansible-version}}
+            export PATH=/home/runner/.local/bin:$PATH
+
+    - name: Setup ansible roles
+      run: |
+            export DEFAULT_LOCAL_TMP=/home/runner/ansible-tmp
+            ./test/setup_roles.sh
+    - name: simple integration tests
+      run:  |
+            echo "${{ matrix.ruby-version }} ${{matrix.ansible-version}}"
+            export DEFAULT_LOCAL_TMP=/home/runner/ansible-tmp
+            bundle check
+            which ansible-playbook
+            echo "**** ANSIBLE VERSION ****"
+            ansible-playbook --version
+            echo "****                 ****"
+            bundle exec kitchen test
+    - name: cluster integration tests
+      run: ./test/test-cluster.sh

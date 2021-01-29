@@ -28,98 +28,42 @@ provisioner                 :
     # verbose                 : "vvvvv"
 
 platforms                   :
-### Ubuntu 1404
- - name                     : "ubuntu1404_one"
-   driver_config            :
-     image                  : ubuntu:14.04
-     platform               : ubuntu
-   provisioner              :
-      ansible_playbook_bin  : "`avm path vOne `ansible-playbook"
-      groups                :
-         concourse-web      :
-                              - 'simple-ubuntu1404-one'
-         concourse-worker   :
-                              - 'simple-ubuntu1404-one'
-                              - 'worker-ubuntu1404-one'
-
- - name                     : "ubuntu1404_three"
-   driver_config            :
-     image                  : ubuntu:14.04
-     platform               : ubuntu
-   provisioner              :
-      ansible_playbook_bin  : "`avm path vThree `ansible-playbook"
-      groups                :
-         concourse-web      :
-                              - 'simple-ubuntu1404-three'
-         concourse-worker   :
-                              - 'simple-ubuntu1404-three'
-                              - 'worker-ubuntu1404-three'
 ### Ubuntu 1604
- - name                     : "ubuntu1604_one"
+ - name                     : "ubuntu1604"
    driver_config            :
      image                  : ubuntu:16.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path vOne `ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1604-one'
+                              - 'simple-ubuntu1604'
          concourse-worker   :
-                              - 'simple-ubuntu1604-one'
-                              - 'worker-ubuntu1604-one'
-
- - name                     : "ubuntu1604_two"
-   driver_config            :
-     image                  : ubuntu:16.04
-     platform               : ubuntu
-   provisioner              :
-      ansible_playbook_bin  : "`avm path vTwo `ansible-playbook"
-      groups                :
-         concourse-web      :
-                              - 'simple-ubuntu1604-two'
-         concourse-worker   :
-                              - 'simple-ubuntu1604-two'
-                              - 'worker-ubuntu1604-two'
-
- - name                     : "ubuntu1604_three"
-   driver_config            :
-     image                  : ubuntu:16.04
-     platform               : ubuntu
-   provisioner              :
-      ansible_playbook_bin  : "`avm path vThree `ansible-playbook"
-      groups                :
-         concourse-web      :
-                              - 'simple-ubuntu1604-three'
-         concourse-worker   :
-                              - 'simple-ubuntu1604-three'
-                              - 'worker-ubuntu1604-three'
+                              - 'simple-ubuntu1604'
+                              - 'worker-ubuntu1604'
 ### Ubuntu 1804
- - name                     : "ubuntu1804_one"
+ - name                     : "ubuntu1804"
    driver_config            :
      image                  : ubuntu:18.04
      platform               : ubuntu
    provisioner              :
-      ansible_playbook_bin  : "`avm path vOne `ansible-playbook"
       groups                :
          concourse-web      :
-                              - 'simple-ubuntu1804-one'
+                              - 'simple-ubuntu1804'
          concourse-worker   :
-                              - 'simple-ubuntu1804-one'
-                              - 'worker-ubuntu1804-one'
-
- - name                     : "ubuntu1804_three"
-   driver_config            :
-     image                  : ubuntu:18.04
-     platform               : ubuntu
-   provisioner              :
-      ansible_playbook_bin  : "`avm path vThree `ansible-playbook"
-      groups                :
-         concourse-web      :
-                              - 'simple-ubuntu1804-three'
-         concourse-worker   :
-                              - 'simple-ubuntu1804-three'
-                              - 'worker-ubuntu1804-three'
-
+                              - 'simple-ubuntu1804'
+                              - 'worker-ubuntu1804'
+### Ubuntu 2004
+#  - name                     : "ubuntu2004"
+#    driver_config            :
+#      image                  : ubuntu:20.04
+#      platform               : ubuntu
+#    provisioner              :
+#       groups                :
+#          concourse-web      :
+#                               - 'simple-ubuntu2004'
+#          concourse-worker   :
+#                               - 'simple-ubuntu2004'
+                              # - 'worker-ubuntu2004'
 suites:
   - name                    : simple
     provisioner             :
