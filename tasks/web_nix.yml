@@ -76,7 +76,7 @@
     name="concourse-web"
     state="started"
     enabled=True
-  ignore_errors: "{{ concourse_ignore_errors }}"
+  ignore_errors: true
   when: "ansible_system == 'Linux'"
 
 - name: web | Templating concourse web start launchd plist (macOSx)
@@ -107,3 +107,11 @@
   when: "{{ concourseci_web_resource_type_defaults | dict2items | length > 0 }}"
   notify:
    - restart concourse-web
+
+- name: web | Ensure Concourse web is running and Starts on boot (linux)
+  service:
+    name="concourse-web"
+    state="started"
+    enabled=True
+  ignore_errors: "{{ concourse_ignore_errors }}"
+  when: "ansible_system == 'Linux'"
