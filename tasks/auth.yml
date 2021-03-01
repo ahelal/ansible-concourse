@@ -42,4 +42,3 @@
     concourse_facts_main_users:
       CONCOURSE_MAIN_TEAM_LOCAL_USER: "{% for local_user in concourse_local_users %}{{local_user.user}}{% if not loop.last %},{% endif %}{% endfor %}"
   when: concourse_web_options['CONCOURSE_MAIN_TEAM_LOCAL_USER'] is not defined
-
