@@ -1,6 +1,6 @@
 ---
 # Concourse version
-concourseci_version                         : "v5.4.0"
+concourseci_version                         : "v7.0.0"
 ## Dir structure
 concourseci_base_dir                        : "/opt/concourseci"
 concourseci_bin_dir                         : "{{ concourseci_base_dir }}/bin"

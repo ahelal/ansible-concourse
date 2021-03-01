@@ -2,13 +2,13 @@
 
 - name: auth | Install httpasswd
   apt:
-    name: "python-passlib,python-bcrypt"
+    name: "python3-passlib,python3-bcrypt" #"{{ passlib_apt_dependencies }}"
     state: "present"
-  when: ansible_os_family == 'Debian' 
+  when: ansible_os_family == 'Debian'
 
 - name: auth | Check that one local user is added
   fail: 
-    msg="At least one local user is needed"
+    msg: "At least one local user is needed"
   when: concourse_local_users | length == 0
 
 - name: auth | Create bcrypt password for local users
@@ -31,7 +31,7 @@
 - name: auth | Add concourse_add_local_user
   set_fact:
     concourse_facts_local_users:
-      CONCOURSE_ADD_LOCAL_USER: "{{ list_users.stdout_lines  | join(',') }}"
+      CONCOURSE_ADD_LOCAL_USER : "{{ list_users.stdout_lines  | join(',') }}"
 
 - name: auth | Set empty dict concourse_facts_main_users
   set_fact:
@@ -42,4 +42,3 @@
     concourse_facts_main_users:
       CONCOURSE_MAIN_TEAM_LOCAL_USER: "{% for local_user in concourse_local_users %}{{local_user.user}}{% if not loop.last %},{% endif %}{% endfor %}"
   when: concourse_web_options['CONCOURSE_MAIN_TEAM_LOCAL_USER'] is not defined
-
