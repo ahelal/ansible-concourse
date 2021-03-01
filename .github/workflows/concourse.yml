@@ -31,6 +31,7 @@ jobs:
     - name: Setup ansible
       run: |
             sudo apt-get install -y python3-setuptools
+            pip3 -m pip install --upgrade pip
             pip3 install ansible==${{matrix.ansible-version}}
             export PATH=/home/runner/.local/bin:$PATH
 
