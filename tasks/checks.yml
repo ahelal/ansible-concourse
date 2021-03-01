@@ -10,6 +10,10 @@
     msg: "Configuration for this role has changed. Please read the Readme.md"
   when: CONCOURSE_WEB_BIND_IP is defined or CONCOURSE_WEB_TSA_HOST is defined
 
+- name: checks | Display version
+  ansible.builtin.debug:
+    msg: "Target version {{concourseci_version}}"
+
 - name: checks | Set downloaded url for concourse version 4.x or lower
   set_fact:
     concourseci_download_url: "{{ concourseci_download_fr_url }}/{{ version_4_filename }}"
