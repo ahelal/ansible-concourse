@@ -25,7 +25,7 @@ provisioner                 :
     diff                    : True
     sudo                    : True
     extra_vars              : "@./test/integration/simple/concourse-vars.yml"
-    raw_arguments           : "-e concourseci_version=<%= ENV['concourseci_version'] || 'v7.0.0' %>"
+    raw_arguments           : "-e concourseci_version=<%= ENV['concourseci_version'] || 'v7.0.0' %> --extra-vars='ansible_python_interpreter=/usr/bin/python3'"
     # verbose                 : "vvvvv"
 
 platforms                   :

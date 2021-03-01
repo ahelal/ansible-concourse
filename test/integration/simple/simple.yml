@@ -5,11 +5,11 @@
   gather_facts: False
   become: True
   tasks:
-    - name: install python 2
-      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    - name: install python 3
+      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3-minimal)
       changed_when: False
 
-- name: Install iproute2
+- name: Install dep
   hosts: all
   gather_facts: False
   become: True
@@ -17,6 +17,9 @@
     - name: install iproute 2
       apt:
         name: iproute2
+    - name: install gnupg
+      apt:
+        name: gnupg
 
 - name: Provision Concourse
   hosts: all

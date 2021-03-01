@@ -22,6 +22,10 @@ concourseci_download_fr_url  : "https://github.com/concourse/concourse/releases/
 
 concourseci_worker_position  : "{{ groups[concourseci_worker_group].index(inventory_hostname)| default(0) }}"
 
+passlib_apt_py3_dependencies: "python3-passlib,python3-bcrypt"
+passlib_apt_py2_dependencies: python-passlib,python-bcrypt
+passlib_apt_dependencies: "{{ passlib_apt_py3_dependencies if 'python3' in ansible_python_interpreter | default('') else passlib_apt_py2_dependencies }}"
+
 ## MacOSx stuff
 concourseci_launchd_path     : "/Library/LaunchDaemons"
 concourseci_launchd_web      : "com.github.ahelal.concourse.web"
